@@ -1,0 +1,20 @@
+<!-- Indices written at Mon, 13 Jun 2011 13:35:21 UTC -->
+
+<datastore-indexes>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Letters" ancestor="false" source="auto">
+        <property name="due_date" direction="asc"/>
+        <property name="show" direction="asc"/>
+        <property name="trans_type" direction="asc"/>
+        <property name="create_date" direction="asc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="Letters" ancestor="false" source="auto">
+        <property name="due_date" direction="asc"/>
+        <property name="show" direction="asc"/>
+        <property name="create_date" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

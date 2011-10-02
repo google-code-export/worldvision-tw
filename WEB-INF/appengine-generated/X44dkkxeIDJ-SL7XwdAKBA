@@ -1,0 +1,58 @@
+1985 : Track billing history in a separate table and update internal metrics import to use it
+
+schema:
+publisherid V
+
+state: trial, data-append, monthly V
+
+1: trial -> monthly (cron job?) V
+2. trial -> data-append (cron job?) V
+3. monthly -> append (remove credit card) TODO 
+4. append -> monthly (upgrade button) V
+
+query:
+
+select * from billing_history where state = 1 or state = 2 and updated_at between start_date and end_ate
+
+
+
+1980 : Create on-boarding process for new engineers
+*What I have now:
+Languages:
+Ruby
+Java
+Scala
+
+Frameworks:
+Rails
+Hibernate
+Spring
+Velocity
+
+Tools:
+Quartz
+ActiveMQ
+Hadoop
+
+Database:
+MySQL
+Solr
+
+Operations:
+hudson
+AWS
+capstriano
+fabric
+
+*Basic gears
+
+Frond-end
+Ruby
+Rails
+JavaInteface
+
+Back-end
+
+*Advanced gears
+
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes
+  autoGenerate="true">
+    <datastore-index kind="Letters" ancestor="false">
+        <property name="voulenteer_id" direction="asc" />
+        <property name="create_date" direction="asc" />
+    </datastore-index>
+	<datastore-index kind="Letters" ancestor="false">
+        <property name="return_file_url" direction="asc" />
+        <property name="due_date" direction="asc" />
+    </datastore-index>
+
+    
+</datastore-indexes>

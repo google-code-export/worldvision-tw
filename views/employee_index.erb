@@ -1,0 +1,264 @@
+<html>
+  <head>
+    <title>World Vision</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="jquery-1.4.4.js"></script>
+<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet" />	
+<link type="text/css" href="app.css" rel="stylesheet" />	
+<script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.urldecoder.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.10.custom.min.js"></script>
+<script type="text/javascript">
+var trans_type = "英翻中";
+$(document).ready(function(){
+	var type = getUrlVars()["type"];
+	if (type)
+		setSelected($('#tans_select'), type);
+	var country = getUrlVars()["country_id"];
+	if (country)
+		setSelected($('#country_select'), country);
+	var employee = getUrlVars()["employee_id"];
+	if (employee)
+		setSelected($('#employee_select'), employee);
+	
+	// if (date)
+		// ($('#date_select').attr("value", "1234");
+	// else
+	// 		setSelected($('#tans_select'), trans_type);
+	// alert ($('select[select]').length);
+	$('select[select]').each(function(){
+		setSelected($(this), $(this).attr("select"));
+	});
+	
+	// Datepicker
+	// $('#date_select').datepicker();
+});
+
+$(function() {
+	
+	$( "#date_select" ).datepicker();
+	var date = getUrlVars()["date"]
+	if (date){
+		date = $.url.decode(date)
+		$( "#date_select" ).datepicker( "setDate" , date );
+	}
+});
+
+</script>
+  </head>
+  <body style="font-family: sans-serif;">
+<%= erb :header %>
+
+
+	<!-- file upload   -->
+	<div class="orange" style="height: 135px">
+	<div style="float:left">
+    <span style="font-size:18px">檔案上傳</span>
+    <form name="uploadform" action="/file_upload"
+    enctype="multipart/form-data" method="post">
+    <p>
+    請選擇欲上傳檔案:<br>
+	<input id="user_id" style="display:none" type="text" name="id" value="<%=@account.account%>"/>
+	<input type="file" name="myFile" size="40"/>
+	<select id="trans_type" name="type">
+		<!-- <option>請選擇</option> -->
+        <option value="eng">英翻中</option>
+		<option value="chi">中翻英</option>
+    </select>
+    </p>
+    <div>
+    	<button type="button" onClick="submitform()">上傳檔案</button>
+		</form>
+		<script type="text/javascript">
+		var trans_type="eng";
+		function submitform()
+		{
+		  // document.uploadform.action = "<%=@url%>?from=/employee&to=/file_upload&id=" + document.getElementById("user_id").value + "&type=" 
+		  // 				+ document.getElementById("trans_type").value;
+	      document.uploadform.action = "<%=@url%>";	
+		  post_parameters(document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
+		  document.uploadform.submit();
+		}
+		</script>
+    </div>
+    </form>
+    <!-- end -->
+
+    <!-- edit letters -->
+    <!-- <form method=post>
+              account, <input name="account" value="zzzz"></input><br/>
+              password, <input name="password" value="zzzz"></input><br/>
+              role,<select name="role"><br/>
+                <option value="employee">employee</option>
+                <option value="voulenteer">voulenteer</option>
+              </select>
+              name, <input name="name" value="zzzz"></input><br/>
+              voulenteer_id, <input name="voulenteer_id" value="123"></input><br/>
+              voulenteer_type, 
+              <select name="voulenteer_type"><br/>
+                <option value="chinese">chinese</option>
+                <option value="english">english</option>
+                <option value="both">both </option>
+              </select><br/>
+              <input type=submit value=Create>
+    </form> -->
+    <!-- end -->
+    
+    <!-- show letters -->
+    <!-- total = <%=@letters.length%> rows -->
+    </div>
+    <div style="position:relative; left:100px">
+	<span style="font-size:18px">上傳檔案查詢</span>
+	<%#-= erb(:_search_emp, :layout => false) %>
+	<table id="search">
+	<tr>
+		<th>翻譯類別</th>
+		<th>國家</th>
+		<th>員工</th>
+		<th>日期</th>
+	</tr>
+	<tr>
+		<form action="/employee" method="GET">
+		<td>
+			<!-- <form action="/employee" method="GET"> -->
+			<select id="tans_select" name="type" onChange='form.submit()'>
+				<option value=''>請選擇</option>
+		        <option value="eng">英翻中</option>
+				<option value="chi">中翻英</option>
+		    </select>
+			<!-- </form> -->
+
+		</td>
+		<td>
+			<!-- <form action="/employee" method="GET"> -->
+			<select id="country_select" name="country_id" onChange='form.submit()'>
+				<option value=''>請選擇</option>
+		        <% @countries.each do |country| %>	
+				<option value="<%=h country.id%>"><%=h country.name%></option>
+				<% end %>
+		    </select>
+			<!-- </form> -->
+		</td>
+		<td>
+			<!-- <form action="/employee" method="GET"> -->
+			<select id="employee_select" name="employee_id" onChange='form.submit()'>
+				<option value=''>請選擇</option>
+		        <% @employees.each do |employee| %>	
+				<option value="<%=h employee.account%>"><%=h employee.account%></option>
+				<% end %>
+		    </select>
+			<!-- </form> -->
+		</td>
+		<td>
+			<!-- <form action="/employee" method="GET"> -->
+			<input type="text" id="date_select" name="date" onChange='form.submit()'>
+	
+		</td>
+		<!-- <td>
+					<input type="submit" value="搜尋"></input>
+				</td> -->
+		</form>
+	</tr>
+	</table>
+	</div>
+	</div>
+	<br/>
+    <table>
+    <tr>
+      <th>上傳日期<br/>
+	  <!--<% if @query_string && @query_string != '' %>
+		<a href="/employee?<%=@query_string%>sort=asc">遞增</a>
+		<a href="/employee?<%=@query_string%>sort=desc">遞減</a>
+	  <% else%>
+		<a href="/employee?sort=asc">遞增</a>
+		<a href="/employee?sort=desc">遞減</a>
+	  <% end%>-->
+	  </th>
+      <th style="width: 70px">上傳員工<br/>
+	<!--
+	  	<% if @query_string %>
+			<a href="/employee?<%=@query_string%>field=employee_id&sort=asc">遞增</a>
+			<a href="/employee?<%=@query_string%>field=employee_id&sort=desc">遞減</a>
+		  <% else%>
+			<a href="/employee?field=employee_id&sort=asc">遞增</a>
+			<a href="/employee?field=employee_id&sort=desc">遞減</a>
+		  <% end%>-->
+	  </th>
+	  <th>檔案名稱</th>
+      <th>國家</th>
+      <!-- <th>信種</th> -->
+      <th>備註</th>
+      <th>封數</th>
+      <th>狀態</th>
+      <!-- <th>志工編號</th> -->
+      <th>志工姓名</th>
+      <th>領取日期</th>
+      <th>應返日期</th>
+      <th>回傳日期</th>
+      <th>譯返下載</th>
+      <th>操作</th>
+    </tr>
+    
+	<% @pages.each do |page|%>
+	<% if @query_string%>
+	<a href="/employee?start=<%=page%>&<%=@query_string%>"><%=page%></a>&nbsp;
+	<% else%>
+	<a href="/employee?start=<%=page%>"><%=page%></a>&nbsp;
+	<% end %>
+	<% end %>
+      <% @letters.each do |letter| %>
+    <tr>
+        <%if @query_string2%>
+		<form method=post action="update_letter?<%= @query_string2 %>">
+		<%else%>
+		<form method=post action='update_letter'>
+		<%end%>
+        <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+        <td><%=h letter.create_date%></td>
+        <td><%=h letter.employee_id%></td>
+		<td><%=h letter.upload_file_name%></td>
+        <td>
+		  <select id="countries" name="country" select="<%=letter.country_id%>">
+			<option >請選擇</option>
+ 			<% @countries.each do |country| %>	
+			<option value="<%=h country.id%>"><%=h country.name%></option>
+			<% end %>
+          </select>
+          </td>
+        <td><textarea name="note" rows="3"><%=h letter.note%></textarea></td>
+        <td><input style="width: 50px" name="number_of_letters" value="<%=letter.number_of_letters%>"></input>
+        <td><%=h letter.status%></td>
+        <!-- <td><%=h letter.voulenteer_id%></td> -->
+        <td><%=h letter.voulenteer_name%></td>
+        <td><%=h letter.claim_date%></td>
+        <td><%=h letter.due_date%></td>
+        <td><%=h letter.return_date%></td>
+        <td><a href="/serve?blob-key=<%=letter.return_file_url%>"><%=h letter.return_file_name%></a></td>
+        <td>
+		<% if ((letter.claim_date.nil?) || (!letter.return_file.nil?) || (!letter.due_date.nil? && Date.today+1 > letter.due_date ))%>
+          <input type=submit value="更新">
+          </form>
+          <form method=post action='delete_letter'>
+            <input style="display:none" name="id" value="<%= letter.id %>"></input>
+            <input type=submit value="刪除">
+          </form>
+        <% elsif (letter.status == "已譯返")%>
+		  <form method=post action='delete_letter'>
+            <input style="display:none" name="id" value="<%= letter.id %>"></input>
+            <input type=submit value="刪除">
+          </form>	
+		<% end %>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+    
+    <!-- end -->
+    
+    
+
+    <div style="position: absolute; bottom: 20px; right: 20px;">
+    <!-- <img src="/images/appengine.gif"></div> -->
+  </body>
+</html>

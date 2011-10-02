@@ -1,0 +1,88 @@
+<html>
+  <head>
+    <title>World Vision</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+.header{
+	width: 130px;
+	float: left;
+}
+</style>
+<script type="text/javascript">
+function = checkinputvalue(){
+	alert("hi");
+	var account = document.getElementById('account');
+	if (account.value == '')
+		alert("account id cannot be empty");
+}
+
+</script>
+  </head>
+  <body style="font-family: sans-serif;">
+    <h1>World Vision Translation Portal</h1>
+
+	<h3>New Account123</h3>
+	<div style="width: 300px">
+    <form method=post action="/create_account">
+      <div class="header">account</div> <input id="account" name="account" value="zzzz"></input><br/>
+      <div class="header">password</div> <input id="password" name="password" value="zzzz"></input><br/>
+      <div class="header">role</div>
+	  <select name="role"><br/>
+        <option value="employee">employee</option>
+        <option value="voulenteer">voulenteer</option>
+      </select>
+      <div class="header">name</div> <input name="name" value="zzzz"></input><br/>
+      <div class="header">voulenteer_id</div> <input name="voulenteer_id" value="123"></input><br/>
+      <div class="header">voulenteer_type</div> 
+		<select name="voulenteer_type"><br/>
+        <option value="chinese">chinese</option>
+        <option value="english">english</option>
+        <option value="both">both </option>
+      </select><br/>
+      <input type="submit" value="Create123" onclick='checkinputvalue()'>
+    </form>
+	
+	<h3>Existing Account</h3>
+	<table>
+		<table border="1">
+	    <tr>
+	      <th>Accout</th>
+	      <th>Password</th>
+	      <th>Role</th>
+	      <th>Name</th>
+	      <th>Voulenteer ID</th>
+		  <th>Voulenteer Type</th>
+	      <th>Update</th>
+	    </tr>
+    <% @accounts.each do |account| %>
+	<tr>
+		<form method=post action='update_account'>
+        <td style="display:none"><input name="id" value="<%= account.id %>"></input></td>
+        <td><%=h account.account%></td>
+        <td><%=h account.password%></td>
+        <td><%=account.role%><br/>
+		  	<select name="role"><br/>
+		        <option value="employee">employee</option>
+		        <option value="voulenteer">voulenteer</option>
+		      </select>
+          </td>
+        <td><input name="name" value="<%= account.name%>"></input>  <br/>
+		<td><input name="type" value="<%= account.voulenteer_id%>"></input>  <br/>
+        <td><%=account.voulenteer_type%><br/>
+			<select name="voulenteer_type"><br/>
+	        <option value="chinese">chinese</option>
+	        <option value="english">english</option>
+	        <option value="both">both </option>
+	      </select><br/>
+	     </td>
+		<td>
+			<input type=submit value=Update>
+	          </form>
+        </td>
+    </tr>
+    <% end %>
+
+    <div style="position: absolute; bottom: 20px; right: 20px;">
+    <img src="/images/appengine.gif"></div>
+  </body>
+</html>

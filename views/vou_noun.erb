@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>World Vision</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="/app.css" rel="stylesheet" />	
+  </head>
+  <body style="font-family: sans-serif;">
+<%= erb :header %>
+	<a  href="/voulenteer">待譯信件</a>
+	<a  href="/voulenteer/template">各國信件翻譯範本</a>
+	<a  href="/voulenteer/note">各國翻譯注意事項</a>
+	<!-- <a href="/voulenteer/noun">各國翻譯常見名詞</a> -->
+<h3>各國翻譯常見名詞</h3>
+<table border="1" style="width: 400px">
+<tr>
+	<th style="width: 100px">國家</th>
+	<th style="width: 100px">各國翻譯常見名詞</th>
+</tr>
+<% @countries.each do |country| %>	
+<tr>
+<td><%=h country.name%></td>
+<td><a href="/serve?blob-key=<%= country.noun_url %>"><%=country.noun_file_name%></a></td>
+</tr>
+<% end %>
+</table>
+
+</body>
+</html>

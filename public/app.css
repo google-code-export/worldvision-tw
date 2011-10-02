@@ -1,0 +1,55 @@
+h1{
+	background-color: #E96326;
+	color: white;
+	height: 50px;
+	padding: 10px;
+}
+#search th{
+	background-color: white;
+	color:black;
+}
+#search td{
+border: none;
+}
+
+table{
+	border-collapse: collapse;
+/*	border-spacing: 0px 0px;*/
+/*	border: 1px;*/	
+}
+th {
+	height: 30px;
+background-color: #E96326;
+color: white;
+font-size: 14px;
+}
+tbody{
+	border-color: inherit;
+	display: table-row-group;
+}
+tr{
+	display: table-row;
+}
+td{
+	border: 1px solid black;
+}
+
+a.orange{
+	background-color: #E96326;
+	color: white;
+	font-size: 16px;
+/*	text-decoration:none;*/
+/*	height:3;*/
+}
+
+body{
+	width:900px;
+	position:absolute; left:15%;
+}
+
+div.orange{
+	padding:5px;
+	background-color: #E96326;
+	color: white;
+	font-size: 16px;
+}
