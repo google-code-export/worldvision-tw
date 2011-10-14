@@ -236,7 +236,7 @@ $(function() {
         <td><%=h letter.return_date%></td>
         <td><a href="/serve?blob-key=<%=letter.return_file_url%>"><%=h letter.return_file_name%></a></td>
         <td>
-		<% if ((letter.claim_date.nil?) || (!letter.return_file.nil?) || (!letter.due_date.nil? && Date.today+1 > letter.due_date ))%>
+		<% if (letter.claim_date.nil?)%>
           <input type=submit value="更新">
           </form>
           <form method=post action='delete_letter'>
