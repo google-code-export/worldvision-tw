@@ -64,7 +64,7 @@ $('select[select]').each(function(){
       <input type=submit value="建立帳號" onclick=''>
     </form>
 <!-- new account end -->
-	<form method=post action="/admin">
+	<form method=get action="/admin">
 	<select name="search_role">
 		<option >請選擇</option>
         <option value="employee">員工</option>
@@ -76,7 +76,15 @@ $('select[select]').each(function(){
 <!-- existing account start -->
 	<h3>所有帳號</h3>
 
-		<table>
+		<table >
+			<col style="width:80">
+			<col style="width:80">
+			<col style="width:150">
+			<col style="width:100">
+			<col style="width:150">
+			<col style="width:150">
+			<col style="width:80">
+			<col style="width:80">
 	    <tr>
 	      <th>帳號</th>
 	      <th>密碼</th>

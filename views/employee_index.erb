@@ -47,8 +47,8 @@ $(function() {
 
 </script>
   </head>
-  <body style="font-family: sans-serif;">
-<%= erb :header %>
+  <body style="font-family: sans-serif; width: 1150px" class="employee">
+<%= erb :header_wide %>
 
 
 	<!-- file upload   -->
@@ -62,7 +62,7 @@ $(function() {
 	<input id="user_id" style="display:none" type="text" name="id" value="<%=@account.account%>"/>
 	<input type="file" name="myFile" size="40"/>
 	<select id="trans_type" name="type">
-		<!-- <option>請選擇</option> -->
+		<option>請選擇</option>
         <option value="eng">英翻中</option>
 		<option value="chi">中翻英</option>
     </select>
@@ -84,34 +84,13 @@ $(function() {
     </div>
     </form>
     <!-- end -->
-
-    <!-- edit letters -->
-    <!-- <form method=post>
-              account, <input name="account" value="zzzz"></input><br/>
-              password, <input name="password" value="zzzz"></input><br/>
-              role,<select name="role"><br/>
-                <option value="employee">employee</option>
-                <option value="voulenteer">voulenteer</option>
-              </select>
-              name, <input name="name" value="zzzz"></input><br/>
-              voulenteer_id, <input name="voulenteer_id" value="123"></input><br/>
-              voulenteer_type, 
-              <select name="voulenteer_type"><br/>
-                <option value="chinese">chinese</option>
-                <option value="english">english</option>
-                <option value="both">both </option>
-              </select><br/>
-              <input type=submit value=Create>
-    </form> -->
-    <!-- end -->
-    
     <!-- show letters -->
     <!-- total = <%=@letters.length%> rows -->
     </div>
     <div style="position:relative; left:100px">
 	<span style="font-size:18px">上傳檔案查詢</span>
 	<%#-= erb(:_search_emp, :layout => false) %>
-	<table id="search">
+	<table id="search" class="nowidth">
 	<tr>
 		<th>翻譯類別</th>
 		<th>國家</th>
@@ -164,7 +143,20 @@ $(function() {
 	</div>
 	</div>
 	<br/>
-    <table>
+    <table style="width: 1150px">
+		<col width=70>
+		<col width=90>
+		<col width=150>
+		<col width=90>
+		<col width=150>
+		<col width=50>
+		<col width=50>
+		<col width=90>
+		<col width=70>
+		<col width=70>
+		<col width=70>
+		<col width=150>
+		<col width=50>
     <tr>
       <th>上傳日期<br/>
 	  <!--<% if @query_string && @query_string != '' %>
@@ -217,7 +209,7 @@ $(function() {
         <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
         <td><%=h letter.create_date%></td>
         <td><%=h letter.employee_id%></td>
-		<td><%=h letter.upload_file_name%></td>
+		<td class="wrap"><%=truncate letter.upload_file_name%></td>
         <td>
 		  <select id="countries" name="country" select="<%=letter.country_id%>">
 			<option >請選擇</option>
@@ -226,8 +218,8 @@ $(function() {
 			<% end %>
           </select>
           </td>
-        <td><textarea name="note" rows="3"><%=h letter.note%></textarea></td>
-        <td><input style="width: 50px" name="number_of_letters" value="<%=letter.number_of_letters%>"></input>
+        <td><textarea name="note" rows="3" style="width:140px"><%=h letter.note%></textarea></td>
+        <td><input style="width: 30px" name="number_of_letters" value="<%=letter.number_of_letters%>"></input>
         <td><%=h letter.status%></td>
         <!-- <td><%=h letter.voulenteer_id%></td> -->
         <td><%=h letter.voulenteer_name%></td>
@@ -236,9 +228,9 @@ $(function() {
         <td><%=h letter.return_date%></td>
         <td><a href="/serve?blob-key=<%=letter.return_file_url%>"><%=h letter.return_file_name%></a></td>
         <td>
-		<% if (letter.claim_date.nil?)%>
+		<% if (letter.claim_date == nil)%>
           <input type=submit value="更新">
-          </form>
+		</form>
           <form method=post action='delete_letter'>
             <input style="display:none" name="id" value="<%= letter.id %>"></input>
             <input type=submit value="刪除">

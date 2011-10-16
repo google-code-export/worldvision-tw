@@ -14,8 +14,12 @@ border: none;
 
 table{
 	border-collapse: collapse;
-/*	border-spacing: 0px 0px;*/
-/*	border: 1px;*/	
+	table-layout:fixed;
+	width:920px;
+}
+
+table.nowidth{
+	width: auto;
 }
 th {
 	height: 30px;
@@ -32,6 +36,10 @@ tr{
 }
 td{
 	border: 1px solid black;
+	font-size: 14px;
+}
+td.wrap{
+	word-wrap:break-word;
 }
 
 a.orange{
@@ -47,9 +55,14 @@ body{
 	position:absolute; left:15%;
 }
 
+body.employee{
+	left: 5%;
+}
+
 div.orange{
 	padding:5px;
 	background-color: #E96326;
 	color: white;
 	font-size: 16px;
+	width:1140px;
 }

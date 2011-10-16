@@ -77,13 +77,20 @@ function download_file(id){
 	<a href="/employee?start=<%=page%>"><%=page%></a>
 	<% end %> -->
     <table border="1">
+		<col width=100>
+		<col width=50>
+		<col width=300>
+		<col width=20>
+		<col width=50>
+		<col width=300>
+		<col width=100>
     <tr>
-      <th>上傳日期</th>
-      <th style="width: 10px">國家</th>
+      <th >上傳日期</th>
+      <th>國家</th>
       <!-- <th>信種</th> -->
       <th>備註</th>
       <th>封數</th>
-      <th style="width: 10px">狀態</th>
+      <th>狀態</th>
       <!-- <th>領取日期</th> -->
       <!-- <th>應返日期</th> -->
       <th>待譯信件</th>
@@ -98,7 +105,7 @@ function download_file(id){
         <!-- <td><%=h letter.employee_id%></td> -->
         <td><%=letter.country_name%></td>
         <!-- <td><%=h letter.type%>  <br/></td> -->
-        <td><textarea name="note" rows="3" readonly="readonly"><%=h letter.note%></textarea></td>
+        <td class="wrap"><%=h letter.note%></td>
         <td><%=letter.number_of_letters%></input>
 		<% if (letter.status.index('緊急') == nil)%>
 			<td><%=h letter.status%></td>
@@ -107,7 +114,7 @@ function download_file(id){
 		<% end %>
         <!-- <td><%=h letter.claim_date%></td> -->
         <!-- <td><%=h letter.due_date%></td> -->
-        <td><%=h letter.upload_file_name%></td>
+        <td class="wrap"><%=truncate letter.upload_file_name%></td>
         <td>
           <!-- <form action="/claim_letter" method="post" onsubmit='return show_download_file("<%=letter.id%>", "<%=h letter.upload_file_url%>","<%=h letter.upload_file_name%>","<%=@account_id%>")'> -->
 		  <form action="/claim_letter?id=<%= letter.id %>&account_id=<%=@account_id%>" method="post">
@@ -130,6 +137,15 @@ function download_file(id){
     <!-- claim by this volunteer -->
 	<h2>已領取</h2>
     <table border="1">
+		<col width=90>
+		<col width=50>
+		<col width=150>
+		<col width=20>
+		<col width=70>
+		<col width=90>
+		<col width=100>
+		<col width=150>
+		<col width=200>
     <tr>
       <th>上傳日期</th>
       <th style="width: 10px">國家</th>
@@ -151,17 +167,13 @@ function download_file(id){
         <!-- <td><%=h letter.employee_id%></td> -->
         <td><%=letter.country_name%></td>
         <!-- <td><%=h letter.type%>  <br/></td> -->
-        <td><textarea name="note" rows="3" readonly="readonly"><%=h letter.note%></textarea></td>
+        <td><%=h letter.note%></td>
         <td><%=letter.number_of_letters%></input>
         <td><%=h letter.status%></td>
         <td><%=h letter.claim_date%></td>
         <td><%=h letter.due_date%></td>
-        <td><a href="/serve?blob-key=<%=letter.upload_file_url%>"><%=h letter.upload_file_name%></a></td>
+        <td><a href="/serve?blob-key=<%=letter.upload_file_url%>"><%=truncate letter.upload_file_name%></a></td>
         <td>
-          <!-- <form action="/claim_letter" method="post">
-                <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                  <input type="submit" value="領取確認">
-          </form> -->
           <% if letter.return_file_url == nil%>
           <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
                 譯返上傳:<input type="file" name="myFile" size="10">
@@ -170,7 +182,7 @@ function download_file(id){
 		<form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
                 退件原因:
 				<input name="id" style="display:none" value="<%= letter.id %>">
-				<input name="excuse" size="50" id="execuse_<%= letter.id %>">
+				<input name="excuse" size="25" id="execuse_<%= letter.id %>">
                 <input type="submit" value="確認">
           </form>
 		  <% else%>
