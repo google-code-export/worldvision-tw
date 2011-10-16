@@ -7,6 +7,7 @@ require 'appengine-apis/urlfetch'
 require "net/http"
 require "uri"
 require "java"
+use Rack::Logger
 
 include_class 'com.google.appengine.api.urlfetch.HTTPHeader'
 include_class 'com.google.appengine.api.urlfetch.HTTPResponse'
@@ -78,6 +79,7 @@ class Letter
   property :return_file_name, String
   property :show, String
   property :send_due_reminder, Boolean, :default => 0
+  property :deleted, Boolean, :default => 0
   
   def self.upload_file(upload)
       Letter.create(:upload_file=>upload)
@@ -92,6 +94,7 @@ class Date
     strftime('%m/%d/%Y')
   end
 end
+
 
 # end
 
@@ -143,6 +146,18 @@ helpers do
     session[:user]
   end
   
+  def logger
+      request.logger
+  end
+  
+  def truncate (string)
+    index = string.rindex('\\')
+    if ( index && index > 0)
+      string = string[index+1,string.length]
+    end
+    string  
+  end
+  
   def authenticate_account(auth, type)
     # puts "debug:authen:" + auth.credentials.to_s
     id = auth.username
@@ -180,20 +195,30 @@ end
 
 # admin
 
-post '/admin' do
-  protected!
-  if (params[:search_role] && params[:search_name])
-    @accounts = Account.all(:role => params[:search_role], :name => params[:search_name])
-  end
-  erb :admin_index
-end
-
 get '/admin' do
   protected!
-  @accounts = Account.all
+  name = params[:search_name]
+  role = params[:search_role] 
+  if ( role && (role == 'employee' || role == 'voulenteer') && name && name.strip != '' )
+    @accounts = Account.all(:role => role, :name => name)
+  elsif (role && (role == 'employee' || role == 'voulenteer'))
+    @accounts = Account.all(:role => role)
+  elsif (name && name.strip != '')
+    @accounts = Account.all(:name => name)
+  else
+    @accounts = Array.new
+  end
+  
   
   erb :admin_index
 end
+
+# get '/admin' do
+#   protected!
+#   @accounts = Array.new
+#   
+#   erb :admin_index
+# end
 
 get '/admin/country' do
   protected!
@@ -204,6 +229,7 @@ end
 
 get '/admin/log' do
   protected!
+  logger.info("due:00")
   start_date = params[:start_date]
   end_date = params[:end_date]
   @query_string = ''
@@ -232,18 +258,21 @@ get '/admin/log' do
   @query_string2 = ''
   start_date2 = params[:start_date2]
   end_date2 = params[:end_date2]
+  logger.info("due emeail::0 ")
   if (start_date2 && end_date2)
     s_date = Date.strptime(start_date2, DATE_FORMAT)
     e_date = Date.strptime(end_date2, DATE_FORMAT)
     @letters = Array.new
     letters = Letter.all(:due_date_3.not => nil)
     letters = letters.all(:due_date_3.lt => Date.today)
-    letters = letters.all(:return_file_url => nil, :status => '已領取')
+    # letters = letters.all(:return_file_url => nil, :status => '已領取')
+    logger.info("due emeail::1 " + letters.size.to_s)
     letters.each do |letter|
       if (letter.claim_date >= s_date && letter.claim_date <= e_date)
         @letters.push(letter)
       end
     end
+    logger.info("due emeail::2 " + letters.size.to_s)
     params.each do |key,value|
         @query_string2 += ("#{key}\=#{value}\&")
     end
@@ -372,62 +401,11 @@ get '/employee' do
     @count = @letters.size
     @letters = @letters.all(:offset=> offset, :limit => PAGESIZE)
     
-    
-    # if !country_id.nil?
-    #   @letters = Letter.all(:offset=> offset, :limit => PAGESIZE , :country_id=>country_id)
-    #   @count = Letter.all(:country_id=>country_id).size
-    #   @criteria='country_id='+country_id.to_s
-    # elsif !employee_id.nil?
-    #   @letters = Letter.all(:offset=> offset, :limit => PAGESIZE , :employee_id.like => employee_id)
-    #   @count = Letter.all(:employee_id=>'emp').size
-    #   @criteria='employee_id'+employee_id.to_s
-    # elsif !date.nil?
-    #   d = Date.strptime(date, DATE_FORMAT)
-    #   letters = Letter.all()
-    #   @letters = Array.new
-    #   letters.each do |letter|
-    #   if (letter.create_date.to_s == date)
-    #     @letters.push(letter)
-    #   end
-    #   end
-    #   @count = @letters.size
-    #   @letters = @letters[offset..(PAGESIZE-1)]
-    #   @criteria = 'date='+date.to_s
-    # else
-    #   if (field)
-    #           if (sort =='asc')
-    #            @letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :trans_type=>trans_type, :order=>[:employee_id.asc])
-    #            else
-    #            @letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :trans_type=>trans_type, :order=>[:employee_id.desc])  
-    #            end
-    #            @count = Letter.all(:trans_type=>trans_type).size
-    #            @criteria = 'trans_type='+trans_type.to_s
-    #         else
-    #          if (sort =='asc')
-    #          @letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :trans_type=>trans_type, :order=>[:create_date.asc])
-    #          else
-    #          @letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :trans_type=>trans_type, :order=>[:create_date.desc])  
-    #          end
-    #          @count = Letter.all(:trans_type=>trans_type).size
-    #          @criteria = 'trans_type='+trans_type.to_s
-    #         end
-    # end
-    
   # other fields
   @countries = Country.all
   @employees = Account.all(:role => 'employee')
   puts "====> emplpyee"
   @account = current_user
-  # @dates = Letter.all(:fields => [:create_date], :unique => true, :order => [:create_date.asc])
-  # first_date = Letter.first(:order => [:create_date.asc] ).create_date
-  #   last_date = Letter.last(:order => [:create_date.asc] ).create_date
-  #   rows = (last_date - first_date).to_i
-  #   date = first_date
-  #   @dates = Array.new()
-  #   for i in (0..rows)
-  #     @dates.push(date)
-  #     date +=1
-  #   end
   
   if (request.query_string.nil?)
         @query_string = nil
@@ -518,7 +496,9 @@ post '/delete_letter' do
       letter = Letter.get(id)
       if (!letter.nil?)
         if (letter.employee_id == current_user[:account].to_s)
-          letter.destroy
+          letter.deleted = 1
+          letter.show = 0
+          letter.save
         end
       end
     end
@@ -691,7 +671,7 @@ end
 get '/migration' do
    letters = Letter.all
    letters.each do |letter|
-      letter.send_due_reminder = false
+      letter.deleted = false
       letter.save
    end
    redirect 'admin'
@@ -734,7 +714,7 @@ def get_letters()
 
     
     @criteria = ''
-    @letters = Letter.all()
+    @letters = Letter.all(:deleted => 0)
     if (trans_type)
       @letters = @letters.all(:trans_type => trans_type)
       @criteria+=('type=' + trans_type)
