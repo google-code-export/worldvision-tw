@@ -9,6 +9,9 @@
         <property name="return_file_url" direction="asc" />
         <property name="due_date" direction="asc" />
     </datastore-index>
-
+	<datastore-index kind="Letters" ancestor="false" source="manual">
+        <property name="deleted" direction="asc"/>
+        <property name="create_date" direction="asc"/>
+    </datastore-index>
     
 </datastore-indexes>
