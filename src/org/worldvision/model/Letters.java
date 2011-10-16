@@ -68,6 +68,8 @@ public class Letters {
 	private boolean send_due_reminder;
 	@Persistent
 	private String show;
+	@Persistent
+	private boolean deleted;
 
 	public String getShow() {
 		return show;
@@ -269,6 +271,14 @@ public class Letters {
 
 	public void setNumber_of_letters(int number_of_letters) {
 		this.number_of_letters = number_of_letters;
+	}
+
+	public boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 
 }
