@@ -70,7 +70,7 @@ public class EmailWorker extends HttpServlet {
 				SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 				String dueDate = formatter.format(letter.getDue_date());
 				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("robbiecheng@gmail.com",
+				msg.setFrom(new InternetAddress("robbie@fliptop.com",
 						"WorldVision Admin"));
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						receipt, ""));
