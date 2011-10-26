@@ -84,7 +84,7 @@ public class LetterModel {
 
 	}
 
-	public List findOldLetters(PersistenceManager pm, int days) {
+	public List findOldLetters(PersistenceManager pm, String type, int days) {
 		List<Letters> result = new ArrayList();
 
 		Calendar cal = Calendar.getInstance();
@@ -94,7 +94,7 @@ public class LetterModel {
 		System.out.println("date: " + date.toGMTString());
 		Query query = pm.newQuery(Letters.class);
 		try {
-			query.setFilter("create_date < date && voulenteer_id == null");
+			query.setFilter("create_date < date && trans_type==" + type +"&& voulenteer_id == null");
 			query.declareImports("import java.util.Date");
 			query.declareParameters("Date date");
 			result = (List<Letters>) query.execute(date);
