@@ -159,7 +159,7 @@ helpers do
   end
 
   def is_chinese_email(type)
-    if (type && type == 'chinese')
+    if (type && type == 'chi')
       true
     else
       false
