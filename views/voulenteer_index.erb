@@ -1,206 +1,209 @@
 <html>
-  <head>
+<head>
     <title>World Vision</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet" />
-<script type="text/javascript" src="app.js"></script>
-<script type="text/javascript" src="/js/jquery-1.4.4.min.js"></script>
-<script type="text/javascript" src="/js/jquery-ui-1.8.10.custom.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	var type = getUrlVars()["type"] == null? "both" : getUrlVars()["type"];
-	setSelected($('#tans_select'), type);
-});
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-ui-1.8.10.custom.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var type = getUrlVars()["type"] == null ? "both" : getUrlVars()["type"];
+            setSelected($('#tans_select'), type);
+        });
 
-function check(id){
-	var ele = document.getElementById(id);
-	if (ele && ele.value==''){
-	 alert("請輸入退件原因");
-	 return false;
-	}
-}
+        function check(id) {
+            var ele = document.getElementById(id);
+            if (ele && ele.value == '') {
+                alert("請輸入退件原因");
+                return false;
+            }
+        }
 
-function show_download_file(id, file_key, file_name, account_id){
-	if (id && file_name){
-		// var url = '<br/><br/><a href="/file_download?id='+ id +'">下載'+file_name+'</a><br/><br/>';
-		var url = '<br/><br/><a href="/serve?blob-key='+ file_key +'">下載'+file_name+'</a><br/><br/><a href="/claim_letter?id='+id+'&account_id='+account_id+'"> 確認領取	</a>';
-		document.getElementById('dialog').innerHTML = url;
-		$( "#dialog" ).dialog({
-					close: function(event, ui) {
-						// claim_letter(id, account_id);
-						// alert(account_id);
-					}
-				});
-		return false;
-	}
+        function show_download_file(id, file_key, file_name, account_id) {
+            if (id && file_name) {
+                // var url = '<br/><br/><a href="/file_download?id='+ id +'">下載'+file_name+'</a><br/><br/>';
+                var url = '<br/><br/><a href="/serve?blob-key=' + file_key + '">下載' + file_name + '</a><br/><br/><a href="/claim_letter?id=' + id + '&account_id=' + account_id + '"> 確認領取	</a>';
+                document.getElementById('dialog').innerHTML = url;
+                $("#dialog").dialog({
+                    close: function(event, ui) {
+                        // claim_letter(id, account_id);
+                        // alert(account_id);
+                    }
+                });
+                return false;
+            }
 
-}
+        }
 
-function claim_letter(id, account_id){
-	window.location.href='/claim_letter?id='+id+'&account_id='+account_id;
-}
+        function claim_letter(id, account_id) {
+            window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
+        }
 
-function download_file(id){
-	if (id != null){
-		var url = '/file_download?id=' + id;
-		window.open('/file_download?id=' + id,window);
-	}
-}
-</script>
-<link type="text/css" href="app.css" rel="stylesheet" />
-  </head>
-  <body style="font-family: sans-serif;">
-  <div style="">
-  <br>
-<%= erb :header %>
-  	<div id="dialog" title="下載檔案">
-	</div>
-	<a  href="/voulenteer/template">各國信件翻譯範本</a>
-	<a  href="/voulenteer/note">各國翻譯注意事項</a>
-	<a href="/voulenteer/noun">各國翻譯常見名詞</a>
-    <% if @account_trans_type && @account_trans_type == 'both'%>
-	<form action="/voulenteer" method="GET">
-	<h3>翻譯類別</h3>
-	<select name="type" onchange="this.form.submit();" id="tans_select">
-		<option value="both">請選擇</option>
-        <option value="eng">英翻中</option>
-		<option value="chi">中翻英</option>
-    </select>
-	</form>
-	<% end %>
+        function download_file(id) {
+            if (id != null) {
+                var url = '/file_download?id=' + id;
+                window.open('/file_download?id=' + id, window);
+            }
+        }
+    </script>
+    <link type="text/css" href="app.css" rel="stylesheet"/>
+</head>
+<body style="font-family: sans-serif;">
+<div style="">
+    <br>
+    <%= erb :header %>
+    <div id="dialog" title="下載檔案">
+    </div>
+    <a href="/voulenteer/template">各國信件翻譯範本</a>
+    <a href="/voulenteer/note">各國翻譯注意事項</a>
+    <a href="/voulenteer/noun">各國翻譯常見名詞</a>
+    <% if @account_trans_type && @account_trans_type == 'both' %>
+        <form action="/voulenteer" method="GET">
+            <h3>翻譯類別</h3>
+            <select name="type" onchange="this.form.submit();" id="tans_select">
+                <option value="both">請選擇</option>
+                <option value="eng">英翻中</option>
+                <option value="chi">中翻英</option>
+            </select>
+        </form>
+    <% end %>
 
-	<!-- show letters -->
-    <!-- total = <%=@letters.length%> rows -->
-	<!-- not claimed yet begin-->
-	<h2>未領取</h2>
-	<!-- <% @pages.each do |page|%>
-	<a href="/employee?start=<%=page%>"><%=page%></a>
-	<% end %> -->
+    <!-- show letters -->
+    <!-- total = <%= @letters.length %> rows -->
+    <!-- not claimed yet begin-->
+    <h2>未領取</h2>
+    <!--
+    <% @pages.each do |page| %>
+	<a href="/employee?start=<%= page %>"><%= page %></a>
+
+    <% end %> -->
     <table border="1">
-		<col width=100>
-		<col width=50>
-		<col width=300>
-		<col width=20>
-		<col width=50>
-		<col width=300>
-		<col width=100>
-    <tr>
-      <th >上傳日期</th>
-      <% if is_chinese_email(@account_trans_type)%>
-        <th>國家</th>
-      <% end %>
-      <!-- <th>信種</th> -->
-      <th>備註</th>
-      <th>封數</th>
-      <th>狀態</th>
-      <!-- <th>領取日期</th> -->
-      <!-- <th>應返日期</th> -->
-      <th>待譯信件</th>
-      <th>領取</th>
-    </tr>
+        <col width=100>
+        <col width=50>
+        <col width=300>
+        <col width=20>
+        <col width=50>
+        <col width=300>
+        <col width=100>
+        <tr>
+            <th>上傳日期</th>
+            <% if is_chinese_email(@account_trans_type) %>
+                <th>國家</th>
+            <% end %>
+            <!-- <th>信種</th> -->
+            <th>備註</th>
+            <th>封數</th>
+            <th>狀態</th>
+            <!-- <th>領取日期</th> -->
+            <!-- <th>應返日期</th> -->
+            <th>待譯信件</th>
+            <th>領取</th>
+        </tr>
 
 
-    <% @letters.each do |letter| %>
-    <tr>
-        <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
-        <td><%=h letter.create_date%></td>
-        <!-- <td><%=h letter.employee_id%></td> -->
-        <% if is_chinese_email(@account_trans_type)%>
-        <td><%=letter.country_name%></td>
+        <% @letters.each do |letter| %>
+            <tr>
+                <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+                <td><%= h letter.create_date %></td>
+                <!-- <td><%= h letter.employee_id %></td> -->
+                <% if is_chinese_email(@account_trans_type) %>
+                    <td><%= letter.country_name %></td>
+                <% end %>
+                <!-- <td><%= h letter.type %>  <br/></td> -->
+                <td class="wrap"><%= h letter.note %></td>
+                <td><%= letter.number_of_letters %></input>
+                    <% if (letter.status.index('緊急') == nil) %>
+                    <td><%= h letter.status %></td>
+                <% else %>
+                    <td><span style="color:red"><%= h letter.status %></span></td>
+                <% end %>
+                <!-- <td><%= h letter.claim_date %></td> -->
+                <!-- <td><%= h letter.due_date %></td> -->
+                <td class="wrap"><%= truncate letter.upload_file_name %></td>
+                <td>
+                    <!-- <form action="/claim_letter" method="post" onsubmit='return show_download_file("<%= letter.id %>", "<%= h letter.upload_file_url %>","<%= h letter.upload_file_name %>","<%= @account_id %>")'> -->
+                    <form action="/claim_letter?id=<%= letter.id %>&account_id=<%= @account_id %>" method="post">
+                        <!--<form action="/claim_letter" method="post" onsubmit='download_file("<%= letter.id %>")'>-->
+                        <input style="display:none" name="id" value="<%= letter.id %>"></input>
+                        <input type="submit" value="領取確認">
+                    </form>
+                    <% if !letter.claim_date.nil? %>
+                        <form action="<%= @url %>/?from=/voulenteer&to=/return_file_upload?id=<%= letter.id %>" enctype="multipart/form-data" method="post">
+                            譯返上傳:<input type="file" name="myFile" size="10">
+                            <input type="submit" value="Send">
+                        </form>
+                    <% end %>
+                </td>
+            </tr>
         <% end %>
-        <!-- <td><%=h letter.type%>  <br/></td> -->
-        <td class="wrap"><%=h letter.note%></td>
-        <td><%=letter.number_of_letters%></input>
-		<% if (letter.status.index('緊急') == nil)%>
-			<td><%=h letter.status%></td>
-		<% else %>
-			<td><span style="color:red"><%=h letter.status%></span></td>
-		<% end %>
-        <!-- <td><%=h letter.claim_date%></td> -->
-        <!-- <td><%=h letter.due_date%></td> -->
-        <td class="wrap"><%=truncate letter.upload_file_name%></td>
-        <td>
-          <!-- <form action="/claim_letter" method="post" onsubmit='return show_download_file("<%=letter.id%>", "<%=h letter.upload_file_url%>","<%=h letter.upload_file_name%>","<%=@account_id%>")'> -->
-		  <form action="/claim_letter?id=<%= letter.id %>&account_id=<%=@account_id%>" method="post">
-	      <!--<form action="/claim_letter" method="post" onsubmit='download_file("<%=letter.id%>")'>-->
-                <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                <input type="submit" value="領取確認">
-          </form>
-		  <% if !letter.claim_date.nil?%>
-          <form action="<%=@url%>/?from=/voulenteer&to=/return_file_upload?id=<%= letter.id %>" enctype="multipart/form-data" method="post">
-                譯返上傳:<input type="file" name="myFile" size="10">
-                <input type="submit" value="Send">
-          </form>
-		  <% end %>
-        </td>
-      </tr>
-      <% end %>
     </table>
 
     <!-- end -->
     <!-- claim by this volunteer -->
-	<h2>已領取</h2>
+    <h2>已領取</h2>
     <table border="1">
-		<col width=90>
-		<col width=50>
-		<col width=150>
-		<col width=20>
-		<col width=70>
-		<col width=90>
-		<col width=100>
-		<col width=150>
-		<col width=200>
-    <tr>
-      <th>上傳日期</th>
-      <% if is_chinese_email(@account_trans_type)%>
-      <th style="width: 10px">國家</th>
-      <% end %>
-      <!-- <th>信種</th> -->
-      <th>備註</th>
-      <th>封數</th>
-      <th style="width: 10px">狀態</th>
-      <th>領取日期</th>
-      <th>應返日期</th>
-      <th>待譯信件</th>
-      <th>譯返上傳</th>
-    </tr>
+        <col width=90>
+        <col width=50>
+        <col width=150>
+        <col width=20>
+        <col width=70>
+        <col width=90>
+        <col width=100>
+        <col width=150>
+        <col width=200>
+        <tr>
+            <th>上傳日期</th>
+            <% if is_chinese_email(@account_trans_type) %>
+                <th style="width: 10px">國家</th>
+            <% end %>
+            <!-- <th>信種</th> -->
+            <th>備註</th>
+            <th>封數</th>
+            <th style="width: 10px">狀態</th>
+            <th>領取日期</th>
+            <th>應返日期</th>
+            <th>待譯信件</th>
+            <th>譯返上傳</th>
+        </tr>
 
 
-    <% @voulenteer_letters.each do |letter| %>
-    <tr>
-        <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
-        <td><%=h letter.create_date%></td>
-        <!-- <td><%=h letter.employee_id%></td> -->
-        <% if is_chinese_email(@account_trans_type)%>
-        <td><%=letter.country_name%></td>
+        <% @voulenteer_letters.each do |letter| %>
+            <tr>
+                <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+                <td><%= h letter.create_date %></td>
+                <!-- <td><%= h letter.employee_id %></td> -->
+                <% if is_chinese_email(@account_trans_type) %>
+                    <td><%= letter.country_name %></td>
+                <% end %>
+                <!-- <td><%= h letter.type %>  <br/></td> -->
+                <td><%= h letter.note %></td>
+                <td><%= letter.number_of_letters %></input>
+                <td><%= h letter.status %></td>
+                <td><%= h letter.claim_date %></td>
+                <td><%= h letter.due_date %></td>
+                <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
+                </td>
+                <td>
+                    <% if letter.return_file_url == nil %>
+                        <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= @url %>" enctype="multipart/form-data" method="post">
+                            譯返上傳:<input type="file" name="myFile" size="10">
+                            <input type="submit" value="上傳">
+                        </form>
+                        <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
+                            退件原因:
+                            <input name="id" style="display:none" value="<%= letter.id %>">
+                            <input name="excuse" size="25" id="execuse_<%= letter.id %>">
+                            <input type="submit" value="確認">
+                        </form>
+                    <% else %>
+                        已成功上傳
+                    <% end %>
+
+
+                </td>
+            </tr>
         <% end %>
-        <!-- <td><%=h letter.type%>  <br/></td> -->
-        <td><%=h letter.note%></td>
-        <td><%=letter.number_of_letters%></input>
-        <td><%=h letter.status%></td>
-        <td><%=h letter.claim_date%></td>
-        <td><%=h letter.due_date%></td>
-        <td><a href="/serve?blob-key=<%=letter.upload_file_url%>"><%=truncate letter.upload_file_name%></a></td>
-        <td>
-          <% if letter.return_file_url == nil%>
-          <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-                譯返上傳:<input type="file" name="myFile" size="10">
-                <input type="submit" value="上傳">
-          </form>
-		<form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
-                退件原因:
-				<input name="id" style="display:none" value="<%= letter.id %>">
-				<input name="excuse" size="25" id="execuse_<%= letter.id %>">
-                <input type="submit" value="確認">
-          </form>
-		  <% else%>
-			已成功上傳
-		  <% end%>
-
-
-        </td>
-      </tr>
-      <% end %>
     </table>
 
     <!-- file upload   -->
@@ -209,7 +212,7 @@ function download_file(id){
     <!-- end -->
 
     <div style="position: absolute; bottom: 20px; right: 20px;">
-    <!-- <img src="/images/appengine.gif"></div> -->
+        <!-- <img src="/images/appengine.gif"></div> -->
     </div>
-  </body>
+</body>
 </html>
