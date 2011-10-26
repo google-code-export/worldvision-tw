@@ -2,7 +2,7 @@
   <head>
     <title>World Vision</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet" />	
+<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet" />
 <script type="text/javascript" src="app.js"></script>
 <script type="text/javascript" src="/js/jquery-1.4.4.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.8.10.custom.min.js"></script>
@@ -33,11 +33,11 @@ function show_download_file(id, file_key, file_name, account_id){
 				});
 		return false;
 	}
-	
+
 }
 
 function claim_letter(id, account_id){
-	window.location.href='/claim_letter?id='+id+'&account_id='+account_id; 
+	window.location.href='/claim_letter?id='+id+'&account_id='+account_id;
 }
 
 function download_file(id){
@@ -47,7 +47,7 @@ function download_file(id){
 	}
 }
 </script>
-<link type="text/css" href="app.css" rel="stylesheet" />	
+<link type="text/css" href="app.css" rel="stylesheet" />
   </head>
   <body style="font-family: sans-serif;">
   <div style="">
@@ -68,7 +68,7 @@ function download_file(id){
     </select>
 	</form>
 	<% end %>
-	
+
 	<!-- show letters -->
     <!-- total = <%=@letters.length%> rows -->
 	<!-- not claimed yet begin-->
@@ -86,7 +86,9 @@ function download_file(id){
 		<col width=100>
     <tr>
       <th >上傳日期</th>
-      <th>國家</th>
+      <% if is_chinese_email(@account_trans_type)%>
+        <th>國家</th>
+      <% end %>
       <!-- <th>信種</th> -->
       <th>備註</th>
       <th>封數</th>
@@ -96,14 +98,16 @@ function download_file(id){
       <th>待譯信件</th>
       <th>領取</th>
     </tr>
-    
-	
+
+
     <% @letters.each do |letter| %>
     <tr>
         <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
         <td><%=h letter.create_date%></td>
         <!-- <td><%=h letter.employee_id%></td> -->
+        <% if is_chinese_email(@account_trans_type)%>
         <td><%=letter.country_name%></td>
+        <% end %>
         <!-- <td><%=h letter.type%>  <br/></td> -->
         <td class="wrap"><%=h letter.note%></td>
         <td><%=letter.number_of_letters%></input>
@@ -132,7 +136,7 @@ function download_file(id){
       </tr>
       <% end %>
     </table>
-    
+
     <!-- end -->
     <!-- claim by this volunteer -->
 	<h2>已領取</h2>
@@ -148,7 +152,9 @@ function download_file(id){
 		<col width=200>
     <tr>
       <th>上傳日期</th>
+      <% if is_chinese_email(@account_trans_type)%>
       <th style="width: 10px">國家</th>
+      <% end %>
       <!-- <th>信種</th> -->
       <th>備註</th>
       <th>封數</th>
@@ -158,14 +164,16 @@ function download_file(id){
       <th>待譯信件</th>
       <th>譯返上傳</th>
     </tr>
-    
-	
+
+
     <% @voulenteer_letters.each do |letter| %>
     <tr>
         <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
         <td><%=h letter.create_date%></td>
         <!-- <td><%=h letter.employee_id%></td> -->
+        <% if is_chinese_email(@account_trans_type)%>
         <td><%=letter.country_name%></td>
+        <% end %>
         <!-- <td><%=h letter.type%>  <br/></td> -->
         <td><%=h letter.note%></td>
         <td><%=letter.number_of_letters%></input>
@@ -188,16 +196,16 @@ function download_file(id){
 		  <% else%>
 			已成功上傳
 		  <% end%>
-		  
+
 
         </td>
       </tr>
       <% end %>
     </table>
-    
+
     <!-- file upload   -->
     <!-- <h3>File Upload</h3> -->
-    
+
     <!-- end -->
 
     <div style="position: absolute; bottom: 20px; right: 20px;">

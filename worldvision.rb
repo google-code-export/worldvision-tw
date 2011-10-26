@@ -157,6 +157,14 @@ helpers do
     end
     string  
   end
+
+  def is_chinese_email(type)
+    if (type && type == 'chinese')
+      true
+    else
+      false
+    end
+  end
   
   def authenticate_account(auth, type)
     # puts "debug:authen:" + auth.credentials.to_s
