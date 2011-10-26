@@ -59,8 +59,12 @@
     <a href="/voulenteer/note">各國翻譯注意事項</a>
     <a href="/voulenteer/noun">各國翻譯常見名詞</a>
     <% if @account_trans_type && @account_trans_type == 'both' %>
-        <a href="/voulenteer?type=english">中翻英</a>
-        <a href="/voulenteer?type=chinese">英翻中</a>
+        <h3>翻譯類別</h3>
+
+        <div style="float: left;font-size:20px">
+            <a href="/voulenteer?type=eng">中翻英</a>
+            <a href="/voulenteer?type=chi">英翻中</a>
+        </div>
     <% end %>
 
     <!-- show letters -->
