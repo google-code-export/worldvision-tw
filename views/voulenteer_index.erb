@@ -61,29 +61,26 @@
     <% if @account_trans_type && @account_trans_type == 'both' %>
         <h3>翻譯類別</h3>
 
-        <div style="float: left;font-size:20px">
-            <a href="/voulenteer?type=eng">中翻英</a>
-            <a href="/voulenteer?type=chi">英翻中</a>
-        </div>
+        <form action="/voulenteer" method="GET">
+            <h3>翻譯類別</h3>
+            <select name="type" onchange="this.form.submit();" id="tans_select">
+                <option value="eng" style="font-size: 16px">英翻中</option>
+                <option value="chi" style="font-size: 16px">中翻英</option>
+            </select>
+        </form>
     <% end %>
 
     <br/>
-    <!-- not claimed yet begin-->
+
     <h2>未領取</h2>
-    
-    <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url}%>
-    <!-- end -->
-    <!-- claim by this volunteer -->
+    <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
     <h2>已領取</h2>
-    <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url}%>
+    <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
 
-    <!-- file upload   -->
-    <!-- <h3>File Upload</h3> -->
-
-    <!-- end -->
 
     <div style="position: absolute; bottom: 20px; right: 20px;">
         <!-- <img src="/images/appengine.gif"></div> -->
     </div>
+</div>
 </body>
 </html>
