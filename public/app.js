@@ -11,9 +11,13 @@ function getUrlVars()
     return vars;
 }
 function setSelected(target, value){
+    var matched = false;
 	$(target).children().each(function(){
-		if (value == $(this).attr("value")){
+        var attr_value = $(this).attr("value");
+        alert (attr_value);
+		if (value == attr_value){
 			$(this).attr("selected", "selected");
+            matched = true;
 		}
 		else
 			$(this).attr('selected', '');
