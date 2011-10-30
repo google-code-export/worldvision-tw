@@ -533,7 +533,7 @@ get '/voulenteer' do
     @trans_type = _trans_type
   end
 
-  @trans_type = @trans_type.nil? ? @account.voulenteer_type.nil? ? 'eng' : @account.voulenteer_type == 'both' ? 'both' : @account.voulenteer_type[0, 3] : @trans_type
+  @trans_type = @trans_type.nil? ? @account.voulenteer_type.nil? ? 'eng' : @account.voulenteer_type == 'both' ? 'chi' : @account.voulenteer_type[0, 3] : @trans_type
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
