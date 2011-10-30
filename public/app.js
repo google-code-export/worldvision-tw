@@ -27,7 +27,7 @@ function markSelected(target, value){
     $(target).children().each(function(){
         var attr_value = $(this).attr("name");
 		if (value == attr_value){
-			$(this).attr("style", "font-weight: bold; color: #1C94C4");
+			$(this).attr("style", "font-weight: bold; color: #EB8F00");
 		}
 		else
 			$(this).removeAttr('style');
