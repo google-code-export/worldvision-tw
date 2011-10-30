@@ -23,7 +23,7 @@ function setSelected(target, value){
 
 function markSelected(target, value){
     if (!value)
-        value = 'chi'
+        value = 'chi';
     $(target).children().each(function(){
         var attr_value = $(this).attr("name");
 		if (value == attr_value){
