@@ -783,7 +783,7 @@ def get_paginator(letters, offset)
   for i in (1..total_page)
     pages.push(i)
   end
-  pages
+  pages == 1 ? Array.new : pages
 end
 
 # end
