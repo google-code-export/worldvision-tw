@@ -553,12 +553,6 @@ get '/voulenteer' do
       end
     end
   end
-  puts "@letters: " + @letters.size.to_s
-  if (@letters.size > 0)
-    length = @letters.size > 9 ? 9 : @letters.size
-    @letters = @letters[0..length]
-  end
-  puts "voulent_id: " + current_user[:voulenteer_id].to_s
   @claim_letters = Letter.all(:due_date.not => nil)
   @voulenteer_letters = Array.new
   voulenteer_id = current_user[:voulenteer_id]

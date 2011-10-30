@@ -75,7 +75,7 @@
             $("#tabs2").tabs();
         });
     </script>
-    <% if  @trans_type == 'eng'%>
+    <% if  @trans_type == 'eng' %>
         <div id="tabs1" style="width: 960px; height: 800px">
             <ul>
                 <li><a href="#tabs-1">緊急</a></li>
@@ -84,6 +84,9 @@
             </ul>
             <div id="tabs-1">
                 <h3>未領取</h3>
+                <% @pages.each do |page| %>
+                    <a href="/employee?start=<%= page %>"><%= page %></a>
+                <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
             </div>
             <div id="tabs-2">
