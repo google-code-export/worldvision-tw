@@ -22,7 +22,7 @@ function setSelected(target, value){
 }
 
 function markSelected(target, value){
-    if (!value)
+    if (!value || value== null || value == '')
         value = 'chi';
     $(target).children().each(function(){
         var attr_value = $(this).attr("name");
