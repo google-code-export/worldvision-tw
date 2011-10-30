@@ -75,7 +75,8 @@
             $("#tabs2").tabs();
         });
     </script>
-    <% if  @trans_type == 'chi') %>
+    <% if  @trans_type == 'chi'
+        ) %>
         <div id="tabs1" style="width: 960px">
             <ul>
                 <li><a href="#tabs-1">緊急</a></li>
@@ -85,8 +86,6 @@
             <div id="tabs-1">
                 <h3>未領取</h3>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
-                <h3>已領取</h3>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
             </div>
             <div id="tabs-2">
 
@@ -94,8 +93,6 @@
             <div id="tabs-3">
                 <h3>未領取</h3>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
-                <h3>已領取</h3>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
             </div>
         </div>
     <% else %>
@@ -107,15 +104,14 @@
             <div id="tabs-3">
                 <h3>未領取</h3>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
-                <h3>已領取</h3>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
             </div>
             <div id="tabs-4">
 
             </div>
         </div>
     <% end %>
-
+    <h3>已領取</h3>
+    <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
 
     <div style="position: absolute; bottom: 20px; right: 20px;">
         <!-- <img src="/images/appengine.gif"></div> -->
