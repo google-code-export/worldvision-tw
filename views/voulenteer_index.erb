@@ -78,13 +78,22 @@
 
     <% end %> -->
     <table border="1">
-        <col width=100>
-        <col width=50>
-        <col width=300>
-        <col width=20>
-        <col width=50>
-        <col width=300>
-        <col width=100>
+        <% if !is_chinese_email(@account_trans_type) %>
+            <col width=100>
+            <col width=50>
+            <col width=300>
+            <col width=20>
+            <col width=50>
+            <col width=300>
+            <col width=100>
+        <% else %>
+            <col width=100>
+            <col width=350>
+            <col width=20>
+            <col width=50>
+            <col width=300>
+            <col width=100>
+        <% end %>
         <tr>
             <th>上傳日期</th>
             <% if !is_chinese_email(@account_trans_type) %>
@@ -142,15 +151,26 @@
     <!-- claim by this volunteer -->
     <h2>已領取</h2>
     <table border="1">
-        <col width=90>
-        <col width=50>
-        <col width=150>
-        <col width=20>
-        <col width=70>
-        <col width=90>
-        <col width=100>
-        <col width=150>
-        <col width=200>
+        <% if !is_chinese_email(@account_trans_type) %>
+            <col width=90>
+            <col width=50>
+            <col width=150>
+            <col width=20>
+            <col width=70>
+            <col width=90>
+            <col width=100>
+            <col width=150>
+            <col width=200>
+        <% else %>
+            <col width=90>
+            <col width=200>
+            <col width=20>
+            <col width=70>
+            <col width=90>
+            <col width=100>
+            <col width=150>
+            <col width=200>
+        <% end %>
         <tr>
             <th>上傳日期</th>
             <% if !is_chinese_email(@account_trans_type) %>
