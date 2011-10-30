@@ -70,76 +70,8 @@
     <br/>
     <!-- not claimed yet begin-->
     <h2>未領取</h2>
-    <table border="1">
-        <% if !is_chinese_email(@account_trans_type) %>
-            <col width=100>
-            <col width=50>
-            <col width=300>
-            <col width=20>
-            <col width=50>
-            <col width=300>
-            <col width=100>
-        <% else %>
-            <col width=100>
-            <col width=350>
-            <col width=20>
-            <col width=50>
-            <col width=300>
-            <col width=100>
-        <% end %>
-        <tr>
-            <th>上傳日期</th>
-            <% if !is_chinese_email(@account_trans_type) %>
-                <th>國家</th>
-            <% end %>
-            <!-- <th>信種</th> -->
-            <th>備註</th>
-            <th>封數</th>
-            <th>狀態</th>
-            <!-- <th>領取日期</th> -->
-            <!-- <th>應返日期</th> -->
-            <th>待譯信件</th>
-            <th>領取</th>
-        </tr>
-
-
-        <% @letters.each do |letter| %>
-            <tr>
-                <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
-                <td><%= h letter.create_date %></td>
-                <!-- <td><%= h letter.employee_id %></td> -->
-                <% if !is_chinese_email(@account_trans_type) %>
-                    <td><%= letter.country_name %></td>
-                <% end %>
-                <!-- <td><%= h letter.type %>  <br/></td> -->
-                <td class="wrap"><%= h letter.note %></td>
-                <td><%= letter.number_of_letters %></input>
-                    <% if (letter.status.index('緊急') == nil) %>
-                    <td><%= h letter.status %></td>
-                <% else %>
-                    <td><span style="color:red"><%= h letter.status %></span></td>
-                <% end %>
-                <!-- <td><%= h letter.claim_date %></td> -->
-                <!-- <td><%= h letter.due_date %></td> -->
-                <td class="wrap"><%= truncate letter.upload_file_name %></td>
-                <td>
-                    <!-- <form action="/claim_letter" method="post" onsubmit='return show_download_file("<%= letter.id %>", "<%= h letter.upload_file_url %>","<%= h letter.upload_file_name %>","<%= @account_id %>")'> -->
-                    <form action="/claim_letter?id=<%= letter.id %>&account_id=<%= @account_id %>" method="post">
-                        <!--<form action="/claim_letter" method="post" onsubmit='download_file("<%= letter.id %>")'>-->
-                        <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                        <input type="submit" value="領取確認">
-                    </form>
-                    <% if !letter.claim_date.nil? %>
-                        <form action="<%= @url %>/?from=/voulenteer&to=/return_file_upload?id=<%= letter.id %>" enctype="multipart/form-data" method="post">
-                            譯返上傳:<input type="file" name="myFile" size="10">
-                            <input type="submit" value="Send">
-                        </form>
-                    <% end %>
-                </td>
-            </tr>
-        <% end %>
-    </table>
-
+    
+    <%= erb :_vouletters, {:account_trans_type => @account_trans_type, :letters => @letters, :account_id => @account_id, url=>@url}%>
     <!-- end -->
     <!-- claim by this volunteer -->
     <h2>已領取</h2>
