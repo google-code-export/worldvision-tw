@@ -71,11 +71,12 @@
     <br/>
     <script>
         $(function() {
-            $("#tabs").tabs();
+            $("#tabs1").tabs();
+            $("#tabs2").tabs();
         });
     </script>
     <% if  @account_trans_type && (@account_trans_type == 'both' || @account_trans_type == 'chi') %>
-        <div id="tabs" style="width: 960px">
+        <div id="tabs1" style="width: 960px">
             <ul>
                 <li><a href="#tabs-1">緊急</a></li>
                 <li><a href="#tabs-2">手寫稿</a></li>
@@ -98,10 +99,21 @@
             </div>
         </div>
     <% else %>
-        <h3>未領取</h3>
-        <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
-        <h3>已領取</h3>
-        <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
+        <div id="tabs2" style="width: 960px">
+            <ul>
+                <li><a href="#tabs-3">緊急</a></li>
+                <li><a href="#tabs-4">一般</a></li>
+            </ul>
+            <div id="tabs-3">
+                <h3>未領取</h3>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
+                <h3>已領取</h3>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
+            </div>
+            <div id="tabs-4">
+
+            </div>
+        </div>
     <% end %>
 
 
