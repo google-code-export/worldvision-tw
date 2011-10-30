@@ -85,7 +85,7 @@
             <div id="tabs-1">
                 <h3>未領取</h3>
                 <% @pages.each do |page| %>
-                    <a href="/employee?start=<%= page %>"><%= page %></a>
+                    <a href="/employee?start=<%= page %>#tabs-1"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
             </div>
@@ -94,6 +94,10 @@
             </div>
             <div id="tabs-3">
                 <h3>未領取</h3>
+                <% @emergent_pages.each do |page| %>
+                    <a href="/employee?start=<%= page %>#tabs-2"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
         </div>

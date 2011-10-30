@@ -565,15 +565,8 @@ get '/voulenteer' do
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   # paging
-  @count = @all_letters.size
-  puts "count" + @count.to_s
-  puts "index" + offset.to_s
-  total_page = (@count/PAGESIZE.to_f).ceil
-  puts "total_page" + total_page.to_s
-  @pages = Array.new
-  for i in (1..total_page)
-    @pages.push(i)
-  end
+  @pages = get_paginator(@letters)
+  @emergent_pages = get_paginator(@emergent_pages)
 
   @account_id = current_user[:id]
   puts "@account_id: " + @account_id.to_s
@@ -778,6 +771,19 @@ def get_letters()
     @letters = @letters.all(:order=>[:create_date.asc])
   end
   @letters
+end
+
+def get_paginator(letters)
+  count = letters.size
+  puts "count" + count.to_s
+  puts "index" + offset.to_s
+  total_page = (count/PAGESIZE.to_f).ceil
+  puts "total_page" + total_page.to_s
+  pages = Array.new
+  for i in (1..total_page)
+    pages.push(i)
+  end
+  pages
 end
 
 # end
