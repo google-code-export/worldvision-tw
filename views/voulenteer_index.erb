@@ -72,6 +72,7 @@
             $("#tabs2").tabs();
         });
     </script>
+    <h3>未領取</h3>
     <% if  @trans_type == 'eng' %>
         <div id="tabs1" style="width: 960px; height: 800px">
             <ul>
@@ -80,7 +81,6 @@
                 <li><a href="#tabs-3">打字稿</a></li>
             </ul>
             <div id="tabs-1">
-                <h3>未領取</h3>
                 <% @emergent_pages.each do |page| %>
                     <a href="/voulenteer?start=<%= page %>#tabs-1"><%= page %></a>
                 <% end %>
@@ -90,7 +90,6 @@
 
             </div>
             <div id="tabs-3">
-                <h3>未領取</h3>
                 <% @pages.each do |page| %>
                     <a href="/voulenteer?start=<%= page %>#tabs-2"><%= page %></a>
                 <% end %>
@@ -104,14 +103,12 @@
                 <li><a href="#tabs-4">一般</a></li>
             </ul>
             <div id="tabs-3">
-                <h3>未領取</h3>
                 <% @emergent_pages.each do |page| %>
                     <a href="/voulenteer?start=<%= page %>#tabs-3"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @emergent_letters, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
             <div id="tabs-4">
-                <h3>未領取</h3>
                 <% @pages.each do |page| %>
                     <a href="/voulenteer?start=<%= page %>#tabs-4"><%= page %></a>
                 <% end %>
