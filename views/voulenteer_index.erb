@@ -71,7 +71,7 @@
     <!-- not claimed yet begin-->
     <h2>未領取</h2>
     
-    <%= erb :_vou_letters, {:account_trans_type => @account_trans_type, :letters => @letters, :account_id => @account_id, :url=>@url}%>
+    <%= partial :_vou_letters, {:account_trans_type => @account_trans_type, :letters => @letters, :account_id => @account_id, :url=>@url}%>
     <!-- end -->
     <!-- claim by this volunteer -->
     <h2>已領取</h2>
