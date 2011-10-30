@@ -59,8 +59,8 @@
         <form action="/voulenteer" method="GET">
             <h3>翻譯類別</h3>
             <% if @account_trans_type && @account_trans_type == 'both' %>
-                <a href="/voulenteer?type=chi" class="letter_type_button">中翻英</a>
-                <a href="/voulenteer?type=eng" class="letter_type_button">英翻中</a>
+                <a href="/voulenteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
+                <a href="/voulenteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
             <% end %>
         </form>
     <% end %>
