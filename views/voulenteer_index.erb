@@ -84,7 +84,7 @@
             </ul>
             <div id="tabs-1">
                 <h3>未領取</h3>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
             </div>
             <div id="tabs-2">
 
@@ -102,10 +102,11 @@
             </ul>
             <div id="tabs-3">
                 <h3>未領取</h3>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @emergent_letters, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
             <div id="tabs-4">
-
+                <h3>未領取</h3>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @emergent_letters, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
         </div>
     <% end %>

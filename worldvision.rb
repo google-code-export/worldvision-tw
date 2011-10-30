@@ -542,10 +542,15 @@ get '/voulenteer' do
     @all_letters = Letter.all(:due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:create_date.asc])
   end
   @letters = Array.new
+  @emergent_letters = Array.new
   puts "@all_letters: " + @all_letters.size.to_s
   @all_letters.each do |letter|
     if (letter.show == 'true')
-      @letters.push(letter)
+      if (letter.status =='緊急')
+        @emergent_letters.push(letter)
+      else
+        @letters.push(letter)
+      end
     end
   end
   puts "@letters: " + @letters.size.to_s
