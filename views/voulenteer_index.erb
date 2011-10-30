@@ -58,10 +58,10 @@
     <% if @account_trans_type && @account_trans_type == 'both' %>
         <form action="/voulenteer" method="GET">
             <h3>翻譯類別</h3>
-            <select name="type" onchange="this.form.submit();" id="tans_select" style="font-size: 3em">
-                <option value="eng" class="option-text">英翻中</option>
-                <option value="chi" class="option-text">中翻英</option>
-            </select>
+            <% if @account_trans_type && @account_trans_type == 'both' %>
+                <a href="/voulenteer?type=english">中翻英</a>
+                <a href="/voulenteer?type=chinese">英翻中</a>
+            <% end %>
         </form>
     <% end %>
 
