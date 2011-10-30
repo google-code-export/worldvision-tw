@@ -59,8 +59,6 @@
     <a href="/voulenteer/note">各國翻譯注意事項</a>
     <a href="/voulenteer/noun">各國翻譯常見名詞</a>
     <% if @account_trans_type && @account_trans_type == 'both' %>
-        <h3>翻譯類別</h3>
-
         <form action="/voulenteer" method="GET">
             <h3>翻譯類別</h3>
             <select name="type" onchange="this.form.submit();" id="tans_select">
