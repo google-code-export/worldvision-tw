@@ -9,6 +9,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "both" : getUrlVars()["type"];
+            alert(type);
             setSelected($('#tans_select'), type);
         });
 
