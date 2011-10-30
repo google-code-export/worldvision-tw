@@ -87,7 +87,7 @@
         <col width=100>
         <tr>
             <th>上傳日期</th>
-            <% if is_chinese_email(@account_trans_type) %>
+            <% if !is_chinese_email(@account_trans_type) %>
                 <th>國家</th>
             <% end %>
             <!-- <th>信種</th> -->
@@ -106,7 +106,7 @@
                 <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
                 <td><%= h letter.create_date %></td>
                 <!-- <td><%= h letter.employee_id %></td> -->
-                <% if is_chinese_email(@account_trans_type) %>
+                <% if !is_chinese_email(@account_trans_type) %>
                     <td><%= letter.country_name %></td>
                 <% end %>
                 <!-- <td><%= h letter.type %>  <br/></td> -->
@@ -153,7 +153,7 @@
         <col width=200>
         <tr>
             <th>上傳日期</th>
-            <% if is_chinese_email(@account_trans_type) %>
+            <% if !is_chinese_email(@account_trans_type) %>
                 <th style="width: 10px">國家</th>
             <% end %>
             <!-- <th>信種</th> -->
@@ -172,7 +172,7 @@
                 <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
                 <td><%= h letter.create_date %></td>
                 <!-- <td><%= h letter.employee_id %></td> -->
-                <% if is_chinese_email(@account_trans_type) %>
+                <% if !is_chinese_email(@account_trans_type) %>
                     <td><%= letter.country_name %></td>
                 <% end %>
                 <!-- <td><%= h letter.type %>  <br/></td> -->
