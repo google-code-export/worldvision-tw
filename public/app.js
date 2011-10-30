@@ -11,14 +11,24 @@ function getUrlVars()
     return vars;
 }
 function setSelected(target, value){
-    var matched = false;
-	$(target).children().each(function(){
+    $(target).children().each(function(){
         var attr_value = $(this).attr("value");
 		if (value == attr_value){
 			$(this).attr("selected", "selected");
 		}
 		else
 			$(this).removeAttr('selected');
+	});
+}
+
+function markSelected(target, value){
+    $(target).children().each(function(){
+        var attr_value = $(this).attr("value");
+		if (value == attr_value){
+			$(this).attr("style", "font-weight: bold; color: #1C94C4");
+		}
+		else
+			$(this).removeAttr('style');
 	});
 }
 
