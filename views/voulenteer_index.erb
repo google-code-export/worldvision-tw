@@ -76,7 +76,7 @@
     <!-- claim by this volunteer -->
     <h2>已領取</h2>
     <table border="1">
-        <% if !is_chinese_email(@account_trans_type) %>
+        <% if !is_chinese_email(@trans_type) %>
             <col width=90>
             <col width=50>
             <col width=150>
@@ -98,7 +98,7 @@
         <% end %>
         <tr>
             <th>上傳日期</th>
-            <% if !is_chinese_email(@account_trans_type) %>
+            <% if !is_chinese_email(@trans_type) %>
                 <th style="width: 10px">國家</th>
             <% end %>
             <!-- <th>信種</th> -->
