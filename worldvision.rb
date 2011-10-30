@@ -18,7 +18,7 @@ include_class 'java.net.URL'
 # model
 class Account
   include DataMapper::Resource
-  
+
   property :id, Serial
   property :account, String
   property :password, String
@@ -43,14 +43,14 @@ end
 
 class VoulenteerLog
   include DataMapper::Resource
-  
+
   property :id, Serial
   property :voulenteer_id, String
   property :voulenteer_name, String
   property :return_date, Date
   property :excuse, String
   property :claim_date, Date
-  property :letter_id, String 
+  property :letter_id, String
 end
 
 class Letter
@@ -80,12 +80,13 @@ class Letter
   property :show, String
   property :send_due_reminder, Boolean, :default => 0
   property :deleted, Boolean, :default => 0
-  
+
   def self.upload_file(upload)
-      Letter.create(:upload_file=>upload)
+    Letter.create(:upload_file=>upload)
   end
+
   def upload_file
-      Letter.create(:upload_file=>@file)
+    Letter.create(:upload_file=>@file)
   end
 end
 
@@ -103,23 +104,23 @@ DataMapper.setup(:default, "appengine://auto")
 
 # Make sure our template can use <%=h
 helpers do
-  include Rack::Utils  
+  include Rack::Utils
   alias_method :h, :escape_html
-  
+
   def protected!
-      unless admin?
-        response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
-        throw(:halt, [401, "Not authorized\n"])
-      end
+    unless admin?
+      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
+      throw(:halt, [401, "Not authorized\n"])
+    end
   end
-  
+
   def employee!
     unless employee?
       response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
       throw(:halt, [401, "Not authorized\n"])
     end
   end
-  
+
   def voulenteer!
     unless voulenteer?
       response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
@@ -128,34 +129,34 @@ helpers do
   end
 
   def admin?
-      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'admin']
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'admin']
   end
-  
+
   def employee?
-      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'employee')  
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'employee')
   end
-  
+
   def voulenteer?
-      @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-      @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'voulenteer')
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'voulenteer')
   end
-  
+
   def current_user
     session[:user]
   end
-  
+
   def logger
-      request.logger
+    request.logger
   end
-  
+
   def truncate (string)
     index = string.rindex('\\')
-    if ( index && index > 0)
-      string = string[index+1,string.length]
+    if (index && index > 0)
+      string = string[index+1, string.length]
     end
-    string  
+    string
   end
 
   def is_chinese_email(type)
@@ -165,7 +166,7 @@ helpers do
       false
     end
   end
-  
+
   def authenticate_account(auth, type)
     # puts "debug:authen:" + auth.credentials.to_s
     id = auth.username
@@ -176,23 +177,29 @@ helpers do
       # puts "account" + _account.account
       if _account.account == id
         # "debug: find_account: " + _account.account
-        account = _account 
+        account = _account
       end
     end
-    
+
     # account = Account.first(:name => 'robbie')
     if !account.nil?
       # puts "debug:authen:account:3: " + account.account + ":pwd: " + account.password + ": type: " + account.role
     end
-    
+
     if !account.nil? && auth.credentials == [account.account, account.password] && account.role == type
-       if current_user.nil?
-         session[:user] = account
-       end
-       return true
+      if current_user.nil?
+        session[:user] = account
+      end
+      return true
     else
-       return false
+      return false
     end
+  end
+
+  def int_partial(template, locals=nil)
+    locals = locals.is_a?(Hash) ? locals : {template.to_sym =>         locals}
+    template=('_' + template.to_s).to_sym
+    erb(template, {:layout => false}, locals)
   end
 end
 
@@ -206,8 +213,8 @@ end
 get '/admin' do
   protected!
   name = params[:search_name]
-  role = params[:search_role] 
-  if ( role && (role == 'employee' || role == 'voulenteer') && name && name.strip != '' )
+  role = params[:search_role]
+  if (role && (role == 'employee' || role == 'voulenteer') && name && name.strip != '')
     @accounts = Account.all(:role => role, :name => name)
   elsif (role && (role == 'employee' || role == 'voulenteer'))
     @accounts = Account.all(:role => role)
@@ -216,8 +223,8 @@ get '/admin' do
   else
     @accounts = Array.new
   end
-  
-  
+
+
   erb :admin_index
 end
 
@@ -253,16 +260,16 @@ get '/admin/log' do
     logs.each do |log|
       if (log.return_date >= s_date && log.return_date <= e_date)
         @logs.push(log)
-      end  
+      end
     end
-    params.each do |key,value|
-        @query_string += ("#{key}\=#{value}\&")
+    params.each do |key, value|
+      @query_string += ("#{key}\=#{value}\&")
     end
   else
     #@logs = VoulenteerLog.all
     @logs = Array.new
   end
-  
+
   @query_string2 = ''
   start_date2 = params[:start_date2]
   end_date2 = params[:end_date2]
@@ -281,8 +288,8 @@ get '/admin/log' do
       end
     end
     logger.info("due emeail::2 " + letters.size.to_s)
-    params.each do |key,value|
-        @query_string2 += ("#{key}\=#{value}\&")
+    params.each do |key, value|
+      @query_string2 += ("#{key}\=#{value}\&")
     end
   else
     #@letters = Letter.all(:due_date.not => nil)
@@ -290,7 +297,7 @@ get '/admin/log' do
     #@letters = @letters.all(:return_file_url => nil, :status => '已領取')
     @letters = Array.new
   end
-  
+
   erb :admin_log_index
 end
 
@@ -299,36 +306,36 @@ get '/admin/vou' do
   start_date = params[:start_date]
   end_date = params[:end_date]
   @query_string = ''
-  
+
   if (start_date && end_date)
     s_date = Date.strptime(start_date, DATE_FORMAT)
     e_date = Date.strptime(end_date, DATE_FORMAT)
     letters = Letter.all(:return_date.not => nil)
     @letters = Array.new
-    
+
     letters.each do |letter|
       if (letter.return_date >= s_date && letter.return_date <= e_date)
         @letters.push(letter)
       end
       # @letters = @letters.all(:order => [:voulenteer_id.asc])
     end
-    params.each do |key,value|
-        @query_string += ("#{key}\=#{value}\&")
+    params.each do |key, value|
+      @query_string += ("#{key}\=#{value}\&")
     end
   else
     #@letters = Letter.all(:return_date.not => nil)
     @letters = Array.new
     # @letters = @letters.all(:order => [:voulenteer_id.asc])
   end
-  
+
   erb :admin_vou
-  
+
 end
 
 post '/create_account' do
   protected!
   account = Account.create(:account=>params[:account], :password=>params[:password], :role=>params[:role],
-    :name=>params[:name],:voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :email=>params[:email], :jobs=>0)
+                           :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :email=>params[:email], :jobs=>0)
   redirect '/admin'
 end
 
@@ -342,10 +349,10 @@ post '/admin/delete_country' do
   protected!
   id = params[:id]
   if (id)
-  country = Country.get(id)
-  if (!country.nil?)
-    country.destroy
-  end
+    country = Country.get(id)
+    if (!country.nil?)
+      country.destroy
+    end
   end
   redirect '/admin/country'
 end
@@ -354,10 +361,10 @@ post '/delete_account' do
   protected!
   id = params[:id]
   if (id)
-  account = Account.get(id)
-  if (!account.nil?)
-    account.destroy
-  end
+    account = Account.get(id)
+    if (!account.nil?)
+      account.destroy
+    end
   end
   redirect '/admin'
 end
@@ -396,53 +403,53 @@ end
 
 
 # employee
-  PAGESIZE=10
-  DATE_FORMAT='%m/%d/%Y'
+PAGESIZE=10
+DATE_FORMAT='%m/%d/%Y'
 get '/employee' do
   employee!
   @url = get_upload_url()
   # pagaing
   bookmark = params[:start]
-  offset = bookmark.nil?? 0 : bookmark.to_i == 1? 0: ((bookmark.to_i-1)*PAGESIZE)
-   @letters = get_letters
-    
-    @count = @letters.size
-    @letters = @letters.all(:offset=> offset, :limit => PAGESIZE)
-    
+  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+  @letters = get_letters
+
+  @count = @letters.size
+  @letters = @letters.all(:offset=> offset, :limit => PAGESIZE)
+
   # other fields
   @countries = Country.all
   @employees = Account.all(:role => 'employee')
   puts "====> emplpyee"
   @account = current_user
-  
+
   if (request.query_string.nil?)
-        @query_string = nil
+    @query_string = nil
   else
     if (request.query_string.index('\?').nil?)
       @query_string = request.query_string
     else
-      @query_string = request.query_string[0,request.query_string.index('\?')+1]
+      @query_string = request.query_string[0, request.query_string.index('\?')+1]
     end
   end
   @query_string = ''
   # puts "query_string: " + @query_string
   puts "criteria: " + @criteria
-  
-  params.each do |key,value|
+
+  params.each do |key, value|
     if ((key != 'sort' && key != 'start') && value != '請選擇')
       puts "Param #{key}\=#{value}"
       @query_string += ("#{key}\=#{value}\&")
     end
   end
-  
+
   @query_string2 = ''
-  params.each do |key,value|
+  params.each do |key, value|
     if (key != 'l_type' && (key != 'country') && (key != 'note') && (key != 'number_of_letters') && value != '請選擇')
       puts "Param #{key}\=#{value}"
       @query_string2 += ("#{key}\=#{value}\&")
     end
   end
-  
+
   # paging
   puts "count" + @count.to_s
   puts "index" + offset.to_s
@@ -452,72 +459,72 @@ get '/employee' do
   for i in (1..total_page)
     @pages.push(i)
   end
-  
+
   erb :employee_index
 end
 
 post '/update_letter' do
   # puts "update_letter"
   employee!
-    id = params[:id]
-    if (id)
-      letter = Letter.get(id)
-      if (params[:country])
-        puts ("c_id" + params[:country])
-        letter.country_id = params[:country]
-        country = Country.first(:id=>params[:country])
-        if (country)
-          letter.country_name = country.name
-        end
-      end
-      if (params[:l_type])
-        puts ("l_type" + params[:l_type])
-        letter.type = params[:l_type]
-      end
-      if (params[:note])
-        puts ("note: " + params[:note])
-        letter.note = params[:note]
-      end
-      if (params[:number_of_letters] && params[:number_of_letters] != '')
-        puts ("letters: " + params[:number_of_letters])
-        letter.number_of_letters = params[:number_of_letters]
-      end
-      letter.show = 'true'
-      if (letter.employee_id == current_user[:account].to_s)
-        letter.save
+  id = params[:id]
+  if (id)
+    letter = Letter.get(id)
+    if (params[:country])
+      puts ("c_id" + params[:country])
+      letter.country_id = params[:country]
+      country = Country.first(:id=>params[:country])
+      if (country)
+        letter.country_name = country.name
       end
     end
-    @query_string = ''
-    params.each do |key,value|
-      if ((key == 'sort' || key == 'start' || key == 'type' || key == 'country_id' || key=='field' || key == 'date' || key == 'employee_id') && value != '請選擇')
-        puts "Param #{key}\=#{value}"
-        @query_string += ("#{key}\=#{value}\&")
-      end
+    if (params[:l_type])
+      puts ("l_type" + params[:l_type])
+      letter.type = params[:l_type]
     end
-    redirect '/employee?' + @query_string
+    if (params[:note])
+      puts ("note: " + params[:note])
+      letter.note = params[:note]
+    end
+    if (params[:number_of_letters] && params[:number_of_letters] != '')
+      puts ("letters: " + params[:number_of_letters])
+      letter.number_of_letters = params[:number_of_letters]
+    end
+    letter.show = 'true'
+    if (letter.employee_id == current_user[:account].to_s)
+      letter.save
+    end
+  end
+  @query_string = ''
+  params.each do |key, value|
+    if ((key == 'sort' || key == 'start' || key == 'type' || key == 'country_id' || key=='field' || key == 'date' || key == 'employee_id') && value != '請選擇')
+      puts "Param #{key}\=#{value}"
+      @query_string += ("#{key}\=#{value}\&")
+    end
+  end
+  redirect '/employee?' + @query_string
 end
 
 post '/delete_letter' do
   employee!
-    id = params[:id]
-    if (!id.nil?)
-      letter = Letter.get(id)
-      if (!letter.nil?)
-        if (letter.employee_id == current_user[:account].to_s)
-          letter.deleted = 1
-          letter.show = 0
-          letter.save
-        end
+  id = params[:id]
+  if (!id.nil?)
+    letter = Letter.get(id)
+    if (!letter.nil?)
+      if (letter.employee_id == current_user[:account].to_s)
+        letter.deleted = 1
+        letter.show = 0
+        letter.save
       end
     end
-    redirect '/employee'
+  end
+  redirect '/employee'
 end
 # end_date
 
 # voulenteer
 get '/voulenteer' do
   voulenteer!
-  
+
   @url = get_upload_url()
   @account = current_user
   _trans_type = params[:type]
@@ -525,39 +532,39 @@ get '/voulenteer' do
   if ((_trans_type != nil) && (_trans_type == 'chi' || _trans_type == 'eng'))
     @trans_type = _trans_type
   end
-  
-  @trans_type = @trans_type.nil?? @account.voulenteer_type.nil?? 'eng' : @account.voulenteer_type == 'both'? 'both' : @account.voulenteer_type[0,3] : @trans_type 
-  @account_trans_type = @account.voulenteer_type.nil?? 'both' : @account.voulenteer_type
+
+  @trans_type = @trans_type.nil? ? @account.voulenteer_type.nil? ? 'eng' : @account.voulenteer_type == 'both' ? 'both' : @account.voulenteer_type[0, 3] : @trans_type
+  @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:due_date => nil,:show=>'true', :order=>[:create_date.asc])
+    @all_letters = Letter.all(:due_date => nil, :show=>'true', :order=>[:create_date.asc])
   else
-    @all_letters = Letter.all(:due_date => nil,:show=>'true',:trans_type=>@trans_type, :order=>[:create_date.asc])
+    @all_letters = Letter.all(:due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:create_date.asc])
   end
   @letters = Array.new
   puts "@all_letters: " + @all_letters.size.to_s
   @all_letters.each do |letter|
-      if (letter.show == 'true')  
-        @letters.push(letter)
-      end
+    if (letter.show == 'true')
+      @letters.push(letter)
+    end
   end
   puts "@letters: " + @letters.size.to_s
   if (@letters.size > 0)
-    length = @letters.size > 9 ? 9: @letters.size
+    length = @letters.size > 9 ? 9 : @letters.size
     @letters = @letters[0..length]
   end
   puts "voulent_id: " + current_user[:voulenteer_id].to_s
   @claim_letters = Letter.all(:due_date.not => nil)
   @voulenteer_letters = Array.new
   voulenteer_id = current_user[:voulenteer_id]
-  @claim_letters.each do|letter|
+  @claim_letters.each do |letter|
     if (letter.voulenteer_id == voulenteer_id)
       @voulenteer_letters.push(letter)
     end
   end
-  
+
   bookmark = params[:start]
-  offset = bookmark.nil?? 0 : bookmark.to_i == 1? 0: ((bookmark.to_i-1)*PAGESIZE)
+  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   # paging
   @count = @all_letters.size
   puts "count" + @count.to_s
@@ -568,7 +575,7 @@ get '/voulenteer' do
   for i in (1..total_page)
     @pages.push(i)
   end
-  
+
   @account_id = current_user[:id]
   puts "@account_id: " + @account_id.to_s
 
@@ -631,13 +638,13 @@ get '/send_thank_you_email' do
     vou = Account.first(:voulenteer_id => letter.voulenteer_id)
     puts "vou_email " + vou.email
     uri = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=2&email=" + vou.email + "&id=" + id.to_s)
-        Net::HTTP.get_response(uri)
-    
+    Net::HTTP.get_response(uri)
+
     puts "emp_id" + letter.employee_id
     emp = Account.first(:account => letter.employee_id)
     puts "emp_email " + emp.email
     uri2 = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=3&email=" + emp.email + "&id=" + id.to_s)
-        Net::HTTP.get_response(uri2)
+    Net::HTTP.get_response(uri2)
   end
   erb :nothing
 end
@@ -660,7 +667,7 @@ post '/return_letter' do
     voulenteer.save
     letter.status="緊急"
     letter.save
-    
+
     log = VoulenteerLog.new
     log.voulenteer_id = current_user[:voulenteer_id]
     log.voulenteer_name = current_user[:name]
@@ -677,12 +684,12 @@ post '/return_letter' do
 end
 
 get '/migration' do
-   letters = Letter.all
-   letters.each do |letter|
-      letter.deleted = false
-      letter.save
-   end
-   redirect 'admin'
+  letters = Letter.all
+  letters.each do |letter|
+    letter.deleted = false
+    letter.save
+  end
+  redirect 'admin'
 end
 
 get '/dodolo' do
@@ -695,7 +702,7 @@ get '/dodolo' do
   end
   if @target_url && @target_url.index('http') == nil
     @target_url = nil
-  end  
+  end
   erb :dodolo
 end
 
@@ -708,72 +715,70 @@ end
 def get_letters()
   # search
   trans_type = params[:type]
-  trans_type = params[:type].nil?? nil : params[:type] == ''? nil : params[:type]
-  country_id = params[:country_id].nil?? nil : params[:country_id] == ''? nil : params[:country_id].to_i
-  employee_id = params[:employee_id].nil?? nil : params[:employee_id]==''? nil : params[:employee_id]
-  date = params[:date].nil?? nil : params[:date]==''? nil : params[:date]
-  
-  
-  
+  trans_type = params[:type].nil? ? nil : params[:type] == '' ? nil : params[:type]
+  country_id = params[:country_id].nil? ? nil : params[:country_id] == '' ? nil : params[:country_id].to_i
+  employee_id = params[:employee_id].nil? ? nil : params[:employee_id]=='' ? nil : params[:employee_id]
+  date = params[:date].nil? ? nil : params[:date]=='' ? nil : params[:date]
+
+
   # sorting
   sort = params[:sort]
   field = params[:field]
-    
 
-    
-    @criteria = ''
-    @letters = Letter.all(:deleted => 0)
-    if (trans_type)
-      @letters = @letters.all(:trans_type => trans_type)
-      @criteria+=('type=' + trans_type)
-    end
-    if (country_id)
-      @letters = @letters.all(:country_id=>country_id)
-      @criteria+=('country_id='+country_id.to_s)
-    end
-    if (employee_id)
-      @letters = @letters.all(:employee_id=>employee_id)
-      @criteria+=('employee_id'+employee_id.to_s)
-    end
-    if (date)
-              d = Date.strptime(date, DATE_FORMAT)
-              letters = Array.new()
-              index = 0
-              puts ("date: " + date)
-              puts ("d: " + d.to_s)
-              puts "size" + @letters.size.to_s
-              @letters = @letters.all(:create_date=>d)
-              # @letters.each do |letter|
-              #                 if (letter.create_date.to_s != d)
-              #                   letters.push(letter)
-              #                   puts "date: " + letter.create_date.to_s
-              #                   puts "index" + index.to_s
-              #                 end
-              #                 index += 1
-              #               end
-              #               @letters.delete(letters)
-              @criteria += ('date='+date.to_s)
-    end
-    if (sort)
-      if (field)
-        if (sort == 'asc')
-          @letters = @letters.all(:order=>[:employee_id.asc])
-          elsif(sort == 'desc')
-          @letters = @letters.all(:order=>[:employee_id.desc])
-        end
-        @criteria += ('sort='+sort+'&filed='+field)
-      else
-        if (sort == 'asc')
-          @letters = @letters.all(:order=>[:create_date.asc])
-        elsif(sort == 'desc')
-          @letters = @letters.all(:order=>[:create_date.desc])
-        end
-        @criteria += ('sort='+sort)
+
+  @criteria = ''
+  @letters = Letter.all(:deleted => 0)
+  if (trans_type)
+    @letters = @letters.all(:trans_type => trans_type)
+    @criteria+=('type=' + trans_type)
+  end
+  if (country_id)
+    @letters = @letters.all(:country_id=>country_id)
+    @criteria+=('country_id='+country_id.to_s)
+  end
+  if (employee_id)
+    @letters = @letters.all(:employee_id=>employee_id)
+    @criteria+=('employee_id'+employee_id.to_s)
+  end
+  if (date)
+    d = Date.strptime(date, DATE_FORMAT)
+    letters = Array.new()
+    index = 0
+    puts ("date: " + date)
+    puts ("d: " + d.to_s)
+    puts "size" + @letters.size.to_s
+    @letters = @letters.all(:create_date=>d)
+    # @letters.each do |letter|
+    #                 if (letter.create_date.to_s != d)
+    #                   letters.push(letter)
+    #                   puts "date: " + letter.create_date.to_s
+    #                   puts "index" + index.to_s
+    #                 end
+    #                 index += 1
+    #               end
+    #               @letters.delete(letters)
+    @criteria += ('date='+date.to_s)
+  end
+  if (sort)
+    if (field)
+      if (sort == 'asc')
+        @letters = @letters.all(:order=>[:employee_id.asc])
+      elsif (sort == 'desc')
+        @letters = @letters.all(:order=>[:employee_id.desc])
       end
+      @criteria += ('sort='+sort+'&filed='+field)
     else
-      @letters = @letters.all(:order=>[:create_date.asc])
+      if (sort == 'asc')
+        @letters = @letters.all(:order=>[:create_date.asc])
+      elsif (sort == 'desc')
+        @letters = @letters.all(:order=>[:create_date.desc])
+      end
+      @criteria += ('sort='+sort)
     end
-    @letters
+  else
+    @letters = @letters.all(:order=>[:create_date.asc])
+  end
+  @letters
 end
 
 # end
