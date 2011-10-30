@@ -12,17 +12,13 @@ function getUrlVars()
 }
 function setSelected(target, value){
     var matched = false;
-    alert ('value:' + value);
 	$(target).children().each(function(){
         var attr_value = $(this).attr("value");
-        alert ('attr:' + attr_value);
 		if (value == attr_value){
 			$(this).attr("selected", "selected");
-            matched = true;
-            alert('matched');
 		}
 		else
-			$(this).attr('selected', '');
+			$(this).removeAttr('selected');
 	});
 }
 
