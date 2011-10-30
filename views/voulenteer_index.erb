@@ -82,7 +82,7 @@
             <div id="tabs-1">
                 <h3>未領取</h3>
                 <% @emergent_pages.each do |page| %>
-                    <a href="/employee?start=<%= page %>#tabs-1"><%= page %></a>
+                    <a href="/voulenteer?start=<%= page %>#tabs-1"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
             </div>
@@ -92,7 +92,7 @@
             <div id="tabs-3">
                 <h3>未領取</h3>
                 <% @pages.each do |page| %>
-                    <a href="/employee?start=<%= page %>#tabs-2"><%= page %></a>
+                    <a href="/voulenteer?start=<%= page %>#tabs-2"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
@@ -106,14 +106,14 @@
             <div id="tabs-3">
                 <h3>未領取</h3>
                 <% @emergent_pages.each do |page| %>
-                    <a href="/employee?start=<%= page %>#tabs-3"><%= page %></a>
+                    <a href="/voulenteer?start=<%= page %>#tabs-3"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @emergent_letters, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
             <div id="tabs-4">
                 <h3>未領取</h3>
                 <% @pages.each do |page| %>
-                    <a href="/employee?start=<%= page %>#tabs-4"><%= page %></a>
+                    <a href="/voulenteer?start=<%= page %>#tabs-4"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @letters, :letters => @letters, :account_id => @account_id, :url=>@url} %>
             </div>
