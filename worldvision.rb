@@ -411,16 +411,16 @@ get '/employee' do
   # pagaing
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+  @account = current_user
   @letters = get_letters
-
+  @letters = @letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => nil)
   @count = @letters.size
-  @letters = @letters.all(:offset=> offset, :limit => PAGESIZE)
-
+  @return_letters = @letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => '已領取')
+  @return_letters_count = @letters.size
   # other fields
   @countries = Country.all
   @employees = Account.all(:role => 'employee')
-  puts "====> emplpyee"
-  @account = current_user
+
 
   if (request.query_string.nil?)
     @query_string = nil
@@ -451,13 +451,16 @@ get '/employee' do
   end
 
   # paging
-  puts "count" + @count.to_s
-  puts "index" + offset.to_s
   total_page = (@count/PAGESIZE.to_f).ceil
-  puts "total_page" + total_page.to_s
   @pages = Array.new
   for i in (1..total_page)
     @pages.push(i)
+  end
+
+  total_page = (@return_letters_count/PAGESIZE.to_f).ceil
+  @return_letters_pages = Array.new
+  for i in (1..total_page)
+    @return_letters_pages.push(i)
   end
 
   erb :employee_index
