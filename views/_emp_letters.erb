@@ -13,23 +13,23 @@
     <col width=150>
     <col width=50>
     <tr>
-        <th>????<br/>
+        <th>上傳日期<br/>
         </th>
-        <th style="width: 70px">????<br/>
+        <th style="width: 70px">上傳員工<br/>
         </th>
-        <th>????</th>
-        <th>??</th>
-        <!-- <th>??</th> -->
-        <th>??</th>
-        <th>??</th>
-        <th>??</th>
-        <!-- <th>????</th> -->
-        <th>????</th>
-        <th>????</th>
-        <th>????</th>
-        <th>????</th>
-        <th>????</th>
-        <th>??</th>
+        <th>檔案名稱</th>
+        <th>國家</th>
+        <!-- <th>信種</th> -->
+        <th>備註</th>
+        <th>封數</th>
+        <th>狀態</th>
+        <!-- <th>志工編號</th> -->
+        <th>志工姓名</th>
+        <th>領取日期</th>
+        <th>應返日期</th>
+        <th>回傳日期</th>
+        <th>譯返下載</th>
+        <th>操作</th>
     </tr>
 
     <% pages.each do |page| %>
@@ -52,7 +52,7 @@
             <td class="wrap"><%= truncate letter.upload_file_name %></td>
             <td>
                 <select id="countries" name="country" select="<%= letter.country_id %>">
-                    <option>???</option>
+                    <option>請選擇</option>
                     <% countries.each do |country| %>
                         <option value="<%= h country.id %>"><%= h country.name %></option>
                     <% end %>
@@ -69,21 +69,22 @@
             <td><a href="/serve?blob-key=<%= letter.return_file_url %>"><%= h letter.return_file_name %></a></td>
             <td>
                 <% if (letter.claim_date == nil) %>
-                    <input type=submit value="??">
+                    <input type=submit value="更新">
                     </form>
                     <form method=post action='delete_letter'>
                         <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                        <input type=submit value="??">
+                        <input type=submit value="刪除">
                     </form>
-                <% elsif (letter.status == "???") %>
-                    <input type=submit value="??">
+                <% elsif (letter.status == "已譯返") %>
+                    <input type=submit value="更新">
                     </form>
                     <form method=post action='delete_letter'>
                         <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                        <input type=submit value="??">
+                        <input type=submit value="刪除">
                     </form>
                 <% end %>
                 </td>
                 </tr>
     <% end %>
 </table>
+  
