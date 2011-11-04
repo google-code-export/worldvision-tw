@@ -13,5 +13,11 @@
         <property name="deleted" direction="asc"/>
         <property name="create_date" direction="asc"/>
     </datastore-index>
+     <datastore-index kind="Letters" ancestor="false" source="manual">
+        <property name="deleted" direction="asc"/>
+        <property name="employee_id" direction="asc"/>
+        <property name="status" direction="asc"/>
+        <property name="create_date" direction="asc"/>
+    </datastore-index>
     
 </datastore-indexes>
