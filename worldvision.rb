@@ -412,11 +412,11 @@ get '/employee' do
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
-  @letters = get_letters
-  @letters = @letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => nil)
+  letters = get_letters
+  @letters = letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => nil)
   @count = @letters.size
-  @return_letters = @letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => '已領取')
-  @return_letters_count = @letters.size
+  @return_letters = letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s, :status => '已領取')
+  @return_letters_count = @return_letters.size
   # other fields
   @countries = Country.all
   @employees = Account.all(:role => 'employee')
