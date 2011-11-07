@@ -14,16 +14,13 @@
     <col width=50>
     <tr>
         <th>上傳日期<br/>
-        </th>
-        <th style="width: 70px">上傳員工<br/>
-        </th>
+        <th>狀態</th>
+        <th>序號</th>
+        <th>信件種類</th>
         <th>檔案名稱</th>
         <th>國家</th>
-        <!-- <th>信種</th> -->
         <th>備註</th>
         <th>封數</th>
-        <th>狀態</th>
-        <!-- <th>志工編號</th> -->
         <th>志工姓名</th>
         <th>領取日期</th>
         <th>應返日期</th>
@@ -48,7 +45,9 @@
             <% end %>
             <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
             <td><%= h letter.create_date %></td>
-            <td><%= h letter.employee_id %></td>
+            <td><%= h letter.status %></td>
+            <td><input name="priority" value="<%= letter.priority %>"></input></td>
+            <td><input name="letter_source_type" value="<%= letter.letter_source_type %>"></input></td>
             <td class="wrap"><%= truncate letter.upload_file_name %></td>
             <td>
                 <select id="countries" name="country" select="<%= letter.country_id %>">
@@ -59,9 +58,7 @@
                 </select>
             </td>
             <td><textarea name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
-            <td><input style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input>
-            <td><%= h letter.status %></td>
-            <!-- <td><%= h letter.voulenteer_id %></td> -->
+            <td><input style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input></td>
             <td><%= h letter.voulenteer_name %></td>
             <td><%= h letter.claim_date %></td>
             <td><%= h letter.due_date %></td>
