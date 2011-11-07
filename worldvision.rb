@@ -517,6 +517,11 @@ post '/update_letter' do
       puts ("letters: " + params[:letter_source_type])
       letter.letter_source_type = params[:letter_source_type]
     end
+    if (params[:return_days] && params[:return_days] != '')
+      puts ("letters: " + params[:return_days])
+      letter.return_days = params[:return_days]
+    end
+
     letter.show = 'true'
     if (letter.employee_id == current_user[:account].to_s)
       letter.save
@@ -626,8 +631,12 @@ post '/claim_letter' do
     letter.voulenteer_id = current_user[:voulenteer_id]
     letter.voulenteer_name = current_user[:account]
     letter.claim_date = Date.today
-    letter.due_date = Date.today + 6
-    letter.due_date_3 = Date.today + 9
+    if (letters.return_days.nil?)
+      letter.due_date = Date.today + 6
+      letter.due_date_3 = Date.today + 9
+    else
+      letter.due_date = Date.today + letters.return_days
+      letter.due_date_3 = Date.today + letters.return_days + 3
     letter.status="已領取"
     letter.save
     if (current_user[:email] != nil)
