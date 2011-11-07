@@ -6,9 +6,9 @@
     <script type="text/javascript">
         var trans_type = "英翻中";
         $(document).ready(function() {
-            var type = getUrlVars()["type"];
-            if (type)
-                setSelected($('#tans_select'), type);
+            var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
+            markSelected($('#tans_select'), type);
+
             var country = getUrlVars()["country_id"];
             if (country)
                 setSelected($('#country_select'), country);
