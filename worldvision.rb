@@ -73,6 +73,7 @@ class Letter
   property :due_date, Date
   property :due_date_3, Date
   property :return_date, Date
+  property :return_days, Integer
   property :upload_file, Text
   property :upload_file_url, String
   property :upload_file_name, String
