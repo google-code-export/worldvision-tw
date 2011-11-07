@@ -631,7 +631,7 @@ post '/claim_letter' do
     letter.voulenteer_id = current_user[:voulenteer_id]
     letter.voulenteer_name = current_user[:account]
     letter.claim_date = Date.today
-    if (letters.return_days.nil?)
+    if (letter.return_days.nil?)
       letter.due_date = Date.today + 6
       letter.due_date_3 = Date.today + 9
     else
