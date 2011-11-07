@@ -55,7 +55,7 @@
     <a href="/voulenteer/note">各國翻譯注意事項</a>
     <a href="/voulenteer/noun">各國翻譯常見名詞</a>
     <% if @account_trans_type && @account_trans_type == 'both' %>
-        <%= erb :_trans_type :action => '/voulenteer' %>
+        <%= erb :_trans_type, {:action => '/voulenteer'} %>
     <% end %>
 
     <br/>
