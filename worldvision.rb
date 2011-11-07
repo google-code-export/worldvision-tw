@@ -637,6 +637,7 @@ post '/claim_letter' do
     else
       letter.due_date = Date.today + letters.return_days
       letter.due_date_3 = Date.today + letters.return_days + 3
+    end
     letter.status="已領取"
     letter.save
     if (current_user[:email] != nil)
