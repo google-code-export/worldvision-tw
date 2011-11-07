@@ -602,7 +602,7 @@ get '/voulenteer' do
   @emergent_pages = get_paginator(@emergent_letters, offset)
 
   @account_id = current_user[:id]
-  logger.info("account_id:" + @account_id)
+  logger.info("account_id:" + @account_id.to_s)
   
   erb :voulenteer_index
 end
