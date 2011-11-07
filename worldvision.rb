@@ -410,6 +410,9 @@ DATE_FORMAT='%m/%d/%Y'
 get '/employee' do
   employee!
   @url = get_upload_url()
+  trans_type = params[:type]
+  @trans_type = trans_type.nil?? 'eng' : trans_type
+  params[:type] = @trans_type
   # pagaing
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
@@ -473,8 +476,7 @@ get '/employee' do
     @return_letters_pages.push(i)
   end
 
-  trans_type = params[:type]
-  @trans_type = trans_type.nil?? 'eng' : trans_type
+
 
   erb :employee_index
 end
