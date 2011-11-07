@@ -508,6 +508,14 @@ post '/update_letter' do
       puts ("letters: " + params[:number_of_letters])
       letter.number_of_letters = params[:number_of_letters]
     end
+    if (params[:priority] && params[:priority] != '')
+      puts ("letters: " + params[:priority])
+      letter.priority = params[:priority]
+    end
+    if (params[:letter_source_type] && params[:letter_source_type] != '')
+      puts ("letters: " + params[:letter_source_type])
+      letter.letter_source_type = params[:letter_source_type]
+    end
     letter.show = 'true'
     if (letter.employee_id == current_user[:account].to_s)
       letter.save
