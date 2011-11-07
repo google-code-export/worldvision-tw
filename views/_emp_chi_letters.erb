@@ -50,10 +50,11 @@
             <td><input style="width: 50px" name="priority" value="<%= letter.priority %>"></input></td>
             <td class="wrap"><%= truncate letter.upload_file_name %></td>
             <td>
-                <select id="letter_source_type" name="letter_source_type" select="<%= letter.letter_source_type %>">
+                <select id="return_days" name="return_days" select="<%= letter.return_days %>">
                     <option>請選擇</option>
-                    <option value="手寫稿">手寫稿</option>
-                    <option value="打字稿">打字稿</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
                 </select>
             </td>
             <td>
