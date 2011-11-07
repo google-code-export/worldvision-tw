@@ -46,8 +46,14 @@
             <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
             <td><%= h letter.create_date %></td>
             <td><%= h letter.status %></td>
-            <td><input name="priority" value="<%= letter.priority %>"></input></td>
-            <td><input name="letter_source_type" value="<%= letter.letter_source_type %>"></input></td>
+            <td><input style="width: 50px" name="priority" value="<%= letter.priority %>"></input></td>
+            <td>
+                <select id="letter_data_source" name="letter_data_source" select="<%= letter.letter_data_source %>">
+                    <option>請選擇</option>
+                    <option value="手寫稿">手寫稿</option>
+                    <option value="打字稿">打字稿</option>
+                </select>
+            </td>
             <td class="wrap"><%= truncate letter.upload_file_name %></td>
             <td>
                 <select id="countries" name="country" select="<%= letter.country_id %>">
