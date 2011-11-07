@@ -104,10 +104,17 @@
 <br/>
 <%= erb :_trans_type , {:layout=>false}, {:action => '/employee'} %>
 
+<% if @trans_type == 'eng' %>
 <h3>待譯</h3>
-<%= erb :_emp_letters, {:layout=>false},{:pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<%= erb :_emp_eng_letters, {:layout=>false},{:pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
 <h3>譯返</h3>
-<%= erb :_emp_letters, {:layout=>false},{:pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<%= erb :_emp_eng_letters, {:layout=>false},{:pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<% else %>
+<h3>待譯</h3>
+<%= erb :_emp_chi_letters, {:layout=>false},{:pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<h3>譯返</h3>
+<%= erb :_emp_chi_letters, {:layout=>false},{:pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<% end %>
 <!-- end -->
 
 

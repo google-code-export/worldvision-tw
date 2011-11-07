@@ -473,6 +473,9 @@ get '/employee' do
     @return_letters_pages.push(i)
   end
 
+  trans_type = params[:type]
+  @trans_type = trans_type.nil?? 'eng' : trans_type
+
   erb :employee_index
 end
 
