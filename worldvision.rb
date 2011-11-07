@@ -61,6 +61,8 @@ class Letter
   property :country_name, String
   property :country_id, String
   property :type, String
+  property :letter_source_type, String
+  property :priority, Integer
   property :trans_type, String
   property :note, String
   property :status, String
