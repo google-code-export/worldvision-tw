@@ -413,6 +413,7 @@ get '/employee' do
   trans_type = params[:type]
   @trans_type = trans_type.nil?? 'eng' : trans_type
   params[:type] = @trans_type
+  
   # pagaing
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
