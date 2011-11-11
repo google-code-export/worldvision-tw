@@ -6,29 +6,18 @@
     <script type="text/javascript">
         var trans_type = "英翻中";
         $(document).ready(function() {
-            var type = getUrlVars()["type"] == null ? "eng" : getUrlVars()["type"];
+            var params = getUrlVars();
+            var type = getUrlVars()["type"] == null ? "eng" : params["type"];
+            var letter_status = params["letter_status"];
+            if (letter_status){
+                setSelected($('#status'), letter_status);
+            }
+            if (type)
+                setSelected($('#type'), type);
+
             markSelected($('#tans_select'), type);
 
-            var country = getUrlVars()["country_id"];
-            if (country)
-                setSelected($('#country_select'), country);
-            var employee = getUrlVars()["employee_id"];
-            if (employee)
-                setSelected($('#employee_select'), employee);
-            var letter_source_type = getUrlVars()["letter_source_type"];
-            if (letter_source_type)
-                setSelected($('#letter_source_type'), letter_source_type);
-            // if (date)
-            // ($('#date_select').attr("value", "1234");
-            // else
-            // 		setSelected($('#tans_select'), trans_type);
-            // alert ($('select[select]').length);
-            $('select[select]').each(function() {
-                setSelected($(this), $(this).attr("select"));
-            });
 
-            // Datepicker
-            // $('#date_select').datepicker();
         });
 
         $(function() {
@@ -86,9 +75,18 @@
 </div>
 <div style="position:relative; left:100px">
     <span style="font-size:18px">上傳檔案查詢</span>
-    <%#-= erb(:_search_emp, :layout => false) %>
-    <table id="search" class="nowidth">
-    </table>
+    <form action="/employee" method="GET">
+    <select id="status" name="letter_status" onChange='form.submit()'>
+        <option>請選擇</option>
+        <option value="未領取">未領取</option>
+        <option value="已領取">已領取</option>
+        <option value="緊急">緊急</option>
+    </select>
+    <select id="type" name="type" style="display:none">
+        <option value="eng">英翻中</option>
+        <option value="chi">中翻英</option>
+    </select>
+    </form>
 </div>
 </div>
 <br/>
