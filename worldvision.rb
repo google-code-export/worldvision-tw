@@ -749,7 +749,7 @@ def get_letters()
   country_id = params[:country_id].nil? ? nil : params[:country_id] == '' ? nil : params[:country_id].to_i
   employee_id = params[:employee_id].nil? ? nil : params[:employee_id]=='' ? nil : params[:employee_id]
   date = params[:date].nil? ? nil : params[:date]=='' ? nil : params[:date]
-
+  status = params[:letter_status].nil? ? nil : params[:letter_status] == '' ? nil : params[:letter_status]
 
   # sorting
   sort = params[:sort]
@@ -788,6 +788,9 @@ def get_letters()
     #               end
     #               @letters.delete(letters)
     @criteria += ('date='+date.to_s)
+  end
+  if (status)
+    @letters = @letters.all(:status => status)
   end
   if (sort)
     if (field)
