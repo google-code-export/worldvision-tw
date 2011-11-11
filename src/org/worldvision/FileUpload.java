@@ -116,6 +116,8 @@ public class FileUpload extends HttpServlet {
 			String fileName = (String) req.getAttribute("fileName");
 			String fileUrl = blobKey;
 			Letters letter = new Letters(userName, fileUrl, fileName, type);
+			if (type == "chi")
+				letter.setNote("中翻英");
 			letter.setShow("false");
 			PersistenceManager pm = PMF.get().getPersistenceManager();
 			System.out.println("filename: " + fileName);
