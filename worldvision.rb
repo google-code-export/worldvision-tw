@@ -573,9 +573,9 @@ get '/voulenteer' do
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :due_date => nil, :show=>'true', :order=>[:due_date.asc])
+    @all_letters = Letter.all(:due_date => nil, :show=>'true', :order=>[:due_date.asc])
   else
-    @all_letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.asc])
+    @all_letters = Letter.all(:due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.asc])
   end
   @letters = Array.new
   @emergent_letters = Array.new
@@ -611,6 +611,14 @@ get '/voulenteer' do
   # paging
   @pages = get_paginator(@letters, offset)
   @emergent_pages = get_paginator(@emergent_letters, offset)
+
+  if (@letters.size > 10)
+    @letters = @letters[offset, offset+PAGESIZE]
+  end
+
+  if (@emergent_letters.size > 10)
+    @emergent_letters = @emergent_letters[offset, offset+PAGESIZE]
+  end
 
   @account_id = current_user[:id]
   logger.info("account_id:" + @account_id.to_s)
