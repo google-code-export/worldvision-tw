@@ -590,11 +590,11 @@ get '/voulenteer' do
     end
   end
 
-  if (!@letters.size > 50)
+  if (@letters.size > 50)
      @letters = @letters[0, 49]
   end
 
-  if (!@emergent_letters.size > 50)
+  if (@emergent_letters.size > 50)
      @emergent_letters = @emergent_letters[0, 49]
   end
 
