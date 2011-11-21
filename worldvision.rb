@@ -558,6 +558,9 @@ end
 get '/voulenteer' do
   voulenteer!
 
+  bookmark = params[:start]
+  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+
   @url = get_upload_url()
   @account = current_user
   _trans_type = params[:type]
@@ -570,9 +573,9 @@ get '/voulenteer' do
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:due_date => nil, :show=>'true', :order=>[:create_date.asc])
+    @all_letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :due_date => nil, :show=>'true', :order=>[:create_date.asc])
   else
-    @all_letters = Letter.all(:due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:create_date.asc])
+    @all_letters = Letter.all(:offset=> offset, :limit => PAGESIZE, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:create_date.asc])
   end
   @letters = Array.new
   @emergent_letters = Array.new
@@ -595,8 +598,7 @@ get '/voulenteer' do
     end
   end
 
-  bookmark = params[:start]
-  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+
   # paging
   @pages = get_paginator(@letters, offset)
   @emergent_pages = get_paginator(@emergent_letters, offset)
