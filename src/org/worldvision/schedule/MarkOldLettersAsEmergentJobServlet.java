@@ -25,8 +25,8 @@ public class MarkOldLettersAsEmergentJobServlet extends HttpServlet {
 			throws ServletException, IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> letters = new ArrayList();
-		letters.addAll(letter_model.findOldLetters(pm, "chinese", 2));
-		letters.addAll(letter_model.findOldLetters(pm, "english", 7));
+		letters.addAll(letter_model.findOldLetters(pm, LetterModel.TRANS_TYPE_CHINESE_TO_ENGLISH, 2));
+		letters.addAll(letter_model.findOldLetters(pm, LetterModel.TRANS_TYPE_ENGLISH_TO_CHINESE, 7));
 		
 		int size = letters.size();
 		for (int i = 0; i < size; i++){

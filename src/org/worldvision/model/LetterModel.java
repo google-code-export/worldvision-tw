@@ -13,6 +13,10 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
 public class LetterModel {
+	
+	public static final String TRANS_TYPE_CHINESE_TO_ENGLISH = "chi";
+	public static final String TRANS_TYPE_ENGLISH_TO_CHINESE = "eng";
+	
 	//YYYY-MM-DD HH:MM:SS
 	String pattern = "yyyy/MM/dd MM/dd/yyyy ";
     SimpleDateFormat format = new SimpleDateFormat(pattern);
