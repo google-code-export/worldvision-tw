@@ -37,9 +37,9 @@
   <servlet>
 		<description>
 		</description>
-		<display-name>MarkOldLettersJobServlet</display-name>
-		<servlet-name>MarkOldLettersJobServlet</servlet-name>
-		<servlet-class>org.worldvision.schedule.MarkOldLettersJobServlet</servlet-class>
+		<display-name>MarkOldLettersAsEmergentJobServlet</display-name>
+		<servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
+		<servlet-class>org.worldvision.schedule.MarkOldLettersAsEmergentJobServlet</servlet-class>
   </servlet>
   <servlet>
 		<description>
@@ -120,7 +120,7 @@
 			<url-pattern>/reset_due_letters</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-			<servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
+			<servlet-name>MarkDueLettersJobServlet</servlet-name>
 			<url-pattern>/mark_due_letters</url-pattern>
 	</servlet-mapping>
 	
