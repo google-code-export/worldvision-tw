@@ -120,7 +120,7 @@
 			<url-pattern>/reset_due_letters</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-			<servlet-name>MarkDueLettersJobServlet</servlet-name>
+			<servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
 			<url-pattern>/mark_due_letters</url-pattern>
 	</servlet-mapping>
 	
