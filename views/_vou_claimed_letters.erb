@@ -60,7 +60,9 @@
                         退件原因:
                         <input name="id" style="display:none" value="<%= letter.id %>">
                         <input name="excuse" size="25" id="execuse_<%= letter.id %>">
-                        <input type="submit" value="確認">
+                        <div style="float: right">
+                            <input type="submit" value="退件">
+                        </div>
                     </form>
                 <% else %>
                     已成功上傳
