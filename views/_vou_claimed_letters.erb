@@ -1,74 +1,73 @@
 <table border="1">
+    <% if !is_chinese_email(trans_type) %>
+        <col width=90>
+        <col width=90>
+        <col width=50>
+        <col width=150>
+        <col width=20>
+        <col width=70>
+
+        <col width=100>
+        <col width=150>
+        <col width=200>
+    <% else %>
+        <col width=90>
+        <col width=90>
+        <col width=150>
+        <col width=20>
+        <col width=70>
+        <col width=100>
+        <col width=150>
+        <col width=200>
+    <% end %>
+    <!--應返日期/ 領取日期 / 國家 /備註 /封數 / 狀態 / 待譯信件 /譯返上傳-->
+    <tr>
+        <th>應返日期</th>
+        <th>領取日期</th>
         <% if !is_chinese_email(trans_type) %>
-            <col width=90>
-            <col width=50>
-            <col width=150>
-            <col width=20>
-            <col width=70>
-            <col width=90>
-            <col width=100>
-            <col width=150>
-            <col width=200>
-        <% else %>
-            <col width=90>
-            <col width=200>
-            <col width=20>
-            <col width=70>
-            <col width=90>
-            <col width=100>
-            <col width=150>
-            <col width=200>
+            <th style="width: 10px">國家</th>
         <% end %>
+        <th>備註</th>
+        <th>封數</th>
+        <th style="width: 10px">狀態</th>
+        <th>領取日期</th>
+        <th>待譯信件</th>
+        <th>譯返上傳</th>
+    </tr>
+
+
+    <% letters.each do |letter| %>
         <tr>
-            <th>上傳日期</th>
+            <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+            <td><%= h letter.due_date %></td>
+            <td><%= h letter.claim_date %></td>
             <% if !is_chinese_email(trans_type) %>
-                <th style="width: 10px">國家</th>
+                <td><%= letter.country_name %></td>
             <% end %>
-            <!-- <th>信種</th> -->
-            <th>備註</th>
-            <th>封數</th>
-            <th style="width: 10px">狀態</th>
-            <th>領取日期</th>
-            <th>應返日期</th>
-            <th>待譯信件</th>
-            <th>譯返上傳</th>
-        </tr>
-
-
-        <% letters.each do |letter| %>
-            <tr>
-                <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
-                <td><%= h letter.create_date %></td>
-                <!-- <td><%= h letter.employee_id %></td> -->
-                <% if !is_chinese_email(trans_type) %>
-                    <td><%= letter.country_name %></td>
+            <td><%= h letter.note %></td>
+            <td><%= letter.number_of_letters %></input>
+            <td><%= h letter.status %></td>
+            <td><%= h letter.due_date %></td>
+            <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
+            </td>
+            <td>
+                <% if letter.return_file_url == nil %>
+                    <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                        譯返上傳:<input type="file" name="myFile" size="10">
+                        <input type="submit" value="上傳">
+                    </form>
+                    <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
+                        退件原因:
+                        <input name="id" style="display:none" value="<%= letter.id %>">
+                        <input name="excuse" size="25" id="execuse_<%= letter.id %>">
+                        <input type="submit" value="確認">
+                    </form>
+                <% else %>
+                    已成功上傳
                 <% end %>
-                <!-- <td><%= h letter.type %>  <br/></td> -->
-                <td><%= h letter.note %></td>
-                <td><%= letter.number_of_letters %></input>
-                <td><%= h letter.status %></td>
-                <td><%= h letter.claim_date %></td>
-                <td><%= h letter.due_date %></td>
-                <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
-                </td>
-                <td>
-                    <% if letter.return_file_url == nil %>
-                        <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
-                            譯返上傳:<input type="file" name="myFile" size="10">
-                            <input type="submit" value="上傳">
-                        </form>
-                        <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
-                            退件原因:
-                            <input name="id" style="display:none" value="<%= letter.id %>">
-                            <input name="excuse" size="25" id="execuse_<%= letter.id %>">
-                            <input type="submit" value="確認">
-                        </form>
-                    <% else %>
-                        已成功上傳
-                    <% end %>
 
 
-                </td>
-            </tr>
-        <% end %>
-    </table>
+            </td>
+        </tr>
+    <% end %>
+</table>
