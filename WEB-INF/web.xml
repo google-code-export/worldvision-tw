@@ -126,7 +126,7 @@
 	
 	
 	<servlet-mapping>
-			<servlet-name>MarkOldLettersJobServlet</servlet-name>
+			<servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
 			<url-pattern>/mark_old_letters</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
