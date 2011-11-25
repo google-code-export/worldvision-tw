@@ -420,18 +420,18 @@ get '/employee' do
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
   letters = get_letters
-  paginal_letters = letters.all(:offset=> offset, :limit => (PAGESIZE * 2), :employee_id=> current_user[:account].to_s)
+  all_letters = letters.all(:employee_id=> current_user[:account].to_s)
   @letters = Array.new
   @return_letters = Array.new
-  paginal_letters.each do |letter|
+  all_letters.each do |letter|
     if (letter.status == '已譯返')
       @return_letters.push(letter)
     else
       @letters.push(letter)
     end
   end
-  @count = letters.count(:employee_id=> current_user[:account].to_s)
-  @return_letters_count = letters.count(:employee_id=> current_user[:account].to_s, :status=>'已譯返')
+  @count = @letters.size
+  @return_letters_count = @return_letters.size
   logger.info("count:" + @count.to_s)
   logger.info("r_count:" + @return_letters_count.to_s)
 
