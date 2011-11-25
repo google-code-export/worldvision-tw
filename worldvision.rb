@@ -420,7 +420,7 @@ get '/employee' do
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
   letters = get_letters
-  paginal_letters = letters.all(:offset=> offset, :limit => PAGESIZE, :employee_id=> current_user[:account].to_s)
+  paginal_letters = letters.all(:offset=> offset, :employee_id=> current_user[:account].to_s)
   @letters = Array.new
   @return_letters = Array.new
   paginal_letters.each do |letter|
@@ -432,6 +432,13 @@ get '/employee' do
   end
   @count = @letters.size
   @return_letters_count = @return_letters.size
+
+  if (@letters.size > PAGESIZE)
+    @letters = @letters[0,9]
+  end
+  if (@return_letters.size > PAGESIZE)
+    @return_letters = @return_letters[0,9]
+  end
   # other fields
   @countries = Country.all
   @employees = Account.all(:role => 'employee')
