@@ -437,10 +437,10 @@ get '/employee' do
   logger.info("r_count:" + @return_letters_count.to_s)
 
   if (@letters.size > PAGESIZE)
-    @letters = @letters[0,10]
+    @letters = @letters[offset,offset+10]
   end
   if (@return_letters.size > PAGESIZE)
-    @return_letters = @return_letters[0,10]
+    @return_letters = @return_letters[offset,offset+10]
   end
   # other fields
   @countries = Country.all
