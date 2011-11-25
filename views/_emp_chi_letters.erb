@@ -58,12 +58,7 @@
                 </select>
             </td>
             <td>
-                <select id="countries" name="country" select="<%= letter.country_id %>">
-                    <option>請選擇</option>
-                    <% countries.each do |country| %>
-                        <option value="<%= h country.id %>"><%= h country.name %></option>
-                    <% end %>
-                </select>
+                <input name="country"><%= h country.name %></input>
             </td>
             <td><textarea name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
             <td><input style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input></td>
