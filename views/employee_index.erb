@@ -17,7 +17,9 @@
 
             markSelected($('#tans_select'), type);
 
-
+            $('select[select]').each(function() {
+                setSelected($(this), $(this).attr("select"));
+            });
         });
 
         $(function() {
@@ -29,11 +31,6 @@
                 $("#date_select").datepicker("setDate", date);
             }
         });
-
-        $('select[select]').each(function() {
-                setSelected($(this), $(this).attr("select"));
-        });
-
     </script>
 </head>
 <body style="font-family: sans-serif; width: 1150px" class="employee">
