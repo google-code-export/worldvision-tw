@@ -49,4 +49,25 @@ function post_submit (form,p) {
    
 }
 
+function check_updating_letters(id){
+    //check letter_type
+    var letter_type = $('#' + id + '_letter_source_type').val();
+    if (letter_type == '請選擇'){
+       alert("請選擇信件種類");
+       return false;
+    }
+    //check country
+    var country = $('#' + id + '_countries').val();
+    if (country == '請選擇'){
+       alert("請選擇信件國家");
+       return false;
+    }
+    //check # of letters
+    var number_of_letters = parseInt($('#' + id + '_number_of_letters').val());
+    if (!number_of_letters || number_of_letters < 0 ){
+       alert("請輸入信件封數");
+       return false;
+    }
+}
+
 	
