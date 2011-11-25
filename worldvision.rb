@@ -430,6 +430,7 @@ get '/employee' do
       @letters.push(letter)
     end
   end
+# @todo investigate why count does not work
   @count = @letters.size
   @return_letters_count = @return_letters.size
   logger.info("count:" + @count.to_s)
