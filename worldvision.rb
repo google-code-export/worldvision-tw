@@ -434,10 +434,10 @@ get '/employee' do
   @return_letters_count = @return_letters.size
 
   if (@letters.size > PAGESIZE)
-    @letters = @letters[0,9]
+    @letters = @letters[0,10]
   end
   if (@return_letters.size > PAGESIZE)
-    @return_letters = @return_letters[0,9]
+    @return_letters = @return_letters[0,10]
   end
   # other fields
   @countries = Country.all
