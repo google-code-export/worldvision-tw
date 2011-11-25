@@ -431,7 +431,7 @@ get '/employee' do
     end
   end
   @count = letters.count(:employee_id=> current_user[:account].to_s)
-  @return_letters_count = letters.count(:employee_id=> current_user[:account].to_s, :status='已譯返')
+  @return_letters_count = letters.count(:employee_id=> current_user[:account].to_s, :status=>'已譯返')
 
   if (@letters.size > PAGESIZE)
     @letters = @letters[0,10]
