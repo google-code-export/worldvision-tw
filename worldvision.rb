@@ -338,7 +338,7 @@ end
 post '/create_account' do
   protected!
   account = Account.create(:account=>params[:account], :password=>params[:password], :role=>params[:role],
-                           :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :email=>params[:email], :jobs=>0)
+                           :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :jobs=>0)
   redirect '/admin'
 end
 
