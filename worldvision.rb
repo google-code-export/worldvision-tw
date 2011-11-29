@@ -742,11 +742,10 @@ post '/return_letter' do
   redirect '/voulenteer'
 end
 
-get '/migration' do
-  letters = Letter.all
-  letters.each do |letter|
-    letter.deleted = false
-    letter.save
+get '/migrate' do
+  accounts = Accounts.all
+  accounts.each do |account|
+    account.account = account.email
   end
   redirect 'admin'
 end
