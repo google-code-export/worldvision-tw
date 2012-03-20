@@ -10,12 +10,11 @@
 	<a  href="/voulenteer/template">各國信件翻譯範本</a>
 	<!-- <a href="/voulenteer/note">各國翻譯注意事項</a> -->
 	<a  href="/voulenteer/noun">各國翻譯常見名詞</a>
-    <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
-<h3>各國翻譯注意事項</h3>
+<h3>各國翻譯背景</h3>
 <table border="1" style="width: 400px">
     <tr>
         <th style="width: 100px">國家</th>
-        <th style="width: 100px">注意事項下載</th>
+        <th style="width: 100px">翻譯背景下載</th>
     </tr>
     <tr>
         <td colspan="2" class="continent">亞洲</td>
@@ -23,7 +22,7 @@
     <% @asia_countries.each do |country| %>
         <tr>
             <td><%= h country.name %></td>
-            <td><a href="/serve?blob-key=<%= country.note_url %>"><%=truncate(country.note_file_name)%></a></td>
+            <td><a href="/serve?blob-key=<%= country.background_url %>"><%=country.background_file_name%></a></td>
         </tr>
     <% end %>
     <tr>
@@ -32,7 +31,7 @@
     <% @africa_countries.each do |country| %>
         <tr>
             <td><%= h country.name %></td>
-            <td><a href="/serve?blob-key=<%= country.note_url %>"><%=truncate(country.note_file_name)%></a></td>
+            <td><a href="/serve?blob-key=<%= country.background_url %>"><%=country.background_file_name%></a></td>
         </tr>
     <% end %>
     <tr>
@@ -41,7 +40,7 @@
     <% @mid_east_countries.each do |country| %>
         <tr>
             <td><%= h country.name %></td>
-            <td><a href="/serve?blob-key=<%= country.note_url %>"><%=truncate(country.note_file_name)%></a></td>
+            <td><a href="/serve?blob-key=<%= country.background_url %>"><%=country.background_file_name%></a></td>
         </tr>
     <% end %>
     <tr>
@@ -50,7 +49,7 @@
     <% @latin_america_countries.each do |country| %>
         <tr>
             <td><%= h country.name %></td>
-            <td><a href="/serve?blob-key=<%= country.note_url %>"><%=truncate(country.note_file_name)%></a></td>
+            <td><a href="/serve?blob-key=<%= country.background_url %>"><%=country.background_file_name%></a></td>
         </tr>
     <% end %>
 

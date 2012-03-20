@@ -28,17 +28,23 @@ class Account
   property :voulenteer_id, String
   property :voulenteer_type, String
   property :jobs, Integer, :default => 0
+  property :weekly_email, Boolean, :default  => true
+  property :allow_login, Boolean, :default  => true
 end
 class Country
   include DataMapper::Resource
   property :id, Serial
   property :name, String
+  property :continent, String
   property :note_url, String
   property :noun_url, String
   property :template_url, String
+  property :background_url, String
   property :note_file_name, String
   property :noun_file_name, String
   property :template_file_name, String
+  property :background_file_name, String
+
 end
 
 class VoulenteerLog
@@ -69,6 +75,7 @@ class Letter
   property :number_of_letters, Integer, :default  => 0
   property :voulenteer_id, String
   property :voulenteer_name, String
+  property :voulenteer_account, String
   property :claim_date, Date
   property :due_date, Date
   property :due_date_3, Date
@@ -93,6 +100,12 @@ class Letter
   end
 end
 
+class Template
+  include DataMapper::Resource
+  property :id, Serial
+  property :tempate_url, String
+end
+
 class Date
   def to_s
     strftime('%m/%d/%Y')
@@ -104,7 +117,7 @@ end
 
 # Configure DataMapper to use the App Engine datastore 
 DataMapper.setup(:default, "appengine://auto")
-
+enable :sessions
 # Make sure our template can use <%=h
 helpers do
   include Rack::Utils
@@ -112,42 +125,67 @@ helpers do
 
   def protected!
     unless admin?
-      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
-      throw(:halt, [401, "Not authorized\n"])
+      redirect '/login'
+#      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
+#      throw(:halt, [401, "Not authorized\n"])
     end
   end
 
   def employee!
     unless employee?
-      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
-      throw(:halt, [401, "Not authorized\n"])
+      redirect '/login'
+#      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
+#      throw(:halt, [401, "Not authorized\n"])
     end
   end
 
   def voulenteer!
     unless voulenteer?
-      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
-      throw(:halt, [401, "Not authorized\n"])
+      redirect '/login'
+#      response['WWW-Authenticate'] = %(Basic realm="Login to World Vision")
+#      throw(:halt, [401, "Not authorized\n"])
     end
   end
 
   def admin?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'admin']
+    allowed('admin')
+#    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+#    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'admin']
   end
 
   def employee?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'employee')
+    allowed('employee')
+#    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+#    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth.username, @auth.credentials, 'employee')
   end
 
   def voulenteer?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth, 'voulenteer')
+    allowed('voulenteer')
+#    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+#    @auth.provided? && @auth.basic? && @auth.credentials && authenticate_account(@auth.username, @auth.credentials, 'voulenteer')
+  end
+
+  def allowed(role)
+    account = current_user
+    if (account && account.role == role)
+      true
+    else
+      false
+    end
   end
 
   def current_user
-    session[:user]
+    if session[:user]
+      if (session[:user] == 'admin')
+        account = Account.new
+        account.role = 'admin'
+        account
+      else
+        Account.first(:account => session[:user])
+      end
+    else
+      nil
+    end
   end
 
   def logger
@@ -155,9 +193,11 @@ helpers do
   end
 
   def truncate (string)
-    index = string.rindex('\\')
-    if (index && index > 0)
-      string = string[index+1, string.length]
+    if (string)
+      index = string.rindex('\\')
+      if (index && index > 0)
+        string = string[index+1, string.length]
+      end
     end
     string
   end
@@ -170,32 +210,45 @@ helpers do
     end
   end
 
-  def authenticate_account(auth, type)
-    # puts "debug:authen:" + auth.credentials.to_s
-    id = auth.username
-    account = nil
-    accounts = Account.all
-    # puts "debug:id" + id
-    accounts.each do |_account|
-      # puts "account" + _account.account
-      if _account.account == id
-        # "debug: find_account: " + _account.account
-        account = _account
-      end
-    end
-
-    # account = Account.first(:name => 'robbie')
-    if !account.nil?
-      # puts "debug:authen:account:3: " + account.account + ":pwd: " + account.password + ": type: " + account.role
-    end
-
-    if !account.nil? && auth.credentials == [account.account, account.password] && account.role == type
-      if current_user.nil?
-        session[:user] = account
-      end
-      return true
+  def is_english_email(type)
+    if (type && type == 'eng')
+      true
     else
-      return false
+      false
+    end
+  end
+
+  def letter_status_to_chinese(status)
+    if (status == "emergent")
+      "緊急"
+    elsif (status == "unclaimed")
+      "未領取"
+    elsif (status == "claimed")
+      "已領取"
+    elsif (status == "returned")
+      "已譯返"
+    end
+  end
+
+  def authenticate_account(username, password, type)
+
+    if (username == 'admin' && password == 'admin')
+      session[:user] = 'admin'
+      return 'admin'
+    end
+
+    # puts "debug:authen:" + auth.credentials.to_s
+    id = username
+    account = nil
+    account = Account.first(:account => username, :password => password)
+
+    if !account.nil?
+      if current_user.nil?
+        session[:user] = account.account
+      end
+      return account.role
+    else
+      return nil
     end
   end
 
@@ -209,6 +262,37 @@ end
 
 get '/' do
   redirect '/voulenteer'
+end
+
+get '/logout' do
+  session[:user] = nil
+
+  redirect '/login'
+end
+
+get '/login' do
+  erb :login
+end
+
+post '/login' do
+  email = params[:email]
+  password = params[:password]
+
+  @type = authenticate_account(email, password, 'admin')
+  if (@type)
+    if (@type == 'admin')
+      redirect '/admin'
+    elsif (@type == 'employee')
+      redirect '/employee'
+    elsif (@type == 'voulenteer')
+      redirect '/voulenteer'
+    end
+  else
+    @fail = true
+    erb :login
+  end
+
+
 end
 
 # admin
@@ -227,6 +311,9 @@ get '/admin' do
     @accounts = Array.new
   end
 
+  if (params[:account_exists])
+    @account_exists = true
+  end
 
   erb :admin_index
 end
@@ -241,6 +328,7 @@ end
 get '/admin/country' do
   protected!
   @countries = Country.all
+  @template = Template.first
   @url = get_upload_url()
   erb :admin_country_index
 end
@@ -335,17 +423,48 @@ get '/admin/vou' do
 
 end
 
+get '/admin/is_account_exist' do
+  protected!
+
+  logger.info("called")
+  acc = Account.first(:account => params[:account])
+  acc.nil? ? "no" : "yes"
+end
+
 post '/create_account' do
   protected!
-  account = Account.create(:account=>params[:account], :password=>params[:password], :role=>params[:role],
-                           :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :jobs=>0)
-  redirect '/admin'
+
+  acc = Account.first(:account => params[:account])
+  logger.info("acc:" + acc.to_s)
+  @account_exists = nil
+  if (acc.nil?)
+    account = Account.create(:account=>params[:account], :password=>params[:password], :role=>params[:role],
+                             :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :jobs=>0)
+  else
+    @account_exists=true
+  end
+  logger.info("result:" + @account_exists.to_s)
+  if @account_exists
+    redirect '/admin?account_exists=' + @account_exists.to_s
+  else
+    redirect '/admin'
+  end
 end
 
 post '/admin/create_country' do
   protected!
-  country = Country.create(:name=>params[:name])
+  if (params[:name] && params[:continent])
+    country = Country.create(:name=>params[:name], :continent=>params[:continent])
+  end
   redirect '/admin/country'
+end
+
+post '/admin/search_country' do
+  protected!
+  @countries = Country.all(:name => params[:country])
+  @url = get_upload_url()
+
+  erb :admin_country_index
 end
 
 post '/admin/delete_country' do
@@ -398,6 +517,12 @@ post '/update_account' do
     if params[:email]
       account.email = params[:email]
     end
+    if params[:weekly_email]
+      account.weekly_email = params[:weekly_email]
+    end
+    if params[:allow_login]
+      account.allow_login = params[:allow_login]
+    end
     account.save
   end
   redirect '/admin'
@@ -412,19 +537,19 @@ get '/employee' do
   employee!
   @url = get_upload_url()
   trans_type = params[:type]
-  @trans_type = trans_type.nil?? 'eng' : trans_type
+  @trans_type = trans_type.nil? ? 'eng' : trans_type
   params[:type] = @trans_type
-  
+
   # pagaing
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
   letters = get_letters
-  all_letters = letters.all(:employee_id=> current_user[:account].to_s)
+  all_letters = letters.all(:employee_id=> current_user[:account].to_s, :trans_type=> @trans_type)
   @letters = Array.new
   @return_letters = Array.new
   all_letters.each do |letter|
-    if (letter.status == '已譯返')
+    if (letter.status == 'returned')
       @return_letters.push(letter)
     else
       @letters.push(letter)
@@ -437,10 +562,10 @@ get '/employee' do
   logger.info("r_count:" + @return_letters_count.to_s)
 
   if (@letters.size > PAGESIZE)
-    @letters = @letters[offset,offset+10]
+    @letters = @letters[offset+1, PAGESIZE]
   end
   if (@return_letters.size > PAGESIZE)
-    @return_letters = @return_letters[offset,offset+10]
+    @return_letters = @return_letters[offset+1, PAGESIZE]
   end
   # other fields
   @countries = Country.all
@@ -489,7 +614,6 @@ get '/employee' do
   end
 
 
-
   erb :employee_index
 end
 
@@ -501,10 +625,10 @@ post '/update_letter' do
     letter = Letter.get(id)
     if (params[:country])
       puts ("c_id" + params[:country])
-      letter.country_id = params[:country]
-      country = Country.first(:id=>params[:country])
+      country = Country.first(:name=>params[:country])
       if (country)
         letter.country_name = country.name
+        letter.country_id = country.id
       end
     end
     if (params[:l_type])
@@ -539,7 +663,7 @@ post '/update_letter' do
   end
   @query_string = ''
   params.each do |key, value|
-    if ((key == 'sort' || key == 'start' || key == 'type' || key == 'country_id' || key=='field' || key == 'date' || key == 'employee_id') && value != '請選擇')
+    if ((key == 'sort' || key == 'start' || key == 'type' || key == 'country_id' || key=='field' || key == 'date' || key == 'employee_id' || key == 'letter_status' || key == 'start') && value != '請選擇')
       puts "Param #{key}\=#{value}"
       @query_string += ("#{key}\=#{value}\&")
     end
@@ -547,16 +671,19 @@ post '/update_letter' do
   redirect '/employee?' + @query_string
 end
 
-post '/delete_letter' do
+get '/delete_letter' do
   employee!
-  id = params[:id]
-  if (!id.nil?)
-    letter = Letter.get(id)
-    if (!letter.nil?)
-      if (letter.employee_id == current_user[:account].to_s)
-        letter.deleted = 1
-        letter.show = 0
-        letter.save
+  ids = params[:ids]
+  if (ids)
+    ids.each do |id|
+      logger.info("id:" + id.to_s)
+      letter = Letter.get(id)
+      if (!letter.nil?)
+        if (letter.employee_id == current_user[:account].to_s)
+          letter.deleted = 1
+          letter.show = 'false'
+          letter.save
+        end
       end
     end
   end
@@ -568,8 +695,16 @@ end
 get '/voulenteer' do
   voulenteer!
 
+  if (session[:has_been_claimed])
+    @letter_has_been_claimed = true
+    session[:has_been_claimed] = nil
+  end
+
   bookmark = params[:start]
-  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+  offset = 0
+  if (bookmark)
+    offset = (bookmark.to_i-1)*PAGESIZE
+  end
 
   @url = get_upload_url()
   @account = current_user
@@ -583,16 +718,16 @@ get '/voulenteer' do
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:due_date => nil, :show=>'true', :order=>[:due_date.asc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :order=>[:due_date.asc])
   else
-    @all_letters = Letter.all(:due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.asc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.asc])
   end
   @letters = Array.new
   @emergent_letters = Array.new
   puts "@all_letters: " + @all_letters.size.to_s
   @all_letters.each do |letter|
     if (letter.show == 'true')
-      if (letter.status =='緊急')
+      if (letter.status =='emergent')
         @emergent_letters.push(letter)
       else
         @letters.push(letter)
@@ -600,13 +735,34 @@ get '/voulenteer' do
     end
   end
 
+  @hand_writing_letters = Array.new
+  @typing_letters = Array.new
+
+  @letters.each do |letter|
+    if (letter.letter_source_type =='手寫稿')
+      @hand_writing_letters.push(letter)
+    else
+      @typing_letters.push(letter)
+    end
+  end
+
+
   if (@letters.size > 50)
-     @letters = @letters[0, 49]
+    @letters = @letters[0, 49]
   end
 
   if (@emergent_letters.size > 50)
-     @emergent_letters = @emergent_letters[0, 49]
+    @emergent_letters = @emergent_letters[0, 49]
   end
+
+  if (@hand_writing_letters.size > 50)
+    @hand_writing_letters = @hand_writing_letters[0, 49]
+  end
+
+  if (@typing_letters.size > 50)
+    @typing_letters = @typing_letters[0, 49]
+  end
+
 
   @claim_letters = Letter.all(:due_date.not => nil)
   @voulenteer_letters = Array.new
@@ -621,66 +777,102 @@ get '/voulenteer' do
   # paging
   @pages = get_paginator(@letters, offset)
   @emergent_pages = get_paginator(@emergent_letters, offset)
+  @hand_writing_pages = get_paginator(@hand_writing_letters, offset)
+  @typing_pages = get_paginator(@typing_letters, offset)
 
-  if (@letters.size > 10)
-    @letters = @letters[offset, offset+PAGESIZE]
+  if (@letters.size > PAGESIZE)
+    @letters = @letters[offset+1, PAGESIZE]
   end
 
-  if (@emergent_letters.size > 10)
-    @emergent_letters = @emergent_letters[offset, offset+PAGESIZE]
+  logger.info("l_size" + @letters.size.to_s)
+
+  if (@emergent_letters.size > PAGESIZE)
+    @emergent_letters = @emergent_letters[offset+1, PAGESIZE]
   end
+
+  logger.info("e_size" + @emergent_letters.size.to_s)
+
+  if (@hand_writing_letters.size > PAGESIZE)
+    @hand_writing_letters = @hand_writing_letters[offset+1, PAGESIZE]
+  end
+
+  if (@typing_letters.size > PAGESIZE)
+    @typing_letters = @typing_letters[offset+1, PAGESIZE]
+  end
+
+  logger.info("offset" + offset.to_s)
 
   @account_id = current_user[:id]
   logger.info("account_id:" + @account_id.to_s)
-  
+  get_template
+
   erb :voulenteer_index
 end
 
 get '/voulenteer/template' do
-  @countries = Country.all
+  get_template
+  @asia_countries = Country.all(:continent => '亞洲')
+  @africa_countries = Country.all(:continent => '非洲')
+  @mid_east_countries = Country.all(:continent => '中東/東歐')
+  @latin_america_countries = Country.all(:continent => '拉丁美洲')
   erb :vou_template
 end
 
 get '/voulenteer/note' do
-  @countries = Country.all
+  get_template
+  @asia_countries = Country.all(:continent => '亞洲')
+  @africa_countries = Country.all(:continent => '非洲')
+  @mid_east_countries = Country.all(:continent => '中東/東歐')
+  @latin_america_countries = Country.all(:continent => '拉丁美洲')
   erb :vou_note
 end
 
 get '/voulenteer/noun' do
-  @countries = Country.all
+  get_template
+  @asia_countries = Country.all(:continent => '亞洲')
+  @africa_countries = Country.all(:continent => '非洲')
+  @mid_east_countries = Country.all(:continent => '中東/東歐')
+  @latin_america_countries = Country.all(:continent => '拉丁美洲')
   erb :vou_noun
 end
-
 
 post '/claim_letter' do
   voulenteer!
   id = params[:id]
   if (!id.nil?)
     letter = Letter.get(id)
-    letter.voulenteer_id = current_user[:voulenteer_id]
-    letter.voulenteer_name = current_user[:account]
-    letter.claim_date = Date.today
-    if (letter.return_days.nil?)
-      letter.due_date = Date.today + 6
-      letter.due_date_3 = Date.today + 9
+    if (letter.voulenteer_id == nil)
+      letter.voulenteer_id = current_user[:voulenteer_id]
+      letter.voulenteer_account = current_user[:account]
+      letter.voulenteer_name = current_user[:name]
+      letter.claim_date = Date.today
+      if (letter.return_days.nil?)
+        letter.due_date = Date.today + 6
+        letter.due_date_3 = Date.today + 9
+      else
+        return_days = (letter.return_days - 1)
+        letter.due_date = Date.today + return_days
+        letter.due_date_3 = Date.today + return_days + 3
+      end
+      letter.status="claimed"
+      letter.save
+      if (current_user[:email] != nil)
+        # uri = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        # http = Net::HTTP.new(uri.host, uri.port)
+        #       http.read_timeout = 30
+        #       request = Net::HTTP::Get.new(uri.request_uri)
+        #
+        # http.request(request)
+        fetcher = URLFetchServiceFactory.getURLFetchService
+        url_for_vou = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=6&email=" + letter.employee_id + "&id=" + id.to_s)
+        fetcher.fetchAsync(url_for_vou)
+        fetcher.fetchAsync(url_for_emp)
+        # url = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        # AppEngine::URLFetch.fetchAsync(url)
+      end
     else
-      letter.due_date = Date.today + letters.return_days
-      letter.due_date_3 = Date.today + letters.return_days + 3
-    end
-    letter.status="已領取"
-    letter.save
-    if (current_user[:email] != nil)
-      # uri = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
-      # http = Net::HTTP.new(uri.host, uri.port)
-      #       http.read_timeout = 30
-      #       request = Net::HTTP::Get.new(uri.request_uri)
-      #       
-      # http.request(request)
-      fetcher = URLFetchServiceFactory.getURLFetchService
-      url = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
-      fetcher.fetchAsync(url)
-      # url = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
-      # AppEngine::URLFetch.fetchAsync(url)
+      session[:has_been_claimed] = true
     end
   end
   redirect '/voulenteer'
@@ -716,6 +908,7 @@ post '/return_letter' do
     claim_date = letter.claim_date
     letter.voulenteer_id = nil
     letter.voulenteer_name = nil
+    letter.voulenteer_account = nil
     letter.claim_date = nil
     letter.due_date = nil
     letter.due_date_3 = nil
@@ -724,7 +917,7 @@ post '/return_letter' do
     jobs -= 1
     voulenteer.jobs = jobs
     voulenteer.save
-    letter.status="緊急"
+    letter.status="emergent"
     letter.save
 
     log = VoulenteerLog.new
@@ -738,16 +931,36 @@ post '/return_letter' do
       puts params[:excuse]
     end
     log.save
+
+    fetcher = URLFetchServiceFactory.getURLFetchService
+    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=5&email=" + letter.employee_id + "&id=" + id.to_s)
+    fetcher.fetchAsync(url_for_emp)
   end
   redirect '/voulenteer'
 end
 
 get '/migrate' do
-  accounts = Accounts.all
+  accounts = Account.all
   accounts.each do |account|
-    account.account = account.email
+    account.weekly_email = true
+    account.save
   end
-  redirect 'admin'
+  redirect '/admin'
+end
+
+get '/test2' do
+  erb :test
+end
+
+post '/test2' do
+  db = params[:db]
+  if (db)
+    db.each do |d|
+      logger.info("db: " + d.to_s)
+    end
+
+  end
+  erb :test
 end
 
 get '/dodolo' do
@@ -853,6 +1066,10 @@ def get_paginator(letters, offset)
     pages.push(i)
   end
   pages == 1 ? Array.new : pages
+end
+
+def get_template
+  @template = Template.first
 end
 
 # end

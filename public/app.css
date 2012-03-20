@@ -52,7 +52,7 @@ a.orange{
 
 body{
 	width:900px;
-	position:absolute; left:15%;
+	position:absolute; left:10%;
 }
 
 body.employee{
@@ -74,5 +74,29 @@ div.orange{
 a.letter_type_button{
     font-size: 1.17em;
     color: #1C94C4;
+    text-decoration: underline;
+}
+
+a.no-underline{
     text-decoration: none;
+}
+
+.continent{
+    text-align: center;
+}
+
+a img {border: none; }
+
+#navcontainer ul
+{
+margin: 0;
+padding: 0;
+list-style-type: none;
+text-align: center;
+}
+
+#navcontainer ul li { display: inline; }
+
+td.wrap {
+    word-wrap: break-word;
 }

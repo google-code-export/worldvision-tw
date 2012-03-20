@@ -1,33 +1,43 @@
 <table style="width: 1150px">
+    <col width=80>
     <col width=70>
     <col width=70>
     <col width=70>
     <col width=70>
-    <col width=150>
-    <col width=90>
-    <col width=150>
-    <col width=90>
-    <col width=70>
-    <col width=70>
+    <col width=170>
+    <col width=40>
     <col width=70>
     <col width=150>
+    <col width=80>
+    <col width=80>
+    <% if is_return_letters %>
+            <col width=80>
+            <col width=80>
+    <% end %>
     <col width=50>
     <col width=50>
     <tr>
         <th>上傳日期<br/>
         <th>狀態</th>
-        <th>序號</th>
         <th>信件種類</th>
         <th>檔案名稱</th>
         <th>國家</th>
         <th>備註</th>
         <th>封數</th>
         <th>志工姓名</th>
+        <th>志工帳號</th>
         <th>領取日期</th>
         <th>應返日期</th>
-        <th>回傳日期</th>
-        <th>譯返下載</th>
-        <th>操作</th>
+        <% if is_return_letters %>
+            <th>回傳日期</th>
+            <th>譯返下載</th>
+        <% end %>
+       <th>操作</th>
+       <% if !is_return_letters %>
+        <th><input type="checkbox" id="selectallavailable"></th>
+       <% else %>
+        <th><input type="checkbox" id="selectallclaimed"></th>
+       <% end %>
     </tr>
 
     <% pages.each do |page| %>
@@ -46,8 +56,7 @@
             <% end %>
             <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
             <td><%= h letter.create_date %></td>
-            <td><%= h letter.status %></td>
-            <td><input style="width: 50px" name="priority" value="<%= letter.priority %>"></input></td>
+            <td><%= letter_status_to_chinese(letter.status) %></td>
             <td>
                 <select id="<%=letter.id %>_letter_source_type" name="letter_source_type" select="<%= letter.letter_source_type %>">
                     <option>請選擇</option>
@@ -57,38 +66,39 @@
             </td>
             <td class="wrap"><%= truncate letter.upload_file_name %></td>
             <td>
-                <select id="<%=letter.id %>_countries" name="country" select="<%= letter.country_id %>">
-                    <option>請選擇</option>
-                    <% countries.each do |country| %>
-                        <option value="<%= h country.id %>"><%= h country.name %></option>
-                    <% end %>
-                </select>
+                <input id="<%=letter.id%>_countries" name="country" value="<%= letter.country_name %>"/>
             </td>
             <td><textarea name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
             <td><input id="<%=letter.id %>_number_of_letters" style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input></td>
             <td><%= h letter.voulenteer_name %></td>
+            <td class="wrap"><%= h letter.voulenteer_account %></td>
             <td><%= h letter.claim_date %></td>
             <td><%= h letter.due_date %></td>
-            <td><%= h letter.return_date %></td>
-            <td><a href="/serve?blob-key=<%= letter.return_file_url %>"><%= h letter.return_file_name %></a></td>
+            <% if is_return_letters%>
+                <td><%= h letter.return_date %></td>
+                <td><a href="/serve?blob-key=<%= letter.return_file_url %>"><%= truncate letter.return_file_name %></a></td>
+            <% end %>
             <td>
-                <% if (letter.claim_date == nil) %>
-                    <input type=submit value="更新" onclick="return check_updating_letters(<%=letter.id %>)">
+                <% if letter.show == "false" %>
+                        <input type=submit value="儲存" onclick="return check_updating_letters(<%=letter.id %>, 'eng')">
+                        </form>
+                        <img src="/warn.png" alt="">
+                <% elsif (letter.claim_date == nil) %>
+                    <input type=submit value="更新" onclick="return check_updating_letters(<%=letter.id %>, 'eng')">
                     </form>
-                    <form method=post action='delete_letter'>
-                        <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                        <input type=submit value="刪除">
-                    </form>
-                <% elsif (letter.status == "已譯返") %>
-                    <input type=submit value="更新" onclick="check_updating_letters(<%=letter.id %>)">
-                    </form>
-                    <form method=post action='delete_letter'>
-                        <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                        <input type=submit value="刪除">
+                <% elsif (letter.status == "returned") %>
+                    <input type=submit value="更新" onclick="return check_updating_letters(<%=letter.id %>, 'eng')">
                     </form>
                 <% end %>
-                </td>
-                </tr>
+            </td>
+            <td>
+               <% if !is_return_letters %>
+                <input class="availablecase" type="checkbox" style="color:white" value="<%= letter.id %>"/>
+               <% else %>
+                <input class="claimedcase" type="checkbox" style="color:white" value="<%= letter.id %>"/>
+               <% end %>
+            </td>
+            </tr>
     <% end %>
 </table>
-  
+

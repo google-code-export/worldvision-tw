@@ -1,6 +1,8 @@
 package org.worldvision.schedule;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,10 @@ import org.worldvision.model.LetterModel;
 import org.worldvision.model.Letters;
 import org.worldvision.model.PMF;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.urlfetch.URLFetchService;
+import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
+
 public class MarkOldLettersAsEmergentJobServlet extends HttpServlet {
 	private LetterModel letter_model = new LetterModel();
 	private AccountModel account_model = new AccountModel();
@@ -31,9 +37,23 @@ public class MarkOldLettersAsEmergentJobServlet extends HttpServlet {
 		int size = letters.size();
 		for (int i = 0; i < size; i++){
 			Letters letter = letters.get(i);
-			letter.setStatus("緊急");
+			letter.setStatus("emergent");
 			pm.makePersistent(letter);
+			sendLetterToEmp(letter.getEmployee_id(), new Long(letter.getId().getId()).toString());
+		}
+		
+		
+	}
+	
+	private void sendLetterToEmp(String email, String id){
+		URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
+		URL url;
+		try {
+			url = new URL("http://www.worldvision-tw.appspot.com/queue_email?mailId=2&email=" + email + "&id=" + id);
+			fetcher.fetchAsync(url);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-
 }

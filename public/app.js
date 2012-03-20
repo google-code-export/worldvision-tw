@@ -1,3 +1,5 @@
+
+
 function getUrlVars()
 {
     var vars = [], hash;
@@ -11,13 +13,17 @@ function getUrlVars()
     return vars;
 }
 function setSelected(target, value){
+    var current = 0;
     $(target).children().each(function(){
         var attr_value = $(this).attr("value");
-		if (value == attr_value){
-			$(this).attr("selected", "selected");
+        if (value == attr_value){
+            if (target.options)
+                target.options[current].selected = true;
+            else
+                $(this).attr("selected", "selected");
+            
 		}
-		else
-			$(this).removeAttr('selected');
+        current ++;
 	});
 }
 
@@ -27,7 +33,7 @@ function markSelected(target, value){
     $(target).children().each(function(){
         var attr_value = $(this).attr("name");
 		if (value == attr_value){
-			$(this).attr("style", "font-weight: bold; color: #EB8F00");
+			$(this).attr("style", "font-weight: bold; color: #EB8F00;text-decoration:none");
 		}
 		else
 			$(this).removeAttr('style');
@@ -49,18 +55,20 @@ function post_submit (form,p) {
    
 }
 
-function check_updating_letters(id){
+function check_updating_letters(id, type){
     //check letter_type
     var letter_type = $('#' + id + '_letter_source_type').val();
-    if (letter_type == '請選擇'){
-       alert("請選擇信件種類");
-       return false;
-    }
-    //check country
-    var country = $('#' + id + '_countries').val();
-    if (country == '請選擇'){
-       alert("請選擇信件國家");
-       return false;
+    if (type == 'eng'){
+        if (letter_type && letter_type == '請選擇'){
+           alert("請選擇信件種類");
+           return false;
+        }
+        //check country
+        var country = $('#' + id + '_countries').val();
+        if (!country){
+           alert("請輸入信件國家");
+           return false;
+        }
     }
     //check # of letters
     var number_of_letters = parseInt($('#' + id + '_number_of_letters').val());
@@ -70,4 +78,30 @@ function check_updating_letters(id){
     }
 }
 
+function delete_letters_submit(form_id, checkbox_name){
+    var query_string = '/delete_letter?';
+    $("input." + checkbox_name).each(
+        function()
+        {
+            if (this.checked)
+            {
+                query_string += ("ids[]=" + this.value + "&");
+            }
+    });
+    $.ajax({
+      url: query_string,
+      success: function(){
+        window.location.reload();
+      }
+    });
+    return false;
+//    form.method= "get";
+//    form.action="/delete_letter?"+ query_string;
+//    alert ("query:" + form.action.toString());
+//    form.submit();
+}
+
+function show_loading_dialog(){
+    $('#dialog').dialog();
+}
 	

@@ -1,29 +1,51 @@
 <html>
-  <head>
+<head>
     <title>World Vision</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<style>
-.header{
-	width: 130px;
-	float: left;
-}
-.error{
-	color: red;
-}
-</style>
-  </head>
-  <body style="font-family: sans-serif;">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        .header {
+            width: 130px;
+            float: left;
+        }
 
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body style="font-family: sans-serif;">
 
-<form method=post action="/login">
-  <div class="header">account</div> <input name="account" ></input><br/>
-  <div class="header">password</div> <input name="password"></input><br/>
-	 <input type=submit value=Login>
-  </form>
-  <%if @login_error%>
-	  <div class="error"><%=@login_error%></div>
-  <%end%>
-    <div style="position: absolute; bottom: 20px; right: 20px;">
-    <img src="/images/appengine.gif"></div>
-  </body>
+<span><%= @type.to_s %></span>
+<div style="width: 190px; border: 1px solid lightgray; left: 40%; top: 150px; position: relative">
+    <form method=post action="/login">
+        <table border="0.5">
+            <tr>
+                <td colspan="2" style="color: white; background-color:orange">登入NEXT-志工翻譯系統</td>
+            </tr>
+            <tr>
+                <td>帳號</td>
+                <td><input name="email"/></td>
+            </tr>
+            <tr>
+                <td>密碼</td>
+                <td><input TYPE=PASSWORD name="password"/></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input type=submit value=登入></td>
+            </tr>
+            <% if @fail %>
+                <tr>
+                    <td colspan="2">
+
+                        <div class="error">帳號或密碼錯誤</div>
+
+                    </td>
+                </tr>
+            <% end %>
+        </table>
+    </form>
+</dir>
+</table>
+</body>
 </html>

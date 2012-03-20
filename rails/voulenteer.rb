@@ -26,7 +26,7 @@ post '/claim_letter' do
     letter.voulenteer_name = "郭雯婷"
     letter.claim_date = Date.today
     letter.due_date = Date.today + 7
-    letter.status="已領取"
+    letter.status="claimed"
     letter.save
   end
   redirect '/voulenteer'

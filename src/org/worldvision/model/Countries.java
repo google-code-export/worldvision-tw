@@ -27,11 +27,15 @@ public class Countries {
 	@Persistent
 	private String template_url;
 	@Persistent
+	private String background_url;
+	@Persistent
 	private String note_file_name;
 	@Persistent
 	private String noun_file_name;
 	@Persistent
 	private String template_file_name;
+	@Persistent
+	private String background_file_name;
 	public Countries(Blob content) {
 		this.note = content;
 	}
@@ -94,6 +98,18 @@ public class Countries {
 	}
 	public void setTemplate_file_name(String template_file_name) {
 		this.template_file_name = template_file_name;
+	}
+	public String getBackground_url() {
+		return background_url;
+	}
+	public void setBackground_url(String background_url) {
+		this.background_url = background_url;
+	}
+	public String getBackground_file_name() {
+		return background_file_name;
+	}
+	public void setBackground_file_name(String background_file_name) {
+		this.background_file_name = background_file_name;
 	}
 
 }

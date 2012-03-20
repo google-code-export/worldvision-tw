@@ -9,5 +9,5 @@
   </resource-files>
   <ssl-enabled>true</ssl-enabled>
   <precompilation-enabled>true</precompilation-enabled>
-  <sessions-enabled>false</sessions-enabled>
+  <sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

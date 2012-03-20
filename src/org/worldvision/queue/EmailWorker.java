@@ -44,6 +44,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 public class EmailWorker extends HttpServlet {
 	private static final Logger log = Logger.getLogger(EmailWorker.class.getName());
 	private LetterModel model = new LetterModel();
+	public static final String LETTER_VARIABLE = "@letter";
+	public static final String UN_CLAIMED_LETTER_COUNT = "@number_of_unclaimed_letters";
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
@@ -65,10 +67,15 @@ public class EmailWorker extends HttpServlet {
 			//fetch attachment
 			
 			int mail_id = Integer.parseInt(mailId);
-			if (letterId!= null && !"".equals(letterId) && mail_id <5){
+			if (letterId!= null && !"".equals(letterId) && mail_id <=5){
+				letterId = letterId.replace("Letters(", "").replace(")", "");
 				Letters letter = model.getLetter(pm, letterId);
 				SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 				String dueDate = formatter.format(letter.getDue_date());
+				String file_name = letter.getUpload_file_name();
+				int index = file_name.lastIndexOf("\\");
+				if (index > 0)
+					file_name = file_name.substring(index+1, file_name.length());
 				MimeMessage msg = new MimeMessage(session);
 				msg.setFrom(new InternetAddress("robbie@fliptop.com",
 						"WorldVision Admin"));
@@ -76,30 +83,34 @@ public class EmailWorker extends HttpServlet {
 						receipt, ""));
 				switch (mail_id){
 					case 1: 
-						sendDueDateEmail(dueDate, msg);
+						sendDueDateEmail(dueDate, msg, file_name);
 						break;
 					case 2:
-						sendThankYouEmail(msg);
+						sendThankYouEmail(msg, file_name);
 						break;
 					case 3:
-						sendEmailReturndEmail(msg, letterId);
+						sendEmailReturndEmail(msg, letterId, file_name);
 						break;
 					case 4:
-						this.sendDueReminderEmail(msg);
+						this.sendDueReminderEmail(msg, file_name);
+						break;
+					case 5:
+						this.sendEmpEmergentRemiderEmail(msg, letterId, file_name);
 						break;
 				}
 				System.out.println("ready to send");
 				Transport.send(msg);
 				System.out.println("send out email");
 			}
-			else if (mail_id == 5){
+			else if (mail_id == 6){
+				int not_claimed_letters_count = model.findUnClaimedLetters().size();
 				MimeMessage msg = new MimeMessage(session);
 				msg.setFrom(new InternetAddress("robbiecheng@gmail.com",
 						"WorldVision Admin"));
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						receipt, "robbiecheng"));
 				log.info("going to send new letter email to " + receipt);
-				this.sendNewLetterReminderEmail(msg);
+				this.sendNewLetterReminderEmail(msg, not_claimed_letters_count);
 				Transport.send(msg);
 			}
 //			Blob file = letter.getUpload_file();
@@ -137,33 +148,48 @@ public class EmailWorker extends HttpServlet {
 		}
 	}
 
-	private void sendEmailReturndEmail(MimeMessage msg, String fileId) throws MessagingException {
+	private void sendEmpEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
+		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
+		try {
+			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_TOPIC, "big5");
+			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_CONTENT, file_name));
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void sendEmailReturndEmail(MimeMessage msg, String fileId, String file_name) throws MessagingException {
 		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
 		msg.setSubject(MailTemplate.EMPLOYEE_COMPLETE_LETTER_TOPIC, "big5");
-		msg.setText(MailTemplate.EMPLOYEE_COMPLETE_LETTER_CONTENT);
+		msg.setText(replaceVariable(MailTemplate.EMPLOYEE_COMPLETE_LETTER_CONTENT, file_name));
 	}
 
-	private void sendThankYouEmail(MimeMessage msg) throws MessagingException {
+	private void sendThankYouEmail(MimeMessage msg, String file_name) throws MessagingException {
 		msg.setSubject(MailTemplate.VOLUNETTER_COMPLETE_LETTER_TOPIC, "big5");
-		msg.setText(MailTemplate.VOLUNETTER_COMPLETE_LETTER_CONTENT);
+		msg.setText(replaceVariable(MailTemplate.VOLUNETTER_COMPLETE_LETTER_CONTENT, file_name));
 	}
 
-	private void sendDueDateEmail(String dueDate, MimeMessage msg)
+	private void sendDueDateEmail(String dueDate, MimeMessage msg, String file_name)
 			throws MessagingException {
 		msg.setSubject(MailTemplate.CLAIM_LETTER_TOPIC, "big5");
-		msg.setText(MailTemplate.CLAIM_LETTER_CONTENT);
+		msg.setText(replaceVariable(MailTemplate.CLAIM_LETTER_CONTENT, file_name));
 	}
 	
-	private void sendDueReminderEmail(MimeMessage msg)
+	private void sendDueReminderEmail(MimeMessage msg, String file_name)
 		throws MessagingException {
 		msg.setSubject(MailTemplate.DUE_REMINDER_TOPIC, "big5");
-		msg.setText(MailTemplate.DUE_REMINDER_CONTENT);
+		msg.setText(replaceVariable(MailTemplate.DUE_REMINDER_CONTENT, file_name));
 	}
 	
-	private void sendNewLetterReminderEmail(MimeMessage msg)
+	private void sendNewLetterReminderEmail(MimeMessage msg, Integer not_claimed_letters_count)
 		throws MessagingException {
 		msg.setSubject(MailTemplate.NEW_LETTER_REMINDER_TOPIC, "big5");
-		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT);
+		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT.replace(UN_CLAIMED_LETTER_COUNT, not_claimed_letters_count.toString()));
+	}
+	
+	private String replaceVariable(String string, String val){
+		return string.replace(LETTER_VARIABLE, val);
 	}
 	
 }

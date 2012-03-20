@@ -20,6 +20,22 @@ public class LetterModel {
 	//YYYY-MM-DD HH:MM:SS
 	String pattern = "yyyy/MM/dd MM/dd/yyyy ";
     SimpleDateFormat format = new SimpleDateFormat(pattern);
+    
+    
+    public List findUnClaimedLetters(){
+    	PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<Letters> result = new ArrayList();
+		
+		Query query = pm.newQuery(Letters.class);
+		try {
+			query.setFilter("claim_date == null");
+			result = (List<Letters>) query.execute();
+			return result;
+		} finally {
+			query.closeAll();
+		}
+
+    }
 	
 	public List findDueLetters(int days, boolean send) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();

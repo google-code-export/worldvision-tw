@@ -11,8 +11,8 @@
   <listener>
     <listener-class>com.google.appengine.jruby.LazyContextListener</listener-class>
   </listener>
-  
- 
+
+
   <servlet>
 		<description>
 		</description>
@@ -103,7 +103,16 @@
 			<display-name>BlobStoreFileUpload</display-name>
 			<servlet-name>BlobStoreFileUpload</servlet-name>
 			<servlet-class>org.worldvision.blobstore.BlobStoreFileUpload</servlet-class>
+            <load-on-startup>1</load-on-startup>
 		</servlet>
+
+    <servlet>
+			<description>
+			</description>
+			<display-name>TestServlet</display-name>
+			<servlet-name>TestServlet</servlet-name>
+			<servlet-class>org.worldvision.TestServlet</servlet-class>
+	</servlet>
 	<servlet>
 			<description>
 			</description>
@@ -123,8 +132,8 @@
 			<servlet-name>MarkDueLettersJobServlet</servlet-name>
 			<url-pattern>/mark_due_letters</url-pattern>
 	</servlet-mapping>
-	
-	
+
+
 	<servlet-mapping>
 			<servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
 			<url-pattern>/mark_old_letters</url-pattern>
@@ -145,6 +154,10 @@
 			<servlet-name>FileUpload</servlet-name>
 			<url-pattern>/country_upload</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+			<servlet-name>FileUpload</servlet-name>
+			<url-pattern>/template_upload</url-pattern>
+	</servlet-mapping>
 	<servlet-mapping>
 			<servlet-name>FileUpload</servlet-name>
 			<url-pattern>/return_file_upload</url-pattern>
@@ -161,7 +174,7 @@
 			<servlet-name>BlobKeyProvider</servlet-name>
 			<url-pattern>/blobkey</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 			<servlet-name>EmailQueuer</servlet-name>
 			<url-pattern>/queue_email</url-pattern>
@@ -182,5 +195,9 @@
 				<servlet-name>ExportCSVFile</servlet-name>
 				<url-pattern>/test_download</url-pattern>
 	</servlet-mapping>
-	
+    <servlet-mapping>
+				<servlet-name>TestServlet</servlet-name>
+				<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+
 </web-app>

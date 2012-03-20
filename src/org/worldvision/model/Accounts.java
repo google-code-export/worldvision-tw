@@ -43,6 +43,8 @@ public class Accounts {
 	private String voulenteer_type;
 	@Persistent
 	private int jobs;
+	private Boolean weekly_email;
+	
 	
 	public Key getId() {
 		return id;
@@ -92,6 +94,12 @@ public class Accounts {
 
 	public void setJobs(int jobs) {
 		this.jobs = jobs;
+	}
+	public Boolean isWeekly_email() {
+		return weekly_email;
+	}
+	public void setWeekly_email(Boolean weekly_email) {
+		this.weekly_email = weekly_email;
 	}
 	
 

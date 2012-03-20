@@ -91,7 +91,7 @@ public class Letters {
 		super();
 		this.create_date = DateUtil.getCurrentDate();
 		this.employee_id = employeeId;
-		this.status = "未領取";
+		this.status = "unclaimed";
 		this.trans_type = type;
 		this.upload_file_url = upload_file_url;
 		this.upload_file_name = upload_file_name;

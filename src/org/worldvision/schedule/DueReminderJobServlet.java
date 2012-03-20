@@ -33,9 +33,8 @@ public class DueReminderJobServlet extends HttpServlet {
 				if (vou_name != null && !letter.isSend_due_reminder()) {
 					Accounts vou = account_model.getAccountByName(pm, vou_name);
 					if (vou != null) {
-						String email = vou.getEmail();
-						String letter_id = letter.getId().toString()
-								.replace("Letters(", "").replace(")", "");
+						String email = vou.getAccount();
+						String letter_id = letter.getId().toString();
 						if (email != null && !"".equals(email)) {
 							System.out.println("going to send email to "
 									+ email);

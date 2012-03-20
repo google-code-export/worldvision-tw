@@ -6,19 +6,18 @@
         <col width=150>
         <col width=20>
         <col width=70>
-
-        <col width=100>
+        <col width=90>
         <col width=150>
-        <col width=200>
+        <col width=250>
     <% else %>
         <col width=90>
         <col width=90>
         <col width=150>
         <col width=20>
         <col width=70>
-        <col width=100>
+        <col width=90>
         <col width=150>
-        <col width=200>
+        <col width=310>
     <% end %>
     <!--應返日期/ 領取日期 / 國家 /備註 /封數 / 狀態 / 待譯信件 /譯返上傳-->
     <tr>
@@ -30,7 +29,7 @@
         <th>備註</th>
         <th>封數</th>
         <th style="width: 10px">狀態</th>
-        <th>領取日期</th>
+        <th>譯返日期</th>
         <th>待譯信件</th>
         <th>譯返上傳</th>
     </tr>
@@ -45,30 +44,32 @@
                 <td><%= letter.country_name %></td>
             <% end %>
             <td><%= h letter.note %></td>
-            <td><%= letter.number_of_letters %></input>
-            <td><%= h letter.status %></td>
-            <td><%= h letter.due_date %></td>
+            <td><%= letter.number_of_letters %></td>
+            <td><%= letter_status_to_chinese(letter.status) %></td>
+            <td><%= letter.return_date %></td>
             <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
             </td>
             <td>
                 <% if letter.return_file_url == nil %>
                     <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="上傳">
+                        <input type="submit" value="上傳" onclick="$('#dialog').dialog();">
                     </form>
                     <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
                         退件原因:
                         <input name="id" style="display:none" value="<%= letter.id %>">
-                        <input name="excuse" size="25" id="execuse_<%= letter.id %>">
-                        <div style="float: right">
-                            <input type="submit" value="退件">
+                        <div id="navcontainer">
+                        <ul>
+                            <li><input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
+                            <li>
+                            <input type="submit" value="退件" onclick="$('#dialog').dialog();">
+                            </li>
+                        </ul>
                         </div>
                     </form>
                 <% else %>
                     已成功上傳
                 <% end %>
-
-
             </td>
         </tr>
     <% end %>

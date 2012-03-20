@@ -84,6 +84,13 @@ public class FileUpload extends HttpServlet {
 					country.setNoun_file_name(fileName);
 					country.setNoun_url(fileUrl);
 				}
+				else if ("background".equals(type)){
+					System.out.println("save background");
+//					country.setNoun(content);
+					
+					country.setBackground_file_name(fileName);
+					country.setBackground_url(fileUrl);
+				}
 				
 				try {
 					pm.makePersistent(country);
@@ -116,7 +123,7 @@ public class FileUpload extends HttpServlet {
 			String fileName = (String) req.getAttribute("fileName");
 			String fileUrl = blobKey;
 			Letters letter = new Letters(userName, fileUrl, fileName, type);
-			if (type == "chi")
+			if ("chi".equals(type))
 				letter.setNote("中翻英");
 			letter.setShow("false");
 			PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -154,7 +161,7 @@ public class FileUpload extends HttpServlet {
 //				letter.setReturn_file_url((String) data[1]);
 				letter.setReturn_file_url(fileUrl);
 				letter.setReturn_file_name(fileName);
-				letter.setStatus("已譯返");
+				letter.setStatus("returned");
 				letter.setRerturn_date(DateUtil.getCurrentDate());
 				
 				vou = account_model.getAccountByName(pm, letter.getVoulenteer_name());
@@ -175,8 +182,8 @@ public class FileUpload extends HttpServlet {
 				
 				if (vou != null){
 					URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
-					if (vou.getEmail() != null){
-						String email = vou.getEmail();
+					if (vou.getAccount() != null){
+						String email = vou.getAccount();
 						URL url = new URL("http://www.worldvision-tw.appspot.com/queue_email?mailId=2&email=" + email + "&id=" + Long.toString(id));
 						fetcher.fetchAsync(url);
 					}
@@ -184,8 +191,8 @@ public class FileUpload extends HttpServlet {
 				}
 				if (emp != null){
 					URLFetchService fetcher = URLFetchServiceFactory.getURLFetchService();
-					if (emp.getEmail() != null){
-						String email = emp.getEmail();
+					if (emp.getAccount() != null){
+						String email = emp.getAccount();
 						URL url = new URL("http://www.worldvision-tw.appspot.com/queue_email?mailId=3&email=" + email + "&id=" + Long.toString(id));
 						fetcher.fetchAsync(url);
 					}

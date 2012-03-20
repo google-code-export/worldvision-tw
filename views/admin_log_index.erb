@@ -59,7 +59,7 @@ function setDate(param, id){
 			</tr>
 			<% end %>
 		</table>
-		<h4>逾期</h4>
+		<h4>逾期/未譯返</h4>
 		<form url="/admin/log">
 		逾期日期&nbsp;&nbsp;<input type="text" id="start_date2" name="start_date2" style="width: 100px;">
 		<input type="text" id="end_date2" name="end_date2" style="width: 100px;">
@@ -72,12 +72,14 @@ function setDate(param, id){
 					<th>志工姓名</th>
 					<th>志工編號</th>
 					<th>下載檔案日期</th>
+                    <th>檔案譯返日期</th>
 				</tr>
 				<% @letters.each do |letter|%>
 				<tr>
 					<td><%= letter.voulenteer_name%></td>
 					<td><%= letter.voulenteer_id%></td>
 					<td><%= letter.claim_date%></td>
+                    <td><%= letter.return_date%></td>
 				</tr>
 				<% end %>
 			</table>

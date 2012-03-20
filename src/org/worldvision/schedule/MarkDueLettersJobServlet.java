@@ -34,7 +34,7 @@ public class MarkDueLettersJobServlet extends HttpServlet {
 			letter.setClaim_date(null);
 			letter.setDue_date(null);
 			letter.setDue_date_3(null);
-			letter.setStatus("緊急");
+			letter.setStatus("emergent");
 			letter.setShow("true");
 			pm.makePersistent(letter);
 		}

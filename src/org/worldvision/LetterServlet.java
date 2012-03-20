@@ -67,8 +67,8 @@ public class LetterServlet extends HttpServlet {
 			}
 			
 //			"http://www.worldvision-tw.appspot.com/queue_email?email=" + current_user[:email] + "&id=" + id.to_s
-			if (acc.getEmail() != null){
-				String email = acc.getEmail();
+			if (acc.getAccount() != null){
+				String email = acc.getAccount();
 				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + email + "&id=" + id;
 				MailSender.sendEmail(url);
 			}

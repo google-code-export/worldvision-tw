@@ -32,11 +32,11 @@ public class NewLettersJobServlet extends HttpServlet {
 		log.info("available voulenteers:" + size);
 		for (int i = 0; i < size; i++){
 			Accounts vou = result.get(i);
-			String email = vou.getEmail();
-			if (email != null && !"".equals(email)){
+			String email = vou.getAccount();
+			if (email != null && !"".equals(email) && vou.isWeekly_email()){
 				log.info("going to send email to " + email);
 				System.out.println("going to send email to " + email);
-				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=5&email=" + email + "&id=0";
+				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=6&email=" + email + "&id=0";
 				MailSender.sendEmail(url);
 			}
 		}

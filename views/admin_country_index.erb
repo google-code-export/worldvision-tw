@@ -2,7 +2,7 @@
   <head>
 	
     <title>World Vision</title>
-<script type="text/javascript" src="/app.js"></script>
+<%= erb :js_css_header %>
 <script type="text/javascript">
   function checkinputvalue(){
 	var country_name = document.getElementById('country_name');
@@ -10,12 +10,13 @@
 		alert("請輸入國家");
 		return false;
 	}
+    var continent_name = document.getElementById('countinent_name');
+    if (continent_name == ''){
+        alert('請選擇洲區');
+        return false;
+    }
 }
-	
 </script>
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.10.custom.css" rel="stylesheet" />	
-<link type="text/css" href="app.css" rel="stylesheet" />	
-
 </head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <body style="font-family: sans-serif;">
@@ -24,27 +25,54 @@
 
 <!-- new account start -->
 <a href="/admin">管理會員</a>
-<a href="/admin/log">志工退件/逾期紀錄</a>
+<a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
 <a href="/admin/vou">志工翻譯封數統計</a>
 	<h4>所有國家</h4>
-	<form method=post action='create_country' onsubmit="return checkinputvalue()">
-		<input id="country_name" name="name"></input>
-		<input type=submit value="新增國家">
-    </form>
-	<table border="1" style="width: 600px">
+    <div>
+    <div style="float: left">
+        <form method=post action='create_country' onsubmit="return checkinputvalue()">
+            <select id="continent_name" name="continent">
+                <option >洲區</option>
+                <option value="亞洲">亞洲</option>
+                <option value="非洲">非洲</option>
+                <option value="中東/東歐">中東/東歐</option>
+                <option value="拉丁美洲">拉丁美洲</option>
+            </select>
+            <input id="country_name" name="name"></input>
+            <input type=submit value="新增國家">
+        </form>
+        <form method="post" action="search_country">
+            <input name="country"/>
+            <input type="submit" value="搜尋國家">
+        </form>
+    </div>
+    <div>
+      <form onsubmit="post_parameters(this, {from:'/admin/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+      <input type="file" name="myFile" size="10">
+      <input type="submit" value="上傳翻譯底稿">
+      </form>
+    </div>
+    </div>
+	<table border="1" style="width: 800px">
 	<tr>
-		<th style="width: 100px">國家</th>
+		<th style="width: 100px">洲區</th>
+        <th style="width: 100px">國家</th>
 		<th style="width: 100px">注意事項</th>
 		<th style="width: 100px">翻譯範本</th>
 		<th style="width: 100px">常見名詞</th>
+        <!--<th style="width: 100px">翻譯背景</th>-->
 		<th style="width: 200px">操作</th>
 	</tr>
 	<% @countries.each do |country| %>	
 	<tr>
+    <td>
+        <%=h country.continent%>
+    </td>
 	<td><%=h country.name%></td>
-	<td><a href="/serve?blob-key=<%=country.note_url%>"><%=country.note_file_name%></a></td>
-	<td><a href="/serve?blob-key=<%=country.template_url%>"><%=country.template_file_name%></a></td>
-	<td><a href="/serve?blob-key=<%=country.noun_url%>"><%=country.noun_file_name%></a></td>
+	<td><a href="/serve?blob-key=<%=country.note_url%>"><%=truncate(country.note_file_name)%></a></td>
+	<td><a href="/serve?blob-key=<%=country.template_url%>"><%=truncate(country.template_file_name)%></a></td>
+	<td><a href="/serve?blob-key=<%=country.noun_url%>"><%=truncate(country.noun_file_name)%></a></td>
+    <!--<td><a href="/serve?blob-key=<%#=country.background_url%>"><#%=country.background_file_name%></a></td>-->
 	<td>
 	<form onsubmit="post_parameters(this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
@@ -58,9 +86,14 @@
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳常見名詞">
     </form>
-	<form method=post action='delete_country?id=<%=country.id%>'>
-		<input type=submit value="刪除">
+	<!--<form onsubmit="post_parameters(this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'background'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+          <input type="file" name="myFile" size="10">
+          <input type="submit" value="上傳翻譯背景">
+    </form>-->
+    <form method=post action='delete_country?id=<%=country.id%>'>
+		<input type=submit value="刪除國家">
     </form>
+
 	</td>
 	<br/>
 	</tr>
