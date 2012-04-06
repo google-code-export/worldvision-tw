@@ -8,6 +8,8 @@
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             markSelected($('#tans_select'), type);
 
+
+
             $('form').submit(function() {
                  show_loading_dialog();
             });

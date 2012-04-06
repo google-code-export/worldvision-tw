@@ -40,7 +40,7 @@
                 <td><%= letter.country_name %></td>
             <% end %>
             <!-- <td><%= h letter.type %>  <br/></td> -->
-            <td class="wrap"><%= h letter.note %></td>
+            <td class="wrap"><%= append_note(trans_type, letter.note, letter.employee_id) %></td>
             <td><%= h letter.number_of_letters %></td>
                 <% if (letter.status.index('emergent') == nil) %>
                     <td><%= letter_status_to_chinese(letter.status) %></td>

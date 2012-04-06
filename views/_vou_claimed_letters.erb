@@ -43,7 +43,7 @@
             <% if !is_chinese_email(trans_type) %>
                 <td><%= letter.country_name %></td>
             <% end %>
-            <td><%= h letter.note %></td>
+            <td class="wrap" ><%= append_note(trans_type, letter.note, letter.employee_id) %></td>
             <td><%= letter.number_of_letters %></td>
             <td><%= letter_status_to_chinese(letter.status) %></td>
             <td><%= letter.return_date %></td>
@@ -51,12 +51,12 @@
             </td>
             <td>
                 <% if letter.re_upload %>
-                    <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
                         <input type="submit" value="上傳">
                     </form>
                 <% elsif letter.return_file_url == nil %>
-                    <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
                         <input type="submit" value="上傳">
                     </form>

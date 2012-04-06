@@ -84,7 +84,7 @@
                 <%=@url%>?from=/employee&to=/file_upload&id=" + document.getElementById("user_id").value + "&type="
                     // 				+ document.getElementById("trans_type").value;
                     document.uploadform.action = "<%=@url%>";
-                    post_parameters(document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
+                    return check_file_name_and_post_parameters(event,document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
                     document.uploadform.submit();
                 }
             }

@@ -39,19 +39,30 @@ function markSelected(target, value){
 			$(this).removeAttr('style');
 	});
 }
+var STOP_PROPAGATION = false;
+function check_file_name_and_post_parameters (event, form,p) {
+  var file_name = $('input[name*="myFile"]', form).val();
 
-function post_parameters (form,p) {
-  for (var k in p) {
-    var myInput = document.createElement("input") ;
-	myInput.style.display = "none";
-    myInput.setAttribute("name", k) ;
-    myInput.setAttribute("value", p[k]);
-    form.appendChild(myInput);
+  if (file_name == null || file_name == ""){
+      STOP_PROPAGATION = true;
+      alert('請先選擇要上傳的檔案');
+      return false;
+  }
+  else{
+      for (var k in p) {
+        var myInput = document.createElement("input") ;
+        myInput.style.display = "none";
+        myInput.setAttribute("name", k) ;
+        myInput.setAttribute("value", p[k]);
+        form.appendChild(myInput);
+      }
+      STOP_PROPAGATION = false;
+      return true;
   }
 }
 
 function post_submit (form,p) {
-   post_parameters (form,p);
+   check_file_name_and_post_parameters (form,p);
    
 }
 
@@ -102,7 +113,20 @@ function delete_letters_submit(form_id, checkbox_name){
 }
 
 function show_loading_dialog(){
-    $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
-    $('#dialog').dialog();
+    if (!STOP_PROPAGATION){
+        $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
+        $('#dialog').dialog();
+    }
+}
+
+function stop_event_propagation(e)
+{
+   var event = e || window.event;
+   if (event.stopPropagation){
+       event.stopImmediatePropagation();
+   }
+   else if(window.event){
+      window.event.cancelBubble=true;
+   }
 }
 	
