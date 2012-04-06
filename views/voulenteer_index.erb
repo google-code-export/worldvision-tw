@@ -8,11 +8,14 @@
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             markSelected($('#tans_select'), type);
 
-
-
             $('form').submit(function() {
                  show_loading_dialog();
             });
+
+            var hash_key = getUrlVars()["hash_key"]
+            if (hash_key){
+               download_file(hash_key); 
+            }
         });
 
         function check(id) {
@@ -23,31 +26,15 @@
             }
         }
 
-        function show_download_file(id, file_key, file_name, account_id) {
-            if (id && file_name) {
-                // var url = '<br/><br/><a href="/file_download?id='+ id +'">下載'+file_name+'</a><br/><br/>';
-                var url = '<br/><br/><a href="/serve?blob-key=' + file_key + '">下載' + file_name + '</a><br/><br/><a href="/claim_letter?id=' + id + '&account_id=' + account_id + '"> 確認領取	</a>';
-                document.getElementById('dialog').innerHTML = url;
-                $("#dialog").dialog({
-                    close: function(event, ui) {
-                        // claim_letter(id, account_id);
-                        // alert(account_id);
-                    }
-                });
-                return false;
+        function download_file(hash_key) {
+            if (hash_key) {
+                document.location.href='http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
             }
 
         }
 
         function claim_letter(id, account_id) {
             window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
-        }
-
-        function download_file(id) {
-            if (id != null) {
-                var url = '/file_download?id=' + id;
-                window.open('/file_download?id=' + id, window);
-            }
         }
     </script>
 </head>
@@ -125,6 +112,7 @@
     <div style="position: absolute; bottom: 20px; right: 20px;">
         <!-- <img src="/images/appengine.gif"></div> -->
     </div>
+    
 </div>
 </body>
 </html>

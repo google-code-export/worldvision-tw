@@ -90,6 +90,7 @@ class Letter
   property :show, String
   property :send_due_reminder, Boolean, :default => 0
   property :deleted, Boolean, :default => 0
+  property :re_upload, Boolean, :default => 0
 
   def self.upload_file(upload)
     Letter.create(:upload_file=>upload)
@@ -256,6 +257,20 @@ helpers do
     locals = locals.is_a?(Hash) ? locals : {template.to_sym =>         locals}
     template=('_' + template.to_s).to_sym
     erb(template, {:layout => false}, locals)
+  end
+
+  def append_note(type, note, email)
+    logger.info('type' + type.to_s + " note " + note.to_s)
+
+    if (type)
+      if (type == 'eng')
+         note = note + '<br/>若您翻譯時有任何疑問, 歡迎來信至 上傳該信之員工' + email
+      elsif(type == 'chi')
+         note = note + '<br/>[中翻英] 若您翻譯時有任何疑問, 歡迎來信至 上傳該信之員工' + email
+      end
+    end
+    logger.info('final:' + note)
+    note
   end
 end
 
@@ -809,6 +824,22 @@ get '/voulenteer' do
   erb :voulenteer_index
 end
 
+post '/re_upload' do
+  voulenteer!
+
+  id = params[:id]
+  logger.info('id' + id.to_s)
+
+  if id
+    logger.info('save letter')
+    letter = Letter.get(id)
+    letter.re_upload = true
+    letter.save
+  end
+
+  redirect '/voulenteer'
+end
+
 get '/voulenteer/template' do
   get_template
   @asia_countries = Country.all(:continent => '亞洲')
@@ -871,11 +902,18 @@ post '/claim_letter' do
         # url = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
         # AppEngine::URLFetch.fetchAsync(url)
       end
+
+      @hash_key = letter.upload_file_url
     else
       session[:has_been_claimed] = true
     end
   end
-  redirect '/voulenteer'
+  if  @hash_key
+    redirect '/voulenteer?hash_key=' + @hash_key
+  else
+    redirect '/voulenteer'
+  end
+
 end
 
 get '/send_thank_you_email' do

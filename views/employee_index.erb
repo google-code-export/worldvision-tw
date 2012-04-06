@@ -65,11 +65,13 @@
                 </select>
             </p>
             <div>
-                <button type="button" onClick="return submitform()">上傳檔案</button>
+                <button type="button" onClick="return submitform(event)">上傳檔案</button>
         </form>
         <script type="text/javascript">
-            function submitform() {
+            function submitform(event) {
                 var trans_type = $('#trans_type option:selected').text();
+                trans_type = trans_type == "中翻英" ? "CE" : "EC";
+                
                 var file_name = $("#my_file").val();
                 if (file_name == null || file_name == ""){
                     alert("尚未選擇上傳檔案");
@@ -78,14 +80,10 @@
                     alert("檔名與信件種類不符, 請再確認");
                     return false;
                 }else{
-//                    $('#dialog').dialog();
-                    show_loading_dialog();
-                    // document.uploadform.action = "
-                <%=@url%>?from=/employee&to=/file_upload&id=" + document.getElementById("user_id").value + "&type="
-                    // 				+ document.getElementById("trans_type").value;
                     document.uploadform.action = "<%=@url%>";
-                    return check_file_name_and_post_parameters(event,document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
+                    check_file_name_and_post_parameters(event,document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
                     document.uploadform.submit();
+                    show_loading_dialog();
                 }
             }
         </script>
