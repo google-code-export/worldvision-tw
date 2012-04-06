@@ -53,12 +53,12 @@
             <td>
                 <form action="/claim_letter?id=<%= letter.id %>&account_id=<%= account_id %>" method="post">
                     <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                    <input type="submit" value="領取確認" onclick="$('#dialog').dialog();">
+                    <input type="submit" value="領取確認" >
                 </form>
                 <% if !letter.claim_date.nil? %>
                     <form action="<%= url %>/?from=/voulenteer&to=/return_file_upload?id=<%= letter.id %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="Send" onclick="$('#dialog').dialog();">
+                        <input type="submit" value="Send">
                     </form>
                 <% end %>
             </td>

@@ -50,10 +50,15 @@
             <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
             </td>
             <td>
-                <% if letter.return_file_url == nil %>
+                <% if letter.re_upload %>
                     <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="上傳" onclick="$('#dialog').dialog();">
+                        <input type="submit" value="上傳">
+                    </form>
+                <% elsif letter.return_file_url == nil %>
+                    <form onsubmit="post_parameters(this, {from:'/voulenteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                        譯返上傳:<input type="file" name="myFile" size="10">
+                        <input type="submit" value="上傳">
                     </form>
                     <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
                         退件原因:
@@ -62,13 +67,17 @@
                         <ul>
                             <li><input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
                             <li>
-                            <input type="submit" value="退件" onclick="$('#dialog').dialog();">
+                            <input type="submit" value="退件">
                             </li>
                         </ul>
                         </div>
                     </form>
                 <% else %>
                     已成功上傳
+                    <form method="post" action="/re_upload">
+                        <input name="id" style="display:none" value="<%= letter.id %>">
+                        <input type="submit" value="重新上傳">
+                    </form>
                 <% end %>
             </td>
         </tr>

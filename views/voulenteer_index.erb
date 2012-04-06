@@ -7,6 +7,10 @@
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             markSelected($('#tans_select'), type);
+
+            $('form').submit(function() {
+                 show_loading_dialog();
+            });
         });
 
         function check(id) {
@@ -114,7 +118,7 @@
         </div>
     <% end %>
     <h3>已領取</h3>
-    <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url} %>
+    <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url, :re_upload=>@re_upload} %>
 
     <div style="position: absolute; bottom: 20px; right: 20px;">
         <!-- <img src="/images/appengine.gif"></div> -->

@@ -102,6 +102,7 @@ function delete_letters_submit(form_id, checkbox_name){
 }
 
 function show_loading_dialog(){
+    $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
     $('#dialog').dialog();
 }
 	

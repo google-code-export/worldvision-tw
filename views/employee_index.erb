@@ -26,6 +26,10 @@
             $("#selectallclaimed").click(function () {
                 $('.claimedcase').attr('checked', this.checked);
             });
+
+            $('form').submit(function() {
+                 show_loading_dialog();
+            });
         });
 
         $(function() {
@@ -74,7 +78,8 @@
                     alert("檔名與信件種類不符, 請再確認");
                     return false;
                 }else{
-                    $('#dialog').dialog();
+//                    $('#dialog').dialog();
+                    show_loading_dialog();
                     // document.uploadform.action = "
                 <%=@url%>?from=/employee&to=/file_upload&id=" + document.getElementById("user_id").value + "&type="
                     // 				+ document.getElementById("trans_type").value;
