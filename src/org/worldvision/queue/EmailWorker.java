@@ -72,11 +72,7 @@ public class EmailWorker extends HttpServlet {
 				int index = file_name.lastIndexOf("\\");
 				if (index > 0)
 					file_name = file_name.substring(index+1, file_name.length());
-				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("nextwvt@worldvision.org.tw",
-						"WorldVision Admin"));
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
-						receipt, ""));
+				MimeMessage msg = createEmailMessage(receipt, session);
 				switch (mail_id){
 					case 1:
 						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
@@ -92,7 +88,6 @@ public class EmailWorker extends HttpServlet {
 						break;
 					case 4:
 						this.sendDueReminderEmail(msg, file_name);
-						this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
 						break;
 					case 5:
 						this.sendEmpOldEmergentRemiderEmail(msg, letterId, file_name);
@@ -117,6 +112,13 @@ public class EmailWorker extends HttpServlet {
 				System.out.println("ready to send");
 				Transport.send(msg);
 				System.out.println("send out email");
+				
+				//notify emp when email is due.
+				if (mail_id == 4){
+					String emp_email = letter.getEmployee_id();
+					msg = createEmailMessage(emp_email, session);
+					this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
+				}
 			}
 			else if (mail_id == 7){
 				int available_eng_letters = model.findUnClaimedLetters("eng").size();
@@ -165,6 +167,16 @@ public class EmailWorker extends HttpServlet {
 		finally{
 			pm.close();
 		}
+	}
+
+	private MimeMessage createEmailMessage(String receipt, Session session)
+			throws MessagingException, UnsupportedEncodingException {
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress("nextwvt@worldvision.org.tw",
+				"WorldVision Admin"));
+		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
+				receipt, ""));
+		return msg;
 	}
 
 	private void sendEmpOldEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
