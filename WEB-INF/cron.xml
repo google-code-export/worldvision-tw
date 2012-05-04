@@ -15,7 +15,7 @@
   </cron>-->
   <cron>
     <url>/new_letters_job</url>
-    <description>send new letters to available voulenteers</description>
+    <description>send new letters to available volunteers</description>
     <schedule>every wednesday 08:00</schedule>
     <timezone>Asia/Taipei</timezone>
   </cron>
