@@ -17,4 +17,10 @@
         <property name="create_date" direction="asc"/>
     </datastore-index>
 
+    <datastore-index kind="Letters" ancestor="false" source="manual">
+           <property name="return_date" direction="asc"/>
+           <property name="due_date_3" direction="asc"/>
+    </datastore-index>
+
+
 </datastore-indexes>
