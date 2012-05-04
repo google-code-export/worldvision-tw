@@ -244,13 +244,18 @@ helpers do
     account = Account.first(:account => username, :password => password)
 
     if !account.nil?
-      if current_user.nil?
-        session[:user] = account.account
+      if account.allow_login
+        if current_user.nil?
+          session[:user] = account.account
+        end
+        return account.role
+      else
+        return nil
       end
-      return account.role
     else
       return nil
     end
+    
   end
 
   def int_partial(template, locals=nil)
@@ -385,7 +390,7 @@ get '/admin/log' do
     e_date = Date.strptime(end_date2, DATE_FORMAT)
     @letters = Array.new
     letters = Letter.all(:due_date_3.not => nil)
-    letters = letters.all(:due_date_3.lt => Date.today)
+    letters = letters.all(:return_date => nil, :due_date_3.lt => Date.today)
     # letters = letters.all(:return_file_url => nil, :status => '已領取')
     logger.info("due emeail::1 " + letters.size.to_s)
     letters.each do |letter|
