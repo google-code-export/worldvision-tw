@@ -276,7 +276,7 @@ end
 
 
 get '/' do
-  redirect '/voulenteer'
+  redirect '/volunteer'
 end
 
 get '/logout' do
@@ -300,7 +300,7 @@ post '/login' do
     elsif (@type == 'employee')
       redirect '/employee'
     elsif (@type == 'voulenteer')
-      redirect '/voulenteer'
+      redirect '/volunteer'
     end
   else
     @fail = true
@@ -707,7 +707,7 @@ end
 # end_date
 
 # voulenteer
-get '/voulenteer' do
+get '/volunteer' do
   voulenteer!
 
   if (session[:has_been_claimed])
@@ -837,10 +837,10 @@ post '/re_upload' do
     letter.save
   end
 
-  redirect '/voulenteer'
+  redirect '/volunteer'
 end
 
-get '/voulenteer/template' do
+get '/volunteer/template' do
   get_template
   @asia_countries = Country.all(:continent => '亞洲')
   @africa_countries = Country.all(:continent => '非洲')
@@ -849,7 +849,7 @@ get '/voulenteer/template' do
   erb :vou_template
 end
 
-get '/voulenteer/note' do
+get '/volunteer/note' do
   get_template
   @asia_countries = Country.all(:continent => '亞洲')
   @africa_countries = Country.all(:continent => '非洲')
@@ -858,7 +858,7 @@ get '/voulenteer/note' do
   erb :vou_note
 end
 
-get '/voulenteer/noun' do
+get '/volunteer/noun' do
   get_template
   @asia_countries = Country.all(:continent => '亞洲')
   @africa_countries = Country.all(:continent => '非洲')
@@ -909,9 +909,9 @@ post '/claim_letter' do
     end
   end
   if  @hash_key
-    redirect '/voulenteer?hash_key=' + @hash_key
+    redirect '/volunteer?hash_key=' + @hash_key
   else
-    redirect '/voulenteer'
+    redirect '/volunteer'
   end
 
 end
@@ -971,10 +971,10 @@ post '/return_letter' do
     log.save
 
     fetcher = URLFetchServiceFactory.getURLFetchService
-    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=5&email=" + letter.employee_id + "&id=" + id.to_s)
+    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s)
     fetcher.fetchAsync(url_for_emp)
   end
-  redirect '/voulenteer'
+  redirect '/volunteer'
 end
 
 get '/migrate' do
