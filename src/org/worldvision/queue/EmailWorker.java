@@ -3,7 +3,6 @@
  */
 package org.worldvision.queue;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -13,27 +12,22 @@ import java.util.logging.Logger;
 import javax.jdo.PersistenceManager;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mortbay.log.Log;
-import org.worldvision.LetterServlet;
 import org.worldvision.mail.MailTemplate;
 import org.worldvision.model.LetterModel;
 import org.worldvision.model.Letters;
 import org.worldvision.model.PMF;
+import org.worldvision.model.Templates;
 
-import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 
@@ -45,12 +39,16 @@ public class EmailWorker extends HttpServlet {
 	private static final Logger log = Logger.getLogger(EmailWorker.class.getName());
 	private LetterModel model = new LetterModel();
 	public static final String LETTER_VARIABLE = "@letter";
+	public static final String DOWNLOAD_URL = "@download_url";
 	public static final String UN_CLAIMED_LETTER_COUNT = "@number_of_unclaimed_letters";
+	public static final String AVAILABLE_ENG_LETTERS = "@available_eng_letters";
+	public static final String AVAILABLE_CHI_LETTERS = "@available_chi_letters";
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		System.out.println("email-worker-called");
 		System.out.println(req.getParameter("email"));
+		System.out.println("mailId:" + req.getParameter("mailId"));
 		String email = req.getParameter("email");
 		String letterId = req.getParameter("id");
 		String mailId = req.getParameter("mailId");
@@ -67,50 +65,69 @@ public class EmailWorker extends HttpServlet {
 			//fetch attachment
 			
 			int mail_id = Integer.parseInt(mailId);
-			if (letterId!= null && !"".equals(letterId) && mail_id <=5){
+			if (letterId!= null && !"".equals(letterId) && mail_id <=8){
 				letterId = letterId.replace("Letters(", "").replace(")", "");
 				Letters letter = model.getLetter(pm, letterId);
-				SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-				String dueDate = formatter.format(letter.getDue_date());
 				String file_name = letter.getUpload_file_name();
 				int index = file_name.lastIndexOf("\\");
 				if (index > 0)
 					file_name = file_name.substring(index+1, file_name.length());
 				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("robbie@fliptop.com",
+				msg.setFrom(new InternetAddress("nextwvt@worldvision.org.tw",
 						"WorldVision Admin"));
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						receipt, ""));
 				switch (mail_id){
-					case 1: 
+					case 1:
+						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+						String dueDate = formatter.format(letter.getDue_date());
 						sendDueDateEmail(dueDate, msg, file_name);
 						break;
 					case 2:
 						sendThankYouEmail(msg, file_name);
 						break;
 					case 3:
-						sendEmailReturndEmail(msg, letterId, file_name);
+						String blob_key = letter.getReturn_file_url();
+						sendEmailReturndEmail(msg, blob_key, file_name);
 						break;
 					case 4:
 						this.sendDueReminderEmail(msg, file_name);
+						this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
 						break;
 					case 5:
-						this.sendEmpEmergentRemiderEmail(msg, letterId, file_name);
+						this.sendEmpOldEmergentRemiderEmail(msg, letterId, file_name);
+						break;
+					case 6:
+						this.sendEmpCaimLetterNoticeEmail(msg, letterId, file_name);
+						break;
+					case 7:
+						Key key = KeyFactory.createKey("Templates", 242001);
+						PersistenceManager pm2 = PMF.get().getPersistenceManager();
+						Templates template = pm2.getObjectById(Templates.class, key);
+						msg.setSubject("test");
+						msg.setText("test");
+						break;
+					case 8:
+						this.sendEmpReturnedEmergentRemiderEmail(msg, letterId, file_name);
+						break;
+					case 9:
+						this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
 						break;
 				}
 				System.out.println("ready to send");
 				Transport.send(msg);
 				System.out.println("send out email");
 			}
-			else if (mail_id == 6){
-				int not_claimed_letters_count = model.findUnClaimedLetters().size();
+			else if (mail_id == 7){
+				int available_eng_letters = model.findUnClaimedLetters("eng").size();
+				int available_chi_letters = model.findUnClaimedLetters("chi").size();
 				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("robbiecheng@gmail.com",
+				msg.setFrom(new InternetAddress("nextwvt@worldvision.org.tw",
 						"WorldVision Admin"));
 				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 						receipt, "robbiecheng"));
 				log.info("going to send new letter email to " + receipt);
-				this.sendNewLetterReminderEmail(msg, not_claimed_letters_count);
+				this.sendNewLetterReminderEmail(msg, available_eng_letters, available_chi_letters);
 				Transport.send(msg);
 			}
 //			Blob file = letter.getUpload_file();
@@ -137,32 +154,62 @@ public class EmailWorker extends HttpServlet {
 //
 //			msg.setContent(mp);
 		} catch (AddressException e) {
-			// ...
-		} catch (MessagingException e) {
-			// ...
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally{
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
 			pm.close();
 		}
 	}
 
-	private void sendEmpEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
+	private void sendEmpOldEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
 		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
 		try {
-			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_TOPIC, "big5");
-			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_CONTENT, file_name));
+			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_OLD_TOPIC, "big5");
+			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_OLD_CONTENT, file_name));
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-	private void sendEmailReturndEmail(MimeMessage msg, String fileId, String file_name) throws MessagingException {
+	
+	private void sendEmpReturnedEmergentRemiderEmail(MimeMessage msg, String key, String file_name) {
+		String filePath = "http://www.worldvision-tw.appspot.com/serve?blob-key=" + key;
+		try {
+			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_RETURNED_TOPIC, "big5");
+			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_RETURNED_CONTENT, file_name));
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void sendEmpDuedEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
 		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
+		try {
+			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_DUED_TOPIC, "big5");
+			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_DUED_CONTENT, file_name));
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void sendEmpCaimLetterNoticeEmail(MimeMessage msg, String fileId, String file_name) throws MessagingException {
+		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
+		msg.setSubject(MailTemplate.EMP_CLAIM_LETTER_NOTICE_TOPIC, "big5");
+		msg.setText(replaceVariable(MailTemplate.EMP_CLAIM_LETTER_NOTICE_CONTENT, file_name));
+	}
+
+	private void sendEmailReturndEmail(MimeMessage msg, String blob_key, String file_name) throws MessagingException {
+		String filePath = "http://www.worldvision-tw.appspot.com//serve?blob-key=" + blob_key;
 		msg.setSubject(MailTemplate.EMPLOYEE_COMPLETE_LETTER_TOPIC, "big5");
-		msg.setText(replaceVariable(MailTemplate.EMPLOYEE_COMPLETE_LETTER_CONTENT, file_name));
+		msg.setText(replaceVariable(MailTemplate.EMPLOYEE_COMPLETE_LETTER_CONTENT, file_name).replace(DOWNLOAD_URL, filePath));
 	}
 
 	private void sendThankYouEmail(MimeMessage msg, String file_name) throws MessagingException {
@@ -182,10 +229,10 @@ public class EmailWorker extends HttpServlet {
 		msg.setText(replaceVariable(MailTemplate.DUE_REMINDER_CONTENT, file_name));
 	}
 	
-	private void sendNewLetterReminderEmail(MimeMessage msg, Integer not_claimed_letters_count)
+	private void sendNewLetterReminderEmail(MimeMessage msg, Integer available_eng_letters, Integer available_chi_letters)
 		throws MessagingException {
 		msg.setSubject(MailTemplate.NEW_LETTER_REMINDER_TOPIC, "big5");
-		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT.replace(UN_CLAIMED_LETTER_COUNT, not_claimed_letters_count.toString()));
+		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT.replace(AVAILABLE_CHI_LETTERS, available_chi_letters.toString()).replace(AVAILABLE_ENG_LETTERS, available_eng_letters.toString()));
 	}
 	
 	private String replaceVariable(String string, String val){

@@ -41,6 +41,8 @@ public class Letters {
 	@Persistent
 	private String voulenteer_name;
 	@Persistent
+	private String voulenteer_account;
+	@Persistent
 	private Date claim_date;
 	@Persistent
 	private Date due_date;
@@ -70,6 +72,16 @@ public class Letters {
 	private String show;
 	@Persistent
 	private boolean deleted;
+	@Persistent
+	private boolean re_upload;
+
+	public boolean isRe_upload() {
+		return re_upload;
+	}
+
+	public void setRe_upload(boolean re_upload) {
+		this.re_upload = re_upload;
+	}
 
 	public String getShow() {
 		return show;
@@ -280,5 +292,15 @@ public class Letters {
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
 	}
+
+	public String getVoulenteer_account() {
+		return voulenteer_account;
+	}
+
+	public void setVoulenteer_account(String voulenteer_account) {
+		this.voulenteer_account = voulenteer_account;
+	}
+	
+	
 
 }

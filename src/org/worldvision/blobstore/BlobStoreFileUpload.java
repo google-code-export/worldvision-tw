@@ -39,6 +39,8 @@ public class BlobStoreFileUpload extends HttpServlet {
 			System.out.println("upload success");
 			BlobInfo info = blobinfoFactory.loadBlobInfo(blobKey);
 			String fileName = info.getFilename();
+			long size = info.getSize();
+			
 			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextUrl);
 			req.setAttribute("blobKey", blobKey.getKeyString());
 			req.setAttribute("fileName", fileName);

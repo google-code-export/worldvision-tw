@@ -22,6 +22,7 @@ import org.worldvision.model.Accounts;
 import org.worldvision.model.Countries;
 import org.worldvision.model.Letters;
 import org.worldvision.model.PMF;
+import org.worldvision.model.Templates;
 import org.worldvision.util.DateUtil;
 
 import com.google.appengine.api.datastore.Blob;
@@ -46,7 +47,42 @@ public class FileUpload extends HttpServlet {
 			doFileUpload(req, res);
 		} else if (req.getServletPath().indexOf("country_upload") > 0) {
 			doCountryUpload(req, res);
+		} else if (req.getServletPath().indexOf("template_upload") > 0){
+			doTemplateUpload(req, res);
 		}
+	}
+
+	private void doTemplateUpload(HttpServletRequest req,
+			HttpServletResponse res) {
+		System.out.println("java:debug:upload:template:1");
+		try {
+			String blobKey = (String) req.getAttribute("blobKey");
+			if (blobKey != null) {
+				long id = Long.parseLong(req.getParameter("id"));
+				if (id == 0){
+					System.out.println("java:debug:upload:template:2");
+					Templates template = new Templates();
+					template.setTempate_url(blobKey);
+					PersistenceManager pm = PMF.get().getPersistenceManager();
+					pm.makePersistent(template);
+				} else{
+					System.out.println("java:debug:upload:template:3");
+					Key key = KeyFactory.createKey("Templates", id);
+					PersistenceManager pm = PMF.get().getPersistenceManager();
+					Templates template = pm.getObjectById(Templates.class, key);
+					template.setTempate_url(blobKey);
+					try {
+						pm.makePersistent(template);
+					} finally {
+						pm.close();
+					}
+				}
+			}
+			res.sendRedirect("/admin/country");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 
 	private void doCountryUpload(HttpServletRequest req, HttpServletResponse res) {
@@ -123,7 +159,7 @@ public class FileUpload extends HttpServlet {
 			String fileName = (String) req.getAttribute("fileName");
 			String fileUrl = blobKey;
 			Letters letter = new Letters(userName, fileUrl, fileName, type);
-			if ("chi".equals(type))
+			if (type != null && "chi".equals(type))
 				letter.setNote("中翻英");
 			letter.setShow("false");
 			PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -148,23 +184,25 @@ public class FileUpload extends HttpServlet {
 		Accounts emp = null;
 		long id = 0;
 		if (blobKey != null) {
-			if (req.getParameter("id") != null) {
+			if (req.getParameter("id") != null && req.getAttribute("fileName") != null && !"".equals(req.getAttribute("fileName"))) {
 				String fileName = (String) req.getAttribute("fileName");
 				String fileUrl = blobKey;
-				
+					
 				id = Long.parseLong(req.getParameter("id"));
 				Key key = KeyFactory.createKey("Letters", id);
 				PersistenceManager pm = PMF.get().getPersistenceManager();
+				PersistenceManager pm2 = PMF.get().getPersistenceManager();
 				letter = pm.getObjectById(Letters.class, key);
 				letter.setReturn_file_url(fileUrl);
 //				letter.setReturn_file((Blob) data[0]);
 //				letter.setReturn_file_url((String) data[1]);
+				letter.setRe_upload(false);
 				letter.setReturn_file_url(fileUrl);
 				letter.setReturn_file_name(fileName);
 				letter.setStatus("returned");
 				letter.setRerturn_date(DateUtil.getCurrentDate());
 				
-				vou = account_model.getAccountByName(pm, letter.getVoulenteer_name());
+				vou = account_model.getAccountByName(pm2, letter.getVoulenteer_account());
 				String emp_id = letter.getEmployee_id();
 				System.out.println("pm: " + pm.toString());
 				emp = account_model.getAccountByName(pm, emp_id);
@@ -174,10 +212,11 @@ public class FileUpload extends HttpServlet {
 					
 				try {
 					pm.makePersistent(letter);
-					pm.makePersistent(vou);
+					pm2.makePersistent(vou);
 					
 				} finally {
 					pm.close();
+					pm2.close();
 				}
 				
 				if (vou != null){
@@ -200,7 +239,7 @@ public class FileUpload extends HttpServlet {
 			}
 		}
 
-		res.sendRedirect("/voulenteer");
+		res.sendRedirect("/volunteer");
 	}
 
 	private Object[] doUpload(HttpServletRequest req, HttpServletResponse res)

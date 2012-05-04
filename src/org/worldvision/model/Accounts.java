@@ -44,7 +44,7 @@ public class Accounts {
 	@Persistent
 	private int jobs;
 	private Boolean weekly_email;
-	
+	private Boolean allow_login;
 	
 	public Key getId() {
 		return id;
@@ -100,6 +100,16 @@ public class Accounts {
 	}
 	public void setWeekly_email(Boolean weekly_email) {
 		this.weekly_email = weekly_email;
+	}
+	
+	public Boolean getAllow_login() {
+		return allow_login;
+	}
+	public void setAllow_login(Boolean allow_login) {
+		this.allow_login = allow_login;
+	}
+	public Boolean getWeekly_email() {
+		return weekly_email;
 	}
 	
 

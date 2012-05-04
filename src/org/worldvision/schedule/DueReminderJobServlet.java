@@ -29,7 +29,7 @@ public class DueReminderJobServlet extends HttpServlet {
 		try {
 			for (int i = 0; i < size; i++) {
 				Letters letter = result.get(i);
-				String vou_name = letter.getVoulenteer_name();
+				String vou_name = letter.getVoulenteer_account();
 				if (vou_name != null && !letter.isSend_due_reminder()) {
 					Accounts vou = account_model.getAccountByName(pm, vou_name);
 					if (vou != null) {

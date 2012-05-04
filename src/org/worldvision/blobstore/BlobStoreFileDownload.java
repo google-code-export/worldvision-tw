@@ -1,10 +1,14 @@
 package org.worldvision.blobstore;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
+import javax.mail.internet.MimeUtility;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.worldvision.util.URLUtil;
 
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
@@ -23,7 +27,24 @@ public class BlobStoreFileDownload extends HttpServlet {
 		BlobInfoFactory blobinfoFactory = new BlobInfoFactory();
 		BlobInfo info = blobinfoFactory.loadBlobInfo(blobKey);
 		
-		res.setHeader("Content-Disposition", "attachment; filename=" + info.getFilename());
+		res.setContentType(info.getContentType());
+		res.setHeader("Content-Transfer-Encoding", "binary");
+		res.setHeader("charset", "utf-8");
+		res.setCharacterEncoding("utf-8");
+		String filename = info.getFilename();
+		if (filename.indexOf("\\") > 0)
+			filename = filename.substring(filename.lastIndexOf("\\") + 1);
+		
+		String user_agent = req.getHeader("user-agent");	
+		boolean isInternetExplorer = (user_agent.indexOf("MSIE") > -1);
+		if (isInternetExplorer) {
+			filename = URLEncoder.encode(filename, "utf-8");
+		} else {
+		    filename = MimeUtility.encodeText(filename);
+		}
+		System.out.println("filename: " + filename);
+		filename = URLUtil.espaceSpace(filename);
+		res.setHeader("Content-Disposition", "attachment; filename=" + filename);
 		blobstoreService.serve(blobKey, res);
 	}
 

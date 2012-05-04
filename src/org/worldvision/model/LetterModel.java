@@ -22,13 +22,13 @@ public class LetterModel {
     SimpleDateFormat format = new SimpleDateFormat(pattern);
     
     
-    public List findUnClaimedLetters(){
+    public List findUnClaimedLetters(String type){
     	PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> result = new ArrayList();
 		
 		Query query = pm.newQuery(Letters.class);
 		try {
-			query.setFilter("claim_date == null");
+			query.setFilter("claim_date == null && trans_type =='" + type + "'");
 			result = (List<Letters>) query.execute();
 			return result;
 		} finally {
@@ -52,9 +52,9 @@ public class LetterModel {
 
 		Query query = pm.newQuery(Letters.class);
 		if (send = false)
-			query.setFilter("due_date < date && return_file_url == null && send_due_reminder == false");
+			query.setFilter("due_date != null && due_date < date && return_file_url == null && send_due_reminder == false");
 		else
-			query.setFilter("due_date < date && return_file_url == null");
+			query.setFilter("due_date != null && due_date < date && return_file_url == null");
 		query.declareImports("import java.util.Date");
 		query.declareParameters("Date date");
 		result = (List<Letters>) query.execute(date);
@@ -104,7 +104,8 @@ public class LetterModel {
 
 	}
 
-	public List findOldLetters(PersistenceManager pm, String type, int days) {
+	public List findOldLetters(String type, int days) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> result = new ArrayList();
 
 		Calendar cal = Calendar.getInstance();
@@ -114,9 +115,10 @@ public class LetterModel {
 		System.out.println("date: " + date.toGMTString());
 		Query query = pm.newQuery(Letters.class);
 		try {
-			query.setFilter("create_date < date && trans_type==" + type +"&& voulenteer_id == null");
+			query.setFilter("create_date < date && trans_type=='" + type +"' && deleted == false && status == 'unclaimed'");
 			query.declareImports("import java.util.Date");
 			query.declareParameters("Date date");
+			System.out.println("query:" + query.toString());
 			result = (List<Letters>) query.execute(date);
 
 			int size = result.size();
@@ -128,7 +130,7 @@ public class LetterModel {
 			}
 			return result;
 		} finally {
-			query.closeAll();
+			pm.close();
 		}
 
 	}

@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.worldvision.model.Countries;
 import org.worldvision.model.Letters;
 import org.worldvision.model.PMF;
+import org.worldvision.util.URLUtil;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -98,7 +99,7 @@ public class FileDownload extends HttpServlet {
 				: "application/octet-stream");
 		res.setContentLength(file.getBytes().length);
 		res.setHeader("Content-Disposition", "attachment; filename=\""
-				+ filename + "\"");
+				+ URLUtil.espaceSpace(filename) + "\"");
 
 		//
 		// Stream to the requester.

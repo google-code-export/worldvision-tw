@@ -73,6 +73,6 @@ public class LetterServlet extends HttpServlet {
 				MailSender.sendEmail(url);
 			}
 		}
-		res.sendRedirect("/voulenteer");
+		res.sendRedirect("/volunteer");
 	}
 }

@@ -36,7 +36,7 @@ public class NewLettersJobServlet extends HttpServlet {
 			if (email != null && !"".equals(email) && vou.isWeekly_email()){
 				log.info("going to send email to " + email);
 				System.out.println("going to send email to " + email);
-				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=6&email=" + email + "&id=0";
+				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=7&email=" + email + "&id=0";
 				MailSender.sendEmail(url);
 			}
 		}
