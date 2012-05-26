@@ -250,7 +250,7 @@ helpers do
         end
         return account.role
       else
-        return nil
+        return -1
       end
     else
       return nil
@@ -300,7 +300,10 @@ post '/login' do
 
   @type = authenticate_account(email, password, 'admin')
   if (@type)
-    if (@type == 'admin')
+    if (@type == -1)
+      @not_allowed_login = true
+      erb :login
+    elsif (@type == 'admin')
       redirect '/admin'
     elsif (@type == 'employee')
       redirect '/employee'
@@ -443,6 +446,33 @@ get '/admin/vou' do
 
 end
 
+get '/admin/volunteer' do
+  protected!
+
+ # get all volunteers
+ all_volunteers = Account.all(:role => 'voulenteer')
+ @in_service_volunteers = Array.new
+ @available_volunteers = Array.new
+ @letters = Hash.new
+ # look up if any letter claimed by volunteer
+ all_volunteers.each do |volunteer|
+   all_claimed_letters = Letter.all(:claim_date.not =>nil, :voulenteer_account => volunteer.account, :return_date => nil, :order => [ :claim_date.desc ])
+   if (all_claimed_letters.size == 0)
+      # if not, put into available volunteers
+      @available_volunteers.push(volunteer)
+      last_returned_letter = Letter.first(:return_date.not => nil, :voulenteer_account => volunteer.account, :order => [ :return_date.desc ])
+      @letters[volunteer.account] = last_returned_letter
+   else
+      # if yes, insert into its letters attribute
+      @in_service_volunteers.push(volunteer)
+      @letters[volunteer.account] = all_claimed_letters
+   end
+ end
+   logger.info("in service: " + @in_service_volunteers.size.to_s)
+   logger.info("not in service: " + @available_volunteers.size.to_s)
+   erb :admin_vou_status
+end
+
 get '/admin/is_account_exist' do
   protected!
 
@@ -565,7 +595,7 @@ get '/employee' do
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
   letters = get_letters
-  all_letters = letters.all(:employee_id=> current_user[:account].to_s, :trans_type=> @trans_type)
+  all_letters = letters.all(:employee_id=> current_user[:account].to_s, :trans_type=> @trans_type, :order => [ :return_date.desc ])
   @letters = Array.new
   @return_letters = Array.new
   all_letters.each do |letter|
@@ -738,9 +768,9 @@ get '/volunteer' do
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :order=>[:due_date.asc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :order=>[:due_date.desc])
   else
-    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.asc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.desc])
   end
   @letters = Array.new
   @emergent_letters = Array.new
@@ -784,7 +814,7 @@ get '/volunteer' do
   end
 
 
-  @claim_letters = Letter.all(:due_date.not => nil)
+  @claim_letters = Letter.all(:due_date.not => nil, :order => [ :due_date.desc ])
   @voulenteer_letters = Array.new
   voulenteer_id = current_user[:voulenteer_id]
   @claim_letters.each do |letter|

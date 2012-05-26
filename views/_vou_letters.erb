@@ -2,10 +2,13 @@
     <% if !is_chinese_email(trans_type) %>
         <col width=100>
         <col width=50>
+        <% if is_emergent %>
+            <col width=50>
+        <% end %>
         <col width=300>
         <col width=20>
         <col width=50>
-        <col width=300>
+        <col width=250>
         <col width=100>
     <% else %>
         <col width=100>
@@ -20,7 +23,9 @@
         <% if !is_chinese_email(trans_type) %>
             <th>國家</th>
         <% end %>
-        <!-- <th>信種</th> -->
+        <% if is_emergent %>
+            <th>信種</th>
+        <% end %>
         <th>備註</th>
         <th>封數</th>
         <th>狀態</th>
@@ -39,7 +44,9 @@
             <% if !is_chinese_email(trans_type) %>
                 <td><%= letter.country_name %></td>
             <% end %>
-            <!-- <td><%= h letter.type %>  <br/></td> -->
+            <% if is_emergent %>
+                <td><%= h letter.letter_source_type %></td>
+            <% end %>
             <td class="wrap"><%= append_note(trans_type, letter.note, letter.employee_id) %></td>
             <td><%= h letter.number_of_letters %></td>
                 <% if (letter.status.index('emergent') == nil) %>

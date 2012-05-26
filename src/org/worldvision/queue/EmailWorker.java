@@ -84,7 +84,8 @@ public class EmailWorker extends HttpServlet {
 						break;
 					case 3:
 						String blob_key = letter.getReturn_file_url();
-						sendEmailReturndEmail(msg, blob_key, file_name);
+						boolean re_upload = letter.isRe_upload();
+						sendEmailReturndEmail(msg, blob_key, file_name, re_upload);
 						break;
 					case 4:
 						this.sendDueReminderEmail(msg, file_name);
@@ -218,9 +219,12 @@ public class EmailWorker extends HttpServlet {
 		msg.setText(replaceVariable(MailTemplate.EMP_CLAIM_LETTER_NOTICE_CONTENT, file_name));
 	}
 
-	private void sendEmailReturndEmail(MimeMessage msg, String blob_key, String file_name) throws MessagingException {
+	private void sendEmailReturndEmail(MimeMessage msg, String blob_key, String file_name, boolean re_upload) throws MessagingException {
 		String filePath = "http://www.worldvision-tw.appspot.com//serve?blob-key=" + blob_key;
-		msg.setSubject(MailTemplate.EMPLOYEE_COMPLETE_LETTER_TOPIC, "big5");
+		if (re_upload)
+			msg.setSubject(MailTemplate.EMPLOYEE_RE_UPLOAD_LETTER_TOPIC, "big5");
+		else
+			msg.setSubject(MailTemplate.EMPLOYEE_COMPLETE_LETTER_TOPIC, "big5");
 		msg.setText(replaceVariable(MailTemplate.EMPLOYEE_COMPLETE_LETTER_CONTENT, file_name).replace(DOWNLOAD_URL, filePath));
 	}
 

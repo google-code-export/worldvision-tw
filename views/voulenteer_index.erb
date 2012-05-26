@@ -22,7 +22,12 @@
             var ele = document.getElementById(id);
             if (ele && ele.value == '') {
                 alert("請輸入退件原因");
+                STOP_PROPAGATION = true;
                 return false;
+            }
+            else{
+                STOP_PROPAGATION = false;
+                return true;
             }
         }
 
@@ -42,7 +47,6 @@
 <div style="">
     <br>
     <%= erb :vou_header %>
-    <br/><br/>
     <a href="/volunteer/template">各國信件翻譯範本</a>
     <a href="/volunteer/note">各國翻譯注意事項</a>
     <a href="/volunteer/noun">各國翻譯常見名詞</a>
@@ -72,19 +76,19 @@
                 <% @emergent_pages.each do |page| %>
                     <a href="/volunteer?type=eng&start=<%= page %>#tabs-1"><%= page %></a>
                 <% end %>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true} %>
             </div>
             <div id="tabs-2">
                 <% @hand_writing_pages.each do |page| %>
                     <a href="/volunteer?type=eng&start=<%= page %>#tabs-2"><%= page %></a>
                 <% end %>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
             <div id="tabs-3">
                 <% @typing_pages.each do |page| %>
                     <a href="/volunteer?type=eng&start=<%= page %>#tabs-3"><%= page %></a>
                 <% end %>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
         </div>
     <% else %>
@@ -97,13 +101,13 @@
                 <% @emergent_pages.each do |page| %>
                     <a href="/volunteer?type=chi&start=<%= page %>#tabs-4"><%= page %></a>
                 <% end %>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
             <div id="tabs-5">
                 <% @pages.each do |page| %>
                     <a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a>
                 <% end %>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url} %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
         </div>
     <% end %>

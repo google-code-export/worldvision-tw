@@ -15,7 +15,6 @@
 </head>
 <body style="font-family: sans-serif;">
 
-<span><%= @type.to_s %></span>
 <div style="width: 190px; border: 1px solid lightgray; left: 40%; top: 150px; position: relative">
     <form method=post action="/login">
         <table border="0.5">
@@ -39,6 +38,14 @@
                     <td colspan="2">
 
                         <div class="error">帳號或密碼錯誤</div>
+
+                    </td>
+                </tr>
+            <% elsif @not_allowed_login %>
+                <tr>
+                    <td colspan="2">
+
+                        <div class="error">無登入權限, 如有問題請email至srdvs@worldvision.org.tw</div>
 
                     </td>
                 </tr>

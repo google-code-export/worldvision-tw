@@ -52,6 +52,7 @@ public class MailTemplate {
 		"\n";
 	
 	public static final String EMPLOYEE_COMPLETE_LETTER_TOPIC ="NEXT-員工-譯返上傳成功通知信";
+	public static final String EMPLOYEE_RE_UPLOAD_LETTER_TOPIC ="NEXT-員工-譯返[重新]上傳成功通知信";
 	public static final String EMPLOYEE_COMPLETE_LETTER_CONTENT =
 		"親愛的同工："+
 		"\n"+
