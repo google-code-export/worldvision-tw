@@ -57,7 +57,11 @@
                 <td><%= letter_status_to_chinese(letter.status) %></td>
                 <td class="wrap"><%= truncate letter.upload_file_name %></td>
                 <td>
-                    <select id="return_days" name="return_days" select="<%= letter.return_days %>">
+                    <% if letter.return_days %>
+                        <select id="return_days" name="return_days" select="<%= letter.return_days %>">
+                    <% else %>
+                        <select id="return_days" name="return_days" select="3">
+                    <% end %>
                         <option value="3">3</option>
                         <option value="4">4</option>
                         <option value="5">5</option>

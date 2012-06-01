@@ -57,9 +57,9 @@ $('select[select]').each(function(){
 <%= erb :header %>
 
 <!-- new account start -->
-	<a href="/admin/country">管理國家</a>
 	<a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
 	<a href="/admin/vou">志工翻譯封數統計</a>
+    <a href="/admin/vou_status">志工服務管理報表</a>
 	<h3>新建會員</h3>
 	<div style="width: 300px; height:300px">
     <% if @account_exists%>
@@ -82,6 +82,7 @@ $('select[select]').each(function(){
         <option value="eng">英翻中</option>
         <option value="both">皆可 </option>
       </select><br/>
+      <div class="header">備註</div> <input id="note" name="note" ></input>
       <input type=submit value="建立帳號" onclick=''>
     </form>
 <!-- new account end -->
@@ -109,6 +110,7 @@ $('select[select]').each(function(){
 			<col style="width:150">
 			<col style="width:90">
 			<col style="width:80">
+            <col style="width:150">
 			<col style="width:80">
 	    <tr>
 	      <th style="width: 100px">帳號</th>
@@ -119,6 +121,7 @@ $('select[select]').each(function(){
 	      <th>姓名</th>
 	      <th>志工編號</th>
 		  <th>志工類型</th>
+          <th>備註</th>
 	      <th>操作</th>
 	    </tr>
     <% @accounts.each do |account| %>
@@ -157,7 +160,8 @@ $('select[select]').each(function(){
 	        <option value="eng">英翻中</option>
 	        <option value="both">皆可 </option>
 	      </select><br/>
-	     </td>
+	    </td>
+         <td><input name="note" value="<%= account.note%>"></input>  <br/>
 		<td>
 
 			<input type=submit value="更新">

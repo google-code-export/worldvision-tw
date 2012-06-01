@@ -11,7 +11,6 @@
 <%= erb :header %>
 <!-- new account start -->
 <a href="/admin">管理會員</a>
-<a href="/admin/country">管理國家</a>
 <a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
 
 <h4>志工翻譯封數統計</h4>
@@ -23,6 +22,7 @@
         <th>志工姓名</th>
         <th>志工編號</th>
         <th>翻譯信件</th>
+        <th>備註</th>
     </tr>
     <% @in_service_volunteers.each do |voulenteer| %>
         <tr>
@@ -30,10 +30,11 @@
             <td><%= voulenteer.voulenteer_id %></td>
             <td>
                 <% @letters[voulenteer.account].each do |letter|%>
-                    <%= letter.upload_file_name %>,
-                    <%= letter.due_date %>
+                    <%= truncate(letter.upload_file_name) %>,
+                    <%= letter.due_date %><br/>
                 <% end %>
             </td>
+            <td><%= voulenteer.note %></td>
         </tr>
     <% end %>
 </table>
@@ -42,18 +43,22 @@
 <table>
     <tr>
         <th>志工姓名</th>
+        <th>帳號</th>
         <th>志工編號</th>
         <th>上次譯返日期</th>
+        <th>備註</th>
     </tr>
     <% @available_volunteers.each do |voulenteer| %>
         <tr>
             <td><%= voulenteer.name %></td>
+            <td><%= voulenteer.account %></td>
             <td><%= voulenteer.voulenteer_id %></td>
             <td>
                 <% if @letters[voulenteer.account]%>
                     <%= @letters[voulenteer.account].return_date %>,
                 <% end %>
             </td>
+            <td><%= voulenteer.note %></td>
         </tr>
     <% end %>
 </table>

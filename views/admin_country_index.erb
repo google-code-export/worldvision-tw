@@ -24,9 +24,7 @@
 <%= erb :header %>
 
 <!-- new account start -->
-<a href="/admin">管理會員</a>
-<a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
-<a href="/admin/vou">志工翻譯封數統計</a>
+<a href="/employee">管理信件</a>
 	<h4>所有國家</h4>
     <div>
     <div style="float: left">
@@ -47,7 +45,7 @@
         </form>
     </div>
     <div>
-      <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/admin/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+      <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
       <input type="file" name="myFile" size="10">
       <input type="submit" value="上傳翻譯底稿">
       </form>
@@ -74,19 +72,19 @@
 	<td><a href="/serve?blob-key=<%=country.noun_url%>"><%=truncate(country.noun_file_name)%></a></td>
     <!--<td><a href="/serve?blob-key=<%#=country.background_url%>"><#%=country.background_file_name%></a></td>-->
 	<td>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳注意事項">
     </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳翻譯範本">
     </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳常見名詞">
     </form>
-	<!--<form onsubmit="post_parameters(this, {from:'/admin/country', to:'/country_upload', id:'<%= country.id %>', type:'background'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<!--<form onsubmit="post_parameters(this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'background'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳翻譯背景">
     </form>-->
@@ -95,7 +93,6 @@
     </form>
 
 	</td>
-	<br/>
 	</tr>
     <% end %>
 	</table>

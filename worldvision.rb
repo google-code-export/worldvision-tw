@@ -30,6 +30,7 @@ class Account
   property :jobs, Integer, :default => 0
   property :weekly_email, Boolean, :default  => true
   property :allow_login, Boolean, :default  => true
+  property :note, String
 end
 class Country
   include DataMapper::Resource
@@ -348,8 +349,8 @@ end
 #   erb :admin_index
 # end
 
-get '/admin/country' do
-  protected!
+get '/employee/country' do
+  employee!
   @countries = Country.all
   @template = Template.first
   @url = get_upload_url()
@@ -446,7 +447,7 @@ get '/admin/vou' do
 
 end
 
-get '/admin/volunteer' do
+get '/admin/vou_status' do
   protected!
 
  # get all volunteers
@@ -501,24 +502,24 @@ post '/create_account' do
   end
 end
 
-post '/admin/create_country' do
-  protected!
+post '/employee/create_country' do
+  employee!
   if (params[:name] && params[:continent])
     country = Country.create(:name=>params[:name], :continent=>params[:continent])
   end
-  redirect '/admin/country'
+  redirect '/employee/country'
 end
 
-post '/admin/search_country' do
-  protected!
+post '/employee/search_country' do
+  employee!
   @countries = Country.all(:name => params[:country])
   @url = get_upload_url()
 
   erb :admin_country_index
 end
 
-post '/admin/delete_country' do
-  protected!
+post '/employee/delete_country' do
+  employee!
   id = params[:id]
   if (id)
     country = Country.get(id)
@@ -526,7 +527,7 @@ post '/admin/delete_country' do
       country.destroy
     end
   end
-  redirect '/admin/country'
+  redirect '/employee/country'
 end
 
 post '/delete_account' do
@@ -573,6 +574,9 @@ post '/update_account' do
     if params[:allow_login]
       account.allow_login = params[:allow_login]
     end
+    if params[:note]
+      account.note = params[:note]
+    end
     account.save
   end
   redirect '/admin'
@@ -595,16 +599,17 @@ get '/employee' do
   offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
   @account = current_user
   letters = get_letters
-  all_letters = letters.all(:employee_id=> current_user[:account].to_s, :trans_type=> @trans_type, :order => [ :return_date.desc ])
   @letters = Array.new
   @return_letters = Array.new
-  all_letters.each do |letter|
-    if (letter.status == 'returned')
-      @return_letters.push(letter)
-    else
-      @letters.push(letter)
-    end
+  
+  if (current_user[:account] == 'srdvs@worldvision.org.tw')
+    @letters = letters.all(:trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed'], :order => [ :create_date.desc ])
+    @return_letters = letters.all(:trans_type=> @trans_type, :status => 'returned', :order => [ :return_date.desc ])
+  else
+    @letters = letters.all(:employee_id=> current_user[:account].to_s, :status.in => ['unclaimed', 'emergent', 'claimed'], :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @return_letters = letters.all(:employee_id=> current_user[:account].to_s, :status => 'returned', :trans_type=> @trans_type, :order => [ :return_date.desc ])
   end
+
 # @todo investigate why count does not work
   @count = @letters.size
   @return_letters_count = @return_letters.size
@@ -1013,10 +1018,12 @@ post '/return_letter' do
 end
 
 get '/migrate' do
-  accounts = Account.all
-  accounts.each do |account|
-    account.weekly_email = true
-    account.save
+  letters = Letter.all
+  letters.each do |letter|
+    if (letter.re_upload == nil)
+      letter.re_upload = false
+      letter.save
+    end
   end
   redirect '/admin'
 end
@@ -1123,7 +1130,7 @@ def get_letters()
       @criteria += ('sort='+sort)
     end
   else
-    @letters = @letters.all(:order=>[:create_date.asc])
+    @letters = @letters.all(:order=>[:create_date.desc])
   end
   @letters
 end
