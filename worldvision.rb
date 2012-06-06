@@ -266,8 +266,7 @@ helpers do
   end
 
   def append_note(type, note, email)
-    logger.info('type' + type.to_s + " note " + note.to_s)
-
+    
     if (type)
       if (type == 'eng')
          note = note + '<br/>若您翻譯時有任何疑問, 歡迎來信至 上傳該信之員工' + email
@@ -275,7 +274,7 @@ helpers do
          note = note + '<br/>[中翻英] 若您翻譯時有任何疑問, 歡迎來信至 上傳該信之員工' + email
       end
     end
-    logger.info('final:' + note)
+
     note
   end
 end
@@ -755,12 +754,6 @@ get '/volunteer' do
     session[:has_been_claimed] = nil
   end
 
-  bookmark = params[:start]
-  offset = 0
-  if (bookmark)
-    offset = (bookmark.to_i-1)*PAGESIZE
-  end
-
   @url = get_upload_url()
   @account = current_user
   _trans_type = params[:type]
@@ -773,9 +766,9 @@ get '/volunteer' do
   @account_trans_type = @account.voulenteer_type.nil? ? 'both' : @account.voulenteer_type
   puts "===> trans_type" + @trans_type
   if (@trans_type == 'both')
-    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :order=>[:due_date.desc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :order=>[:create_date.asc])
   else
-    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:due_date.desc])
+    @all_letters = Letter.all(:deleted => false, :due_date => nil, :show=>'true', :trans_type=>@trans_type, :order=>[:create_date.asc])
   end
   @letters = Array.new
   @emergent_letters = Array.new
@@ -830,29 +823,35 @@ get '/volunteer' do
 
 
   # paging
-  @pages = get_paginator(@letters, offset)
-  @emergent_pages = get_paginator(@emergent_letters, offset)
-  @hand_writing_pages = get_paginator(@hand_writing_letters, offset)
-  @typing_pages = get_paginator(@typing_letters, offset)
+  @pages = get_paginator(@letters)
+  @emergent_pages = get_paginator(@emergent_letters)
+  @hand_writing_pages = get_paginator(@hand_writing_letters)
+  @typing_pages = get_paginator(@typing_letters)
+
+  bookmark = params[:start]
+  offset = params[:start].nil? ? 0 : get_offset(params[:start])
+  em_offset = params[:em_start].nil? ? 0 : get_offset(params[:em_start])
+  hw_offset = params[:hw_start].nil? ? 0 : get_offset(params[:hw_start])
+  ty_offset = params[:ty_start].nil? ? 0 : get_offset(params[:ty_start])
 
   if (@letters.size > PAGESIZE)
-    @letters = @letters[offset+1, PAGESIZE]
+    @letters = @letters[offset, PAGESIZE]
   end
 
   logger.info("l_size" + @letters.size.to_s)
 
   if (@emergent_letters.size > PAGESIZE)
-    @emergent_letters = @emergent_letters[offset+1, PAGESIZE]
+    @emergent_letters = @emergent_letters[em_offset, PAGESIZE]
   end
 
   logger.info("e_size" + @emergent_letters.size.to_s)
 
   if (@hand_writing_letters.size > PAGESIZE)
-    @hand_writing_letters = @hand_writing_letters[offset+1, PAGESIZE]
+    @hand_writing_letters = @hand_writing_letters[hw_offset, PAGESIZE]
   end
 
   if (@typing_letters.size > PAGESIZE)
-    @typing_letters = @typing_letters[offset+1, PAGESIZE]
+    @typing_letters = @typing_letters[ty_offset, PAGESIZE]
   end
 
   logger.info("offset" + offset.to_s)
@@ -1135,10 +1134,9 @@ def get_letters()
   @letters
 end
 
-def get_paginator(letters, offset)
+def get_paginator(letters)
   count = letters.size
   puts "count" + count.to_s
-  puts "index" + offset.to_s
   total_page = (count/PAGESIZE.to_f).ceil
   puts "total_page" + total_page.to_s
   pages = Array.new
@@ -1150,6 +1148,15 @@ end
 
 def get_template
   @template = Template.first
+end
+
+def get_offset(bookmark)
+  offset = (bookmark.to_i-1)*PAGESIZE
+  if (bookmark.to_i > 1)
+   offset = offset + 1
+  end
+
+  offset
 end
 
 # end

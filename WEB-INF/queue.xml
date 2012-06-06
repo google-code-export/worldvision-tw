@@ -5,7 +5,7 @@
   </queue>
   <queue>
     <name>email-worker-queue</name>
-    <rate>2000/d</rate>
+    <rate>5/s</rate>
     <bucket-size>10</bucket-size>
   </queue>
   <queue>

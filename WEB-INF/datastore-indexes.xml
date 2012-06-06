@@ -94,6 +94,14 @@
             <property name="trans_type" direction="asc"/>
             <property name="return_date" direction="desc"/>
         </datastore-index>
+    <datastore-index kind="Letters" ancestor="false" source="manual">
+            <property name="deleted" direction="asc"/>
+            <property name="due_date" direction="asc"/>
+            <property name="show" direction="asc"/>
+            <property name="trans_type" direction="asc"/>
+            <property name="create_date" direction="asc"/>
+        </datastore-index>
+    
     
 
 </datastore-indexes>

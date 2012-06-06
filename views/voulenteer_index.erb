@@ -74,19 +74,19 @@
             </ul>
             <div id="tabs-1">
                 <% @emergent_pages.each do |page| %>
-                    <a href="/volunteer?type=eng&start=<%= page %>#tabs-1"><%= page %></a>
+                    <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true} %>
             </div>
             <div id="tabs-2">
                 <% @hand_writing_pages.each do |page| %>
-                    <a href="/volunteer?type=eng&start=<%= page %>#tabs-2"><%= page %></a>
+                    <a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
             <div id="tabs-3">
                 <% @typing_pages.each do |page| %>
-                    <a href="/volunteer?type=eng&start=<%= page %>#tabs-3"><%= page %></a>
+                    <a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
@@ -99,7 +99,7 @@
             </ul>
             <div id="tabs-4">
                 <% @emergent_pages.each do |page| %>
-                    <a href="/volunteer?type=chi&start=<%= page %>#tabs-4"><%= page %></a>
+                    <a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a>
                 <% end %>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
