@@ -595,7 +595,7 @@ get '/employee' do
 
   # pagaing
   bookmark = params[:start]
-  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)
+  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)+1
   @account = current_user
   letters = get_letters
   @letters = Array.new
@@ -616,10 +616,10 @@ get '/employee' do
   logger.info("r_count:" + @return_letters_count.to_s)
 
   if (@letters.size > PAGESIZE)
-    @letters = @letters[offset+1, PAGESIZE]
+    @letters = @letters[offset, PAGESIZE]
   end
   if (@return_letters.size > PAGESIZE)
-    @return_letters = @return_letters[offset+1, PAGESIZE]
+    @return_letters = @return_letters[offset, PAGESIZE]
   end
   # other fields
   @countries = Country.all
