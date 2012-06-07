@@ -106,13 +106,6 @@
             <load-on-startup>1</load-on-startup>
 		</servlet>
 
-    <servlet>
-			<description>
-			</description>
-			<display-name>TestServlet</display-name>
-			<servlet-name>TestServlet</servlet-name>
-			<servlet-class>org.worldvision.TestServlet</servlet-class>
-	</servlet>
 	<servlet>
 			<description>
 			</description>
@@ -191,9 +184,6 @@
 				<servlet-name>ExportCSVFile</servlet-name>
 				<url-pattern>/test_download</url-pattern>
 	</servlet-mapping>
-    <servlet-mapping>
-				<servlet-name>TestServlet</servlet-name>
-				<url-pattern>/test</url-pattern>
-	</servlet-mapping>
+    
 
 </web-app>
