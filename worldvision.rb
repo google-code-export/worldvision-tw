@@ -732,12 +732,10 @@ get '/delete_letter' do
     ids.each do |id|
       logger.info("id:" + id.to_s)
       letter = Letter.get(id)
-      if (!letter.nil?)
-        if (letter.employee_id == current_user[:account].to_s)
+      if (!letter.nil? && letter.claim_date.nil? && letter.employee_id == current_user[:account].to_s)
           letter.deleted = 1
           letter.show = 'false'
           letter.save
-        end
       end
     end
   end
