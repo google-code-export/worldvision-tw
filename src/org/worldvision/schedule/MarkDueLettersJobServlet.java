@@ -31,6 +31,7 @@ public class MarkDueLettersJobServlet extends HttpServlet {
 			letter.setClaim_date(null);
 			letter.setVoulenteer_id(null);
 			letter.setVoulenteer_name(null);
+			letter.setVoulenteer_account(null);
 			letter.setClaim_date(null);
 			letter.setDue_date(null);
 			letter.setDue_date_3(null);
