@@ -2,6 +2,7 @@ package org.worldvision.util;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class DateUtil {
 	
@@ -14,6 +15,10 @@ public class DateUtil {
 		cal.add(Calendar.HOUR, 8);
 		
 		return cal.getTime();
+	}
+	
+	public static Calendar getCurrentCalendarOfTPE(){
+		return Calendar.getInstance(TimeZone.getTimeZone("Asia/Taipei"));
 	}
 
 }

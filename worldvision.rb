@@ -397,7 +397,7 @@ get '/admin/log' do
     # letters = letters.all(:return_file_url => nil, :status => '已領取')
     logger.info("due emeail::1 " + letters.size.to_s)
     letters.each do |letter|
-      if (letter.claim_date >= s_date && letter.claim_date <= e_date)
+      if (letter.claim_date && letter.claim_date >= s_date && letter.claim_date <= e_date)
         @letters.push(letter)
       end
     end
@@ -914,9 +914,12 @@ post '/claim_letter' do
       letter.voulenteer_account = current_user[:account]
       letter.voulenteer_name = current_user[:name]
       letter.claim_date = Date.today
+      
+      # eng2chi letters
       if (letter.return_days.nil?)
-        letter.due_date = Date.today + 6
-        letter.due_date_3 = Date.today + 9
+        letter.due_date = Date.today + 7
+        letter.due_date_3 = Date.today + 10
+      #if return days, chi2eng letters 
       else
         return_days = (letter.return_days - 1)
         letter.due_date = Date.today + return_days

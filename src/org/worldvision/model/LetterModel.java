@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+
+import org.worldvision.util.DateUtil;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -41,14 +44,13 @@ public class LetterModel {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> result = new ArrayList();
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtil.getCurrentCalendarOfTPE();
 		// if (days > 0)
 		cal.add(Calendar.DATE, -days);
 		cal.set(Calendar.HOUR_OF_DAY, 0); 
 		cal.set(Calendar.MINUTE, 0); 
 		cal.set(Calendar.SECOND, 0);
 		Date date = cal.getTime();
-		System.out.println("date: " + date.toGMTString());
 
 		Query query = pm.newQuery(Letters.class);
 		if (send = false)
@@ -75,7 +77,7 @@ public class LetterModel {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> result = new ArrayList();
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtil.getCurrentCalendarOfTPE();
 		//
 		Date date = cal.getTime();
 		System.out.println("date: " + date.toGMTString());
@@ -108,7 +110,7 @@ public class LetterModel {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Letters> result = new ArrayList();
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtil.getCurrentCalendarOfTPE();
 		// if (days > 0)
 		cal.add(Calendar.DATE, -days);
 		Date date = cal.getTime();
@@ -138,7 +140,7 @@ public class LetterModel {
 	public List find3DaysDueLetters(PersistenceManager pm, int days) {
 		List<Letters> result = new ArrayList();
 
-		Calendar cal = Calendar.getInstance();
+		Calendar cal = DateUtil.getCurrentCalendarOfTPE();
 		// if (days > 0)
 		cal.add(Calendar.DATE, -days);
 		Date date = cal.getTime();
