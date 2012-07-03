@@ -58,14 +58,16 @@
                 <td class="wrap"><%= truncate letter.upload_file_name %></td>
                 <td>
                     <% if letter.return_days %>
-                        <select id="return_days" name="return_days" select="<%= letter.return_days %>">
+						<input id="return_days" name="return_days"></input>
+                        <!-- <select id="return_days" name="return_days" select="<%= letter.return_days %>"> -->
                     <% else %>
-                        <select id="return_days" name="return_days" select="3">
+					    <input id="return_days" name="return_days" value="3"></input>
+                        <!-- <select id="return_days" name="return_days" select="3"> -->
                     <% end %>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
+                        <!-- <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select> -->
                 </td>
                 <td><textarea name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
                 <td>
