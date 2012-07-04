@@ -69,7 +69,6 @@ class Letter
   property :country_id, String
   property :type, String
   property :letter_source_type, String
-  property :priority, Integer
   property :trans_type, String
   property :note, String
   property :status, String
@@ -488,8 +487,8 @@ post '/create_account' do
   logger.info("acc:" + acc.to_s)
   @account_exists = nil
   if (acc.nil?)
-    account = Account.create(:account=>params[:account], :password=>params[:password], :role=>params[:role],
-                             :name=>params[:name], :voulenteer_id=>params[:voulenteer_id], :voulenteer_type=>params[:voulenteer_type], :jobs=>0)
+    account = Account.create(:account=>params[:account].strip, :password=>params[:password].strip, :role=>params[:role],
+                             :name=>params[:name].strip, :voulenteer_id=>params[:voulenteer_id].strip, :voulenteer_type=>params[:voulenteer_type], :jobs=>0)
   else
     @account_exists=true
   end
@@ -685,10 +684,6 @@ post '/update_letter' do
         letter.country_id = country.id
       end
     end
-    if (params[:l_type])
-      puts ("l_type" + params[:l_type])
-      letter.type = params[:l_type]
-    end
     if (params[:note])
       puts ("note: " + params[:note])
       letter.note = params[:note]
@@ -696,10 +691,6 @@ post '/update_letter' do
     if (params[:number_of_letters] && params[:number_of_letters] != '')
       puts ("letters: " + params[:number_of_letters])
       letter.number_of_letters = params[:number_of_letters]
-    end
-    if (params[:priority] && params[:priority] != '')
-      puts ("letters: " + params[:priority])
-      letter.priority = params[:priority]
     end
     if (params[:letter_source_type] && params[:letter_source_type] != '')
       puts ("letters: " + params[:letter_source_type])
@@ -722,7 +713,8 @@ post '/update_letter' do
       @query_string += ("#{key}\=#{value}\&")
     end
   end
-  redirect '/employee?' + @query_string
+  
+  "success"
 end
 
 get '/delete_letter' do
@@ -1153,9 +1145,9 @@ end
 
 def get_offset(bookmark)
   offset = (bookmark.to_i-1)*PAGESIZE
-  if (bookmark.to_i > 1)
-   offset = offset + 1
-  end
+  # if (bookmark.to_i > 1)
+  #  offset = offset + 1
+  # end
 
   offset
 end

@@ -75,7 +75,7 @@ function check_updating_letters(id, type){
            return false;
         }
         //check country
-        var country = $('#' + id + '_countries').val();
+        var country = $('#' + id + '_country').val();
         if (!country){
            alert("請輸入信件國家");
            return false;
@@ -87,6 +87,31 @@ function check_updating_letters(id, type){
        alert("請輸入信件封數");
        return false;
     }
+	//id,country,note,number_of_letters,letter_source_type,return_days
+	$.ajax({
+	  type: "POST",
+	  url: "/update_letter",
+	  data: { 
+		id: id, 
+		country: $('#' + id + '_country').val(), 
+		note: $('#' + id + '_note').val(), 
+		number_of_letters: $('#' + id + '_number_of_letters').val(),
+		letter_source_type: $('#' + id + '_letter_source_type').val(),
+		return_days: $('#' + id + '_return_days').val()
+		},
+	  beforeSend: function () {
+		$('#' + id + '_msg').removeClass('ajax_msg_error').html('處理中');
+	  }	
+	}).done(function( msg ) {
+		if ($('#' + id + '_save_button')){
+			$('#' + id + '_save_button').attr('value', '更新');
+			$('#' + id + '_img').remove();
+		}
+	  	$('#' + id + '_msg').removeClass('ajax_msg_error').html('更新完成');
+	}).fail(function() { 
+		$('#' + id + '_msg').addClass('ajax_msg_error').html('更新失敗');
+		alert("更新失敗, 請再試一次"); 
+	})
 }
 
 function delete_letters_submit(form_id, checkbox_name){

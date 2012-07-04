@@ -100,3 +100,11 @@ text-align: center;
 td.wrap {
     word-wrap: break-word;
 }
+
+.ajax_msg{
+	font-size: 12px;
+}
+
+.ajax_msg_error{
+	color: red;
+}

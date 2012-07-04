@@ -52,16 +52,16 @@
                 <% else %>
                     <form method=post action='update_letter'>
                 <% end %>
-                <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+                <td style="display:none"><input id="<%= letter.id %>_id" name="id" value="<%= letter.id %>"></input></td>
                 <td><%= h letter.create_date %></td>
                 <td><%= letter_status_to_chinese(letter.status) %></td>
                 <td class="wrap"><%= truncate letter.upload_file_name %></td>
                 <td>
                     <% if letter.return_days %>
-						<input id="return_days" name="return_days"></input>
+						<input id="<%= letter.id %>_return_days" style="width: 30px" name="return_days" value="<%= letter.return_days %>"></input>
                         <!-- <select id="return_days" name="return_days" select="<%= letter.return_days %>"> -->
                     <% else %>
-					    <input id="return_days" name="return_days" value="3"></input>
+					    <input id="<%= letter.id %>_return_days"  style="width: 30px" id="return_days" name="return_days" value="3"></input>
                         <!-- <select id="return_days" name="return_days" select="3"> -->
                     <% end %>
                         <!-- <option value="3">3</option>
@@ -69,7 +69,7 @@
                                             <option value="5">5</option>
                                         </select> -->
                 </td>
-                <td><textarea name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
+                <td><textarea id="<%= letter.id %>_note" name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
                 <td>
                     <input id="<%= letter.id %>_number_of_letters" style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input>
                 </td>
@@ -85,16 +85,17 @@
                 <% end %>
                 <td>
                     <% if letter.show == "false"%>
-                        <input type=submit value="儲存" onclick="return check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input id="<%=letter.id%>_save_button" type="button" value="儲存" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                         </form>
-                        <img src="/warn.png" alt="">
+                        <img id="<%=letter.id%>_img" src="/warn.png" alt="">
                     <% elsif (letter.claim_date == nil) %>
-                        <input type=submit value="更新" onclick="return check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                         </form>
                     <% elsif (letter.status == "returned") %>
-                        <input type=submit value="更新" onclick="return check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                         </form>
                     <% end %>
+					<div class="ajax_msg" id="<%= letter.id %>_msg"></div>
                     </td>
                     <td>
                         <% if !is_return_letters %>
