@@ -784,24 +784,6 @@ get '/volunteer' do
     end
   end
 
-
-  if (@letters.size > 50)
-    @letters = @letters[0, 49]
-  end
-
-  if (@emergent_letters.size > 50)
-    @emergent_letters = @emergent_letters[0, 49]
-  end
-
-  if (@hand_writing_letters.size > 50)
-    @hand_writing_letters = @hand_writing_letters[0, 49]
-  end
-
-  if (@typing_letters.size > 50)
-    @typing_letters = @typing_letters[0, 49]
-  end
-
-
   @claim_letters = Letter.all(:due_date.not => nil, :order => [ :due_date.desc ])
   @voulenteer_letters = Array.new
   voulenteer_id = current_user[:voulenteer_id]
