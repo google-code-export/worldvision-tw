@@ -594,7 +594,7 @@ get '/employee' do
 
   # pagaing
   bookmark = params[:start]
-  offset = bookmark.nil? ? 0 : bookmark.to_i == 1 ? 0 : ((bookmark.to_i-1)*PAGESIZE)+1
+  offset = bookmark.nil? ? 0 : get_offset(bookmark)
   @account = current_user
   letters = get_letters
   @letters = Array.new
