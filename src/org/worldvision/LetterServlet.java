@@ -24,7 +24,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
-
+@Deprecated
 public class LetterServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger(LetterServlet.class.getName());
 	private LetterModel letter_model = new LetterModel();
