@@ -35,7 +35,7 @@ public class AccountModel {
 	}
 
 	public List<Accounts> getAvailableVolunteers(PersistenceManager pm) {
-		Query query = pm.newQuery(Accounts.class, "role == 'voulenteer' && jobs == 0 && allow_login == False");
+		Query query = pm.newQuery(Accounts.class, "role == 'voulenteer'");
 		List result = (List<Accounts>) query.execute();
 		
 		return result;
