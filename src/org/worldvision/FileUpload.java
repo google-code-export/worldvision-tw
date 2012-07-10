@@ -78,7 +78,7 @@ public class FileUpload extends HttpServlet {
 					}
 				}
 			}
-			res.sendRedirect("/admin/country");
+			res.sendRedirect("/employee/country");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,7 +136,7 @@ public class FileUpload extends HttpServlet {
 
 			}
 
-			res.sendRedirect("/admin/country");
+			res.sendRedirect("/employee/country");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
