@@ -29,7 +29,9 @@ public class Letters {
 	@Persistent
 	private String employee_id;
 	@Persistent
-	private String country;
+	private String country_name;
+	@Persistent
+	private String country_id;
 	@Persistent
 	private String type;
 	@Persistent
@@ -74,6 +76,8 @@ public class Letters {
 	private boolean deleted;
 	@Persistent
 	private boolean re_upload;
+	@Persistent
+	private String letter_source_type;
 
 	public boolean isRe_upload() {
 		return re_upload;
@@ -127,11 +131,11 @@ public class Letters {
 	}
 
 	public String getCountry() {
-		return country;
+		return country_name;
 	}
 
 	public void setCountry(String country) {
-		this.country = country;
+		this.country_name = country;
 	}
 
 	public String getType() {
@@ -299,6 +303,30 @@ public class Letters {
 
 	public void setVoulenteer_account(String voulenteer_account) {
 		this.voulenteer_account = voulenteer_account;
+	}
+	
+	public String getCountry_name() {
+		return country_name;
+	}
+
+	public void setCountry_name(String country_name) {
+		this.country_name = country_name;
+	}
+
+	public String getCountry_id() {
+		return country_id;
+	}
+
+	public void setCountry_id(String country_id) {
+		this.country_id = country_id;
+	}
+	
+	public String getLetter_source_type() {
+		return letter_source_type;
+	}
+
+	public void setLetter_source_type(String letter_source_type) {
+		this.letter_source_type = letter_source_type;
 	}
 	
 	
