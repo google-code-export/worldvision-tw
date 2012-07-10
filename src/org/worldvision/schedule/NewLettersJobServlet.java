@@ -26,6 +26,7 @@ public class NewLettersJobServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
+		log.info("called");
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		List<Accounts> result = account_model.getAvailableVolunteers(pm);
 		int size = result.size();
