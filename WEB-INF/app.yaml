@@ -1,4 +1,0 @@
-application: worldvision-tw
-version: 2
-runtime: jruby
-sessions_enabled: true

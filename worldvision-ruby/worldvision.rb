@@ -1017,20 +1017,6 @@ post '/test2' do
   erb :test
 end
 
-get '/dodolo' do
-  url = request.url
-  l_index = url.rindex('dodolo?')
-  print "url: " + url
-  if l_index != nil
-    @target_url = url[l_index+7, url.length]
-    print "url2: " + @target_url
-  end
-  if @target_url && @target_url.index('http') == nil
-    @target_url = nil
-  end
-  erb :dodolo
-end
-
 $blobstoreService = com.google.appengine.api.blobstore.BlobstoreServiceFactory.getBlobstoreService();
 
 def get_upload_url()

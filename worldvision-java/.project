@@ -16,21 +16,6 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>com.google.gdt.eclipse.core.webAppProjectValidator</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.google.appengine.eclipse.core.projectValidator</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
-			<name>com.google.appengine.eclipse.core.enhancerbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
-		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
@@ -39,19 +24,13 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 	</natures>
 	<linkedResources>
 		<link>
 			<name>classes</name>
 			<type>2</type>
-			<location>/Users/robbiecheng/workspace/worldvision-tw/WEB-INF/classes</location>
-		</link>
-		<link>
-			<name>java</name>
-			<type>2</type>
-			<location>/Users/robbiecheng/workspace/worldvision-tw/src</location>
+			<location>/Users/robbiecheng/workspace/worldvision-tw/worldvision-ruby/WEB-INF/classes</location>
 		</link>
 	</linkedResources>
 </projectDescription>
