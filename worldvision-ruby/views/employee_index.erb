@@ -1,0 +1,141 @@
+<html>
+<head>
+    <title>World Vision</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <%= erb :js_css_header %>
+    <script type="text/javascript">
+        var trans_type = "英翻中";
+        $(document).ready(function() {
+            var params = getUrlVars();
+            var type = params["type"] == null ? "eng" : params["type"];
+            var letter_status = params["letter_status"];
+
+            if (letter_status)
+                setSelected('#letter_status', letter_status);
+            if (type)
+                setSelected('#type', type);
+            $('select[select]').each(function() {
+                setSelected('#' + $(this).attr("id"), $(this).attr("select"));
+            });
+            markSelected('#tans_select', type);
+
+            $("#selectallavailable").click(function () {
+                $('.availablecase').attr('checked', this.checked);
+            });
+
+            $("#selectallclaimed").click(function () {
+                $('.claimedcase').attr('checked', this.checked);
+            });
+
+            $('form').submit(function() {
+                 show_loading_dialog();
+            });
+        });
+
+        $(function() {
+
+            $("#date_select").datepicker();
+            var date = getUrlVars()["date"]
+            if (date) {
+                date = $.url.decode(date)
+                $("#date_select").datepicker("setDate", date);
+            }
+        });
+    </script>
+</head>
+<body style="font-family: sans-serif; width: 1150px" class="employee">
+<%= erb :header_wide %>
+
+
+<!-- file upload   -->
+<div class="orange" style="height: 135px">
+    <%= erb :loading_dialog %>
+    <div style="float:left">
+        <span style="font-size:18px">檔案上傳</span>
+
+        <form name="uploadform" action="/file_upload"
+              enctype="multipart/form-data" method="post">
+            <p>
+                請選擇欲上傳檔案:<br>
+                <input id="user_id" style="display:none" type="text" name="id" value="<%= @account.account %>"/>
+                <input id="my_file" type="file" name="myFile" size="40"/>
+                <select id="trans_type" name="type">
+                    <option value="eng">英翻中</option>
+                    <option value="chi">中翻英</option>
+                </select>
+            </p>
+            <div>
+                <button type="button" onClick="return submitform(event)">上傳檔案</button>
+        </form>
+        <script type="text/javascript">
+            function submitform(event) {
+                var trans_type = $('#trans_type option:selected').text();
+                trans_type = trans_type == "中翻英" ? "CE" : "EC";
+                
+                var file_name = $("#my_file").val();
+                if (file_name == null || file_name == ""){
+                    alert("尚未選擇上傳檔案");
+                    return false;
+                }else if (file_name.indexOf(trans_type) < 0){
+                    alert("檔名與信件種類不符, 請再確認");
+                    return false;
+                }else{
+                    document.uploadform.action = "<%=@url%>";
+                    check_file_name_and_post_parameters(event,document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
+                    document.uploadform.submit();
+                    show_loading_dialog();
+                }
+            }
+        </script>
+    </div>
+    </form>
+    <!-- end -->
+    <!-- show letters -->
+    <!-- total = <%= @letters.length %> rows -->
+</div>
+</div>
+<br/>
+<a href="/employee/country" >管理國家</a>
+<br/>
+<%= erb :_trans_type , {:layout=>false}, {:action => '/employee'} %>
+<div >
+    <form action="/employee" method="GET">
+    <select id="letter_status" name="letter_status" onChange='form.submit()'>
+        <option>請選擇</option>
+        <option value="">所有信件</option>
+        <option value="unclaimed">未領取</option>
+        <option value="claimed">已領取</option>
+        <option value="emergent">緊急</option>
+        <option value="returned">已譯返</option>
+    </select>
+    <select id="type" name="type" style="display:none">
+        <option value="eng">英翻中</option>
+        <option value="chi">中翻英</option>
+    </select>
+    </form>
+</div>
+
+<% if @trans_type == 'eng' %>
+<h3>待譯</h3>
+<div>
+<%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => false, :pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<button style="position:relative; left:1100px" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
+</div>
+<h3>譯返</h3>
+<%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+<button style="position:relative; left:1150px" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
+<% else %>
+<h3>待譯</h3>
+<%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => false, :pages => @pages, :query_string => @query_string, :letters => @letters, :query_string2 =>@query_string2, :countries =>@countries} %>
+<button style="position:relative; left:1100px" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
+<h3>譯返</h3>
+<%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries} %>
+<button style="position:relative; left:1150px" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
+<% end %>
+<!-- end -->
+
+
+<div style="position: absolute; bottom: 20px; right: 20px;">
+    <!-- <img src="/images/appengine.gif"></div> -->
+</body>
+</html>

@@ -1,0 +1,111 @@
+    <table style="width: 1150px">
+        <col width=80>
+        <col width=70>
+        <col width=100>
+        <col width=80>
+        <col width=150>
+        <col width=90>
+        <col width=60>
+        <col width=170>
+        <col width=80>
+        <col width=80>
+        <% if is_return_letters %>
+            <col width=80>
+            <col width=130>
+        <% end %>
+        <col width=50>
+        <col width=50>
+        <tr>
+            <th>上傳日期<br/>
+            <th>狀態</th>
+            <th>檔案名稱</th>
+            <th>譯返天數</th>
+            <th>備註</th>
+            <th>封數</th>
+            <th>志工姓名</th>
+            <th>志工帳號</th>
+            <th>領取日期</th>
+            <th>應返日期</th>
+            <% if is_return_letters %>
+                <th>回傳日期</th>
+                <th>譯返下載</th>
+            <% end %>
+            <th>操作</th>
+            <% if !is_return_letters %>
+                <th><input type="checkbox" id="selectallavailable"></th>
+            <% else %>
+                <th><input type="checkbox" id="selectallclaimed"></th>
+            <% end %>
+        </tr>
+
+        <% pages.each do |page| %>
+            <% if query_string %>
+                <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>&nbsp;
+            <% else %>
+                <a href="/employee?start=<%= page %>"><%= page %></a>&nbsp;
+            <% end %>
+        <% end %>
+        <% letters.each do |letter| %>
+            <tr>
+                <% if query_string2 %>
+                    <form method=post action="update_letter?<%= query_string2 %>">
+                <% else %>
+                    <form method=post action='update_letter'>
+                <% end %>
+                <td style="display:none"><input id="<%= letter.id %>_id" name="id" value="<%= letter.id %>"></input></td>
+                <td><%= h letter.create_date %></td>
+                <td><%= letter_status_to_chinese(letter.status) %></td>
+                <td class="wrap"><%= truncate letter.upload_file_name %></td>
+                <td>
+                    <% if letter.return_days %>
+						<input id="<%= letter.id %>_return_days" style="width: 30px" name="return_days" value="<%= letter.return_days %>"></input>
+                        <!-- <select id="return_days" name="return_days" select="<%= letter.return_days %>"> -->
+                    <% else %>
+					    <input id="<%= letter.id %>_return_days"  style="width: 30px" id="return_days" name="return_days" value="3"></input>
+                        <!-- <select id="return_days" name="return_days" select="3"> -->
+                    <% end %>
+                        <!-- <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                        </select> -->
+                </td>
+                <td><textarea id="<%= letter.id %>_note" name="note" rows="3" style="width:140px"><%= h letter.note %></textarea></td>
+                <td>
+                    <input id="<%= letter.id %>_number_of_letters" style="width: 30px" name="number_of_letters" value="<%= letter.number_of_letters %>"></input>
+                </td>
+                <td><%= h letter.voulenteer_name %></td>
+                <td class="wrap"><%= h letter.voulenteer_account %></td>
+                <td><%= h letter.claim_date %></td>
+                <td><%= h letter.due_date %></td>
+                <% if is_return_letters %>
+                    <td><%= h letter.return_date %></td>
+                    <td>
+                        <a href="/serve?blob-key=<%= letter.return_file_url %>"><%= truncate letter.return_file_name %></a>
+                    </td>
+                <% end %>
+                <td>
+                    <% if letter.show == "false"%>
+                        <input id="<%=letter.id%>_save_button" type="button" value="儲存" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        </form>
+                        <img id="<%=letter.id%>_img" src="/warn.png" alt="">
+                    <% elsif (letter.claim_date == nil) %>
+                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        </form>
+                    <% elsif (letter.status == "returned") %>
+                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        </form>
+                    <% end %>
+					<div class="ajax_msg" id="<%= letter.id %>_msg"></div>
+                    </td>
+                    <td>
+                        <% if !is_return_letters %>
+                            <input class="availablecase" type="checkbox" name="ids[]" style="color:white" value="<%= letter.id %>"/>
+                        <% else %>
+                            <input class="claimedcase" type="checkbox" name="ids[]" style="color:white" value="<%= letter.id %>"/>
+                        <% end %>
+                    </td>
+                    </tr>
+        <% end %>
+    </table>
+
+  

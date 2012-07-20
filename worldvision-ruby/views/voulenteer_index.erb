@@ -1,0 +1,125 @@
+<html>
+<head>
+    <title>World Vision</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <%= erb :js_css_header %>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
+            markSelected($('#tans_select'), type);
+
+            $('form').submit(function() {
+                 show_loading_dialog();
+            });
+
+            var hash_key = getUrlVars()["hash_key"]
+            if (hash_key){
+               download_file(hash_key); 
+            }
+        });
+
+        function check(id) {
+            var ele = document.getElementById(id);
+            if (ele && ele.value == '') {
+                alert("請輸入退件原因");
+                STOP_PROPAGATION = true;
+                return false;
+            }
+            else{
+                STOP_PROPAGATION = false;
+                return true;
+            }
+        }
+
+        function download_file(hash_key) {
+            if (hash_key) {
+                document.location.href='http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
+            }
+
+        }
+
+        function claim_letter(id, account_id) {
+            window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
+        }
+    </script>
+</head>
+<body style="font-family: sans-serif;">
+<div style="">
+    <br>
+    <%= erb :vou_header %>
+    <a href="/volunteer/template">各國信件翻譯範本</a>
+    <a href="/volunteer/note">各國翻譯注意事項</a>
+    <a href="/volunteer/noun">各國翻譯常見名詞</a>
+    <% if @template %>
+      <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
+    <% end %>
+    <% if @account_trans_type && @account_trans_type == 'both' %>
+        <%= erb :_trans_type, {:layout=>false}, {:action => '/volunteer'} %>
+    <% end %>
+    <% if @letter_has_been_claimed %>
+        <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
+    <% end %>
+    <br/>
+    <script>
+        $(function() {
+            $("#tabs1").tabs();
+            $("#tabs2").tabs();
+        });
+    </script>
+    <%= erb :loading_dialog %>
+    <% if  @trans_type == 'eng' %>
+        <div id="tabs1" style="width: 960px">
+            <ul>
+                <li><a href="#tabs-1">緊急</a></li>
+                <li><a href="#tabs-2">手寫稿</a></li>
+                <li><a href="#tabs-3">打字稿</a></li>
+            </ul>
+            <div id="tabs-1">
+                <% @emergent_pages.each do |page| %>
+                    <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true} %>
+            </div>
+            <div id="tabs-2">
+                <% @hand_writing_pages.each do |page| %>
+                    <a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
+            </div>
+            <div id="tabs-3">
+                <% @typing_pages.each do |page| %>
+                    <a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
+            </div>
+        </div>
+    <% else %>
+        <div id="tabs2" style="width: 960px">
+            <ul>
+                <li><a href="#tabs-4">緊急</a></li>
+                <li><a href="#tabs-5">一般</a></li>
+            </ul>
+            <div id="tabs-4">
+                <% @emergent_pages.each do |page| %>
+                    <a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
+            </div>
+            <div id="tabs-5">
+                <% @pages.each do |page| %>
+                    <a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a>
+                <% end %>
+                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
+            </div>
+        </div>
+    <% end %>
+    <h3>已領取</h3>
+    <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url, :re_upload=>@re_upload} %>
+
+    <div style="position: absolute; bottom: 20px; right: 20px;">
+        <!-- <img src="/images/appengine.gif"></div> -->
+    </div>
+    
+</div>
+</body>
+</html>

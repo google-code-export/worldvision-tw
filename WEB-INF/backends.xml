@@ -1,8 +1,0 @@
-<backends>
-    <backend name="download">
-        <class>B1</class>
-        <options>
-            <dynamic>true</dynamic>
-        </options>
-    </backend>
-</backends>

@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>World Vision</title>
+    <%= erb :js_css_header %>
+
+<script type="text/javascript">
+$(function() {
+	$("#start_date" ).datepicker();
+	$("#end_date" ).datepicker();
+	setDate("start_date", "start_date");
+	setDate("end_date", "end_date");
+});
+
+function setDate(param, id){
+	var date = getUrlVars()[param]
+	if (date){
+		date = $.url.decode(date)
+		$( "#" + id).datepicker( "setDate" , date );
+	}
+}
+</script>
+
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <body style="font-family: sans-serif;">
+
+<!-- log start -->
+<%= erb :header %>
+<!-- new account start -->
+<a href="/admin">管理會員</a>
+<a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
+<a href="/admin/vou_status">志工服務管理報表</a>
+
+		<h4>志工翻譯封數統計</h4>
+		<form url="/admin/vou">
+		譯返日期&nbsp;&nbsp;<input type="text" id="start_date" name="start_date" style="width: 100px;">
+		<input type="text" id="end_date" name="end_date" style="width: 100px;">
+		<input type="submit" value="查詢"/>
+		<a href="/test_download?type=3&<%=@query_string%>">下載CSV檔</a>
+		</form>
+		
+			<table>
+				<tr>
+					<th>志工姓名</th>
+					<th>志工編號</th>
+					<th>譯返上傳日期</th>
+					<th>封數</th>
+				</tr>
+				<% @letters.each do |letter|%>
+				<tr>
+					<td><%= letter.voulenteer_name%></td>
+					<td><%= letter.voulenteer_id%></td>
+					<td><%= letter.return_date%></td>
+					<td><%= letter.number_of_letters%></td>
+				</tr>
+				<% end %>
+			</table>
+
+
+<!-- log end -->
+  </body>
+</html>

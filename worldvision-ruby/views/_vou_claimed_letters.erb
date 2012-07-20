@@ -1,0 +1,85 @@
+<table border="1">
+    <% if !is_chinese_email(trans_type) %>
+        <col width=90>
+        <col width=90>
+        <col width=50>
+        <col width=150>
+        <col width=20>
+        <col width=70>
+        <col width=90>
+        <col width=150>
+        <col width=250>
+    <% else %>
+        <col width=90>
+        <col width=90>
+        <col width=150>
+        <col width=20>
+        <col width=70>
+        <col width=90>
+        <col width=150>
+        <col width=310>
+    <% end %>
+    <!--應返日期/ 領取日期 / 國家 /備註 /封數 / 狀態 / 待譯信件 /譯返上傳-->
+    <tr>
+        <th>應返日期</th>
+        <th>領取日期</th>
+        <% if !is_chinese_email(trans_type) %>
+            <th style="width: 10px">國家</th>
+        <% end %>
+        <th>備註</th>
+        <th>封數</th>
+        <th style="width: 10px">狀態</th>
+        <th>譯返日期</th>
+        <th>待譯信件</th>
+        <th>譯返上傳</th>
+    </tr>
+
+
+    <% letters.each do |letter| %>
+        <tr>
+            <td style="display:none"><input name="id" value="<%= letter.id %>"></input></td>
+            <td><%= h letter.due_date %></td>
+            <td><%= h letter.claim_date %></td>
+            <% if !is_chinese_email(trans_type) %>
+                <td><%= letter.country_name %></td>
+            <% end %>
+            <td class="wrap" ><%= append_note(trans_type, letter.note, letter.employee_id) %></td>
+            <td><%= letter.number_of_letters %></td>
+            <td><%= letter_status_to_chinese(letter.status) %></td>
+            <td><%= letter.return_date %></td>
+            <td><a href="/serve?blob-key=<%= letter.upload_file_url %>"><%= truncate letter.upload_file_name %></a>
+            </td>
+            <td>
+                <% if letter.re_upload %>
+                    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/volunteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                        譯返上傳:<input type="file" name="myFile" size="10">
+                        <input type="submit" value="上傳">
+                    </form>
+                <% elsif letter.return_file_url == nil %>
+                    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/volunteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
+                        譯返上傳:<input type="file" name="myFile" size="10">
+                        <input type="submit" value="上傳">
+                    </form>
+                    <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
+                        退件原因:
+                        <input name="id" style="display:none" value="<%= letter.id %>">
+                        <div id="navcontainer">
+                        <ul>
+                            <li><input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
+                            <li>
+                            <input type="submit" value="退件">
+                            </li>
+                        </ul>
+                        </div>
+                    </form>
+                <% else %>
+                    已成功上傳
+                    <form method="post" action="/re_upload">
+                        <input name="id" style="display:none" value="<%= letter.id %>">
+                        <input type="submit" value="重新上傳">
+                    </form>
+                <% end %>
+            </td>
+        </tr>
+    <% end %>
+</table>
