@@ -45,7 +45,7 @@
         </form>
     </div>
     <div>
-      <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+      <form onsubmit="return WV.checkFilenameAndPostParameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
       <input type="file" name="myFile" size="10">
       <input type="submit" value="上傳翻譯底稿">
       </form>
@@ -72,15 +72,15 @@
 	<td><a href="/serve?blob-key=<%=country.noun_url%>"><%=truncate(country.noun_file_name)%></a></td>
     <!--<td><a href="/serve?blob-key=<%#=country.background_url%>"><#%=country.background_file_name%></a></td>-->
 	<td>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<form onsubmit="return WV.checkFilenameAndPostParameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳注意事項">
     </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+	<form onsubmit="return WV.checkFilenameAndPostParameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳翻譯範本">
     </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+    <form onsubmit="return WV.checkFilenameAndPostParameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳常見名詞">
     </form>

@@ -1,18 +1,50 @@
 var WV = {
   init: function wv_init() {
-    // do nothing now.
+    // XXX: you could use hashchange/route instead of url parsing.
+
+    var type = this.getUrlVars()['type'] || 'chi';
+    this.markSelected($('#tans_select'), type);
+
+    var self = this;
+    $('form').submit(function submit() {
+      self.showLoadingDialog();
+    });
+
+    var hash_key = this.getUrlVars()['hash_key'];
+    if (hash_key) {
+      this.downloadFile(hash_key); 
+    }
+  },
+  
+  downloadFile: function wv_downloadFile(hash_key) {
+    if (hash_key) {
+      document.location.href = 'http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
+    }
   },
 
   getUrlVars: function wv_getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
+    for (var i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars.push(hash[0]);
         vars[hash[0]] = hash[1];
     }
     return vars;
+  },
+  
+  check: function wv_check(id) {
+    var ele = document.getElementById(id);
+
+    // XXX: Use === when compare to '';
+    if (ele && ele.value === '') {
+      alert("請輸入退件原因");
+      this.STOP_PROPAGATION = true;
+      return false;
+    } else {
+      this.STOP_PROPAGATION = false;
+      return true;
+    }
   },
   
   setSelected: function wv_setSelected(target, value) {
@@ -43,9 +75,9 @@ var WV = {
   },
 
 
-  STOP_PROPAGATION: false;
+  STOP_PROPAGATION: false,
 
-  check_file_name_and_post_parameters: function wv_checkFileNameAndPostParameters (event, form,p) {
+  checkFilenameAndPostParameters: function wv_checkFilenameAndPostParameters(event, form, p) {
     var file_name = $('input[name*="myFile"]', form).val();
 
     if (file_name == null || file_name == ""){
@@ -69,7 +101,7 @@ var WV = {
    check_file_name_and_post_parameters (form, p);
   },
 
-  checkUpdatingLetters: function wv_checkUpdatingLetters(id, type){
+  checkUpdatingLetters: function wv_checkUpdatingLetters(id, type) {
     //check letter_type
     var letter_type = $('#' + id + '_letter_source_type').val();
     if (type == 'eng'){
@@ -92,19 +124,19 @@ var WV = {
     }
     //id,country,note,number_of_letters,letter_source_type,return_days
     $.ajax({
-        type: "POST",
-        url: "/update_letter",
-        data: { 
-          id: id, 
-          country: $('#' + id + '_country').val(), 
-          note: $('#' + id + '_note').val(), 
-          number_of_letters: $('#' + id + '_number_of_letters').val(),
-          letter_source_type: $('#' + id + '_letter_source_type').val(),
-		return_days: $('#' + id + '_return_days').val()
-		},
-	  beforeSend: function () {
-		$('#' + id + '_msg').removeClass('ajax_msg_error').html('處理中');
-	  }	
+      type: "POST",
+      url: "/update_letter",
+      data: { 
+        id: id, 
+        country: $('#' + id + '_country').val(), 
+        note: $('#' + id + '_note').val(), 
+        number_of_letters: $('#' + id + '_number_of_letters').val(),
+        letter_source_type: $('#' + id + '_letter_source_type').val(),
+        return_days: $('#' + id + '_return_days').val()
+      },
+	    beforeSend: function () {
+		    $('#' + id + '_msg').removeClass('ajax_msg_error').html('處理中');
+	    }	
 	  }).done(function( msg ) {
 		  if ($('#' + id + '_save_button')){
 			  $('#' + id + '_save_button').attr('value', '更新');
@@ -120,12 +152,10 @@ var WV = {
   deleteLetttersSubmit: function wv_deleteLettersSubmit(form_id, checkbox_name) {
     var query_string = '/delete_letter?';
     $("input." + checkbox_name).each(
-        function()
-        {
-            if (this.checked)
-            {
-                query_string += ("ids[]=" + this.value + "&");
-            }
+      function(){
+        if (this.checked) {
+          query_string += ("ids[]=" + this.value + "&");
+        }
     });
     $.ajax({
       url: query_string,
@@ -145,7 +175,7 @@ var WV = {
         $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
         $('#dialog').dialog();
     }
-  }
+  },
 
   stopEventPropagation: function wv_stopEventPropagation(evt) {
     var event = evt || window.event;
@@ -154,8 +184,14 @@ var WV = {
     } else if (window.event) {
       window.event.cancelBubble=true;
     }
+  },
+
+  claimLetter: function wv_claimLetter(id, account_id) {
+    window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
   }
 };
 
-WV.init();
+$(document).ready(function() {
+  WV.init();
+});
 

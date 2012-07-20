@@ -85,14 +85,14 @@
                 <% end %>
                 <td>
                     <% if letter.show == "false"%>
-                        <input id="<%=letter.id%>_save_button" type="button" value="儲存" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input id="<%=letter.id%>_save_button" type="button" value="儲存" onclick="WV.checkUpdatingLetters(<%=letter.id %>, 'chi')">
                         </form>
                         <img id="<%=letter.id%>_img" src="/warn.png" alt="">
                     <% elsif (letter.claim_date == nil) %>
-                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input type="button" value="更新" onclick="WV.checkUpdatingLetters(<%=letter.id %>, 'chi')">
                         </form>
                     <% elsif (letter.status == "returned") %>
-                        <input type="button" value="更新" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input type="button" value="更新" onclick="WV.checkUpdatingLetters(<%=letter.id %>, 'chi')">
                         </form>
                     <% end %>
 					<div class="ajax_msg" id="<%= letter.id %>_msg"></div>

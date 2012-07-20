@@ -15,7 +15,7 @@ $(function() {
 });
 
 function setDate(param, id){
-	var date = getUrlVars()[param]
+	var date = WV.getUrlVars()[param];
 	if (date){
 		date = $.url.decode(date)
 		$( "#" + id).datepicker( "setDate" , date );

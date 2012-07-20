@@ -4,43 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <%= erb :js_css_header %>
     <script type="text/javascript">
-        $(document).ready(function() {
-            var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
-            markSelected($('#tans_select'), type);
-
-            $('form').submit(function() {
-                 show_loading_dialog();
-            });
-
-            var hash_key = getUrlVars()["hash_key"]
-            if (hash_key){
-               download_file(hash_key); 
-            }
-        });
-
-        function check(id) {
-            var ele = document.getElementById(id);
-            if (ele && ele.value == '') {
-                alert("請輸入退件原因");
-                STOP_PROPAGATION = true;
-                return false;
-            }
-            else{
-                STOP_PROPAGATION = false;
-                return true;
-            }
-        }
-
-        function download_file(hash_key) {
-            if (hash_key) {
-                document.location.href='http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
-            }
-
-        }
-
-        function claim_letter(id, account_id) {
-            window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
-        }
     </script>
 </head>
 <body style="font-family: sans-serif;">
