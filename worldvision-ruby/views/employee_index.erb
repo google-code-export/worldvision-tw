@@ -6,18 +6,18 @@
     <script type="text/javascript">
         var trans_type = "英翻中";
         $(document).ready(function() {
-            var params = getUrlVars();
+            var params = WV.getUrlVars();
             var type = params["type"] == null ? "eng" : params["type"];
             var letter_status = params["letter_status"];
 
             if (letter_status)
-                setSelected('#letter_status', letter_status);
+                WV.setSelected('#letter_status', letter_status);
             if (type)
-                setSelected('#type', type);
+                WV.setSelected('#type', type);
             $('select[select]').each(function() {
-                setSelected('#' + $(this).attr("id"), $(this).attr("select"));
+                WV.setSelected('#' + $(this).attr("id"), $(this).attr("select"));
             });
-            markSelected('#tans_select', type);
+            WV.markSelected('#tans_select', type);
 
             $("#selectallavailable").click(function () {
                 $('.availablecase').attr('checked', this.checked);
@@ -28,14 +28,14 @@
             });
 
             $('form').submit(function() {
-                 show_loading_dialog();
+                 WV.showLoadingDialog();
             });
         });
 
         $(function() {
 
             $("#date_select").datepicker();
-            var date = getUrlVars()["date"]
+            var date = WV.getUrlVars()["date"]
             if (date) {
                 date = $.url.decode(date)
                 $("#date_select").datepicker("setDate", date);
@@ -83,7 +83,7 @@
                     document.uploadform.action = "<%=@url%>";
                     check_file_name_and_post_parameters(event,document.uploadform, {from:'/employee',to:'/file_upload', id:document.getElementById("user_id").value,type:document.getElementById("trans_type").value});
                     document.uploadform.submit();
-                    show_loading_dialog();
+                    WV.showLoadingDialog();
                 }
             }
         </script>
@@ -119,18 +119,18 @@
 <h3>待譯</h3>
 <div>
 <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => false, :pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
-<button style="position:relative; left:1100px" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
+<button style="position:relative; left:1100px" onClick="return WV.deleteLettersSubmit('delete_available_letter_form', 'availablecase')">刪除</button>
 </div>
 <h3>譯返</h3>
 <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
-<button style="position:relative; left:1150px" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
+<button style="position:relative; left:1150px" onClick="return WV.deleteLettersSubmit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
 <% else %>
 <h3>待譯</h3>
 <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => false, :pages => @pages, :query_string => @query_string, :letters => @letters, :query_string2 =>@query_string2, :countries =>@countries} %>
-<button style="position:relative; left:1100px" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
+<button style="position:relative; left:1100px" onClick="return WV.deleteLettersSubmit('delete_available_letter_form', 'availablecase')">刪除</button>
 <h3>譯返</h3>
 <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries} %>
-<button style="position:relative; left:1150px" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
+<button style="position:relative; left:1150px" onClick="return WV.deleteLettersSubmit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
 <% end %>
 <!-- end -->
 
