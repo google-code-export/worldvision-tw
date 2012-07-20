@@ -12,19 +12,21 @@ var WV = {
 
     var hash_key = this.getUrlVars()['hash_key'];
     if (hash_key) {
-      this.downloadFile(hash_key); 
+      this.downloadFile(hash_key);
     }
   },
-  
+
   downloadFile: function wv_downloadFile(hash_key) {
     if (hash_key) {
-      document.location.href = 'http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
+      document.location.href =
+          'http://www.worldvision-tw.appspot.com/serve?blob-key=' + hash_key;
     }
   },
 
   getUrlVars: function wv_getUrlVars() {
     var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    var href = window.location.href;
+    var hashes = href.slice(href.indexOf('?') + 1).split('&');
     for (var i = 0; i < hashes.length; i++) {
         hash = hashes[i].split('=');
         vars.push(hash[0]);
@@ -32,13 +34,13 @@ var WV = {
     }
     return vars;
   },
-  
+
   check: function wv_check(id) {
     var ele = document.getElementById(id);
 
     // XXX: Use === when compare to '';
     if (ele && ele.value === '') {
-      alert("請輸入退件原因");
+      alert('請輸入退件原因');
       this.STOP_PROPAGATION = true;
       return false;
     } else {
@@ -46,50 +48,52 @@ var WV = {
       return true;
     }
   },
-  
+
   setSelected: function wv_setSelected(target, value) {
     var current = 0;
-    $(target).children().each(function(){
-      var attr_value = $(this).attr("value");
-      if (value == attr_value){
+    $(target).children().each(function iterator() {
+      var attr_value = $(this).attr('value');
+      if (value == attr_value) {
         if (target.options)
           target.options[current].selected = true;
         else
-          $(this).attr("selected", "selected");  
-		  }
-      current ++;
-	  });
+          $(this).attr('selected', 'selected');
+      }
+      current++;
+      });
   },
 
-  markSelected: function wv_markSelected(target, value){
-    if (!value || value== null || value == '')
-        value = 'chi';
-    $(target).children().each(function(){
-        var attr_value = $(this).attr("name");
-		if (value == attr_value){
-			$(this).attr("style", "font-weight: bold; color: #EB8F00;text-decoration:none");
-		}
-		else
-			$(this).removeAttr('style');
-	  });
+  markSelected: function wv_markSelected(target, value) {
+    if (!value || value == null || value === '')
+      value = 'chi';
+
+    $(target).children().each(function iterator() {
+      var attr_value = $(this).attr('name');
+      if (value == attr_value) {
+        $(this).attr('style',
+            'font-weight: bold; color: #EB8F00;text-decoration:none');
+      } else {
+        $(this).removeAttr('style');
+      }
+    });
   },
 
 
   STOP_PROPAGATION: false,
 
-  checkFilenameAndPostParameters: function wv_checkFilenameAndPostParameters(event, form, p) {
+  checkFilenameAndPostParameters: function wv_checkfile(event, form, p) {
     var file_name = $('input[name*="myFile"]', form).val();
 
-    if (file_name == null || file_name == ""){
+    if (file_name == null || file_name == '') {
       this.STOP_PROPAGATION = true;
       alert('請先選擇要上傳的檔案');
       return false;
     } else {
       for (var k in p) {
-        var myInput = document.createElement("input") ;
-        myInput.style.display = "none";
-        myInput.setAttribute("name", k) ;
-        myInput.setAttribute("value", p[k]);
+        var myInput = document.createElement('input');
+        myInput.style.display = 'none';
+        myInput.setAttribute('name', k);
+        myInput.setAttribute('value', p[k]);
         form.appendChild(myInput);
       }
       this.STOP_PROPAGATION = false;
@@ -97,69 +101,68 @@ var WV = {
     }
   },
 
-  postSubmit: function wv_postSubmit (form, p) {
-   check_file_name_and_post_parameters (form, p);
+  postSubmit: function wv_postSubmit(form, p) {
+   check_file_name_and_post_parameters(form, p);
   },
 
   checkUpdatingLetters: function wv_checkUpdatingLetters(id, type) {
     //check letter_type
     var letter_type = $('#' + id + '_letter_source_type').val();
-    if (type == 'eng'){
-      if (letter_type && letter_type == '請選擇'){
-        alert("請選擇信件種類");
+    if (type == 'eng') {
+      if (letter_type && letter_type == '請選擇') {
+        alert('請選擇信件種類');
         return false;
       }
       //check country
       var country = $('#' + id + '_country').val();
-      if (!country){
-        alert("請輸入信件國家");
+      if (!country) {
+        alert('請輸入信件國家');
         return false;
       }
     }
     //check # of letters
     var number_of_letters = parseInt($('#' + id + '_number_of_letters').val());
-    if (!number_of_letters || number_of_letters < 0 ){
-      alert("請輸入信件封數");
+    if (!number_of_letters || number_of_letters < 0) {
+      alert('請輸入信件封數');
       return false;
     }
     //id,country,note,number_of_letters,letter_source_type,return_days
     $.ajax({
-      type: "POST",
-      url: "/update_letter",
-      data: { 
-        id: id, 
-        country: $('#' + id + '_country').val(), 
-        note: $('#' + id + '_note').val(), 
+      type: 'POST',
+      url: '/update_letter',
+      data: {
+        id: id,
+        country: $('#' + id + '_country').val(),
+        note: $('#' + id + '_note').val(),
         number_of_letters: $('#' + id + '_number_of_letters').val(),
         letter_source_type: $('#' + id + '_letter_source_type').val(),
         return_days: $('#' + id + '_return_days').val()
       },
-	    beforeSend: function () {
-		    $('#' + id + '_msg').removeClass('ajax_msg_error').html('處理中');
-	    }	
-	  }).done(function( msg ) {
-		  if ($('#' + id + '_save_button')){
-			  $('#' + id + '_save_button').attr('value', '更新');
-			  $('#' + id + '_img').remove();
-		  }
-	  	$('#' + id + '_msg').removeClass('ajax_msg_error').html('更新完成');
-  	}).fail(function() { 
-		  $('#' + id + '_msg').addClass('ajax_msg_error').html('更新失敗');
-		  alert("更新失敗, 請再試一次"); 
-	  })
+      beforeSend: function onbeforesend() {
+        $('#' + id + '_msg').removeClass('ajax_msg_error').html('處理中');
+      }
+    }).done(function onsuccess(msg) {
+      if ($('#' + id + '_save_button')) {
+        $('#' + id + '_save_button').attr('value', '更新');
+        $('#' + id + '_img').remove();
+      }
+      $('#' + id + '_msg').removeClass('ajax_msg_error').html('更新完成');
+    }).fail(function onerror() {
+      $('#' + id + '_msg').addClass('ajax_msg_error').html('更新失敗');
+      alert('更新失敗, 請再試一次');
+    });
   },
 
-  deleteLetttersSubmit: function wv_deleteLettersSubmit(form_id, checkbox_name) {
+  deleteLetttersSubmit: function wv_dls(form_id, checkbox_name) {
     var query_string = '/delete_letter?';
-    $("input." + checkbox_name).each(
-      function(){
-        if (this.checked) {
-          query_string += ("ids[]=" + this.value + "&");
-        }
+    $('input.' + checkbox_name).each(function iterator() {
+      if (this.checked) {
+        query_string += ('ids[]=' + this.value + '&');
+      }
     });
     $.ajax({
       url: query_string,
-      success: function(){
+      success: function onsuccess() {
         window.location.reload();
       }
     });
@@ -172,8 +175,8 @@ var WV = {
 
   showLoadingDialog: function wv_showLoadingDialog() {
     if (!this.STOP_PROPAGATION) {
-        $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
-        $('#dialog').dialog();
+      $('#dialog').append('<span>請稍候...</span><img src="/ajax.gif" alt="">');
+      $('#dialog').dialog();
     }
   },
 
@@ -182,12 +185,13 @@ var WV = {
     if (event.stopPropagation) {
        event.stopImmediatePropagation();
     } else if (window.event) {
-      window.event.cancelBubble=true;
+      window.event.cancelBubble = true;
     }
   },
 
   claimLetter: function wv_claimLetter(id, account_id) {
-    window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
+    window.location.href =
+        '/claim_letter?id=' + id + '&account_id=' + account_id;
   }
 };
 
