@@ -18,9 +18,9 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
-import org.worldvision.model.Countries;
-import org.worldvision.model.Letters;
-import org.worldvision.model.PMF;
+import org.worldvision.pojo.Countries;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
 import org.worldvision.util.URLUtil;
 
 import com.google.appengine.api.datastore.Blob;

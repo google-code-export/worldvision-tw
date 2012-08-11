@@ -10,6 +10,8 @@ import java.util.TimeZone;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
 import org.worldvision.util.DateUtil;
 
 import com.google.appengine.api.datastore.Key;

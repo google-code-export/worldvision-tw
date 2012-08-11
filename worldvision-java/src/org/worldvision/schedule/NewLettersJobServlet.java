@@ -13,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.worldvision.FileDownload;
 import org.worldvision.mail.MailSender;
 import org.worldvision.model.AccountModel;
-import org.worldvision.model.Accounts;
 import org.worldvision.model.LetterModel;
-import org.worldvision.model.Letters;
-import org.worldvision.model.PMF;
+import org.worldvision.pojo.Accounts;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
 
 public class NewLettersJobServlet extends HttpServlet {
 	private static final Logger log = Logger.getLogger(NewLettersJobServlet.class

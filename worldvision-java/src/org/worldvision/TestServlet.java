@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.worldvision.model.LetterModel;
-import org.worldvision.model.Letters;
-import org.worldvision.model.PMF;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
 
 public class TestServlet extends HttpServlet{
 	

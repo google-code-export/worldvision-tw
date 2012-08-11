@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.worldvision.model.LetterModel;
-import org.worldvision.model.Letters;
 import org.worldvision.model.VoulenteerLogModel;
-import org.worldvision.model.VoulenteerLogs;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.VoulenteerLogs;
 
 public class ExportCSVFile extends HttpServlet {
 	private static final Logger log = Logger.getLogger(ExportCSVFile.class

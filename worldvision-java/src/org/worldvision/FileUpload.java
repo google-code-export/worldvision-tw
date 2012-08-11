@@ -18,11 +18,11 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 import org.worldvision.model.AccountModel;
-import org.worldvision.model.Accounts;
-import org.worldvision.model.Countries;
-import org.worldvision.model.Letters;
-import org.worldvision.model.PMF;
-import org.worldvision.model.Templates;
+import org.worldvision.pojo.Accounts;
+import org.worldvision.pojo.Countries;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
+import org.worldvision.pojo.Templates;
 import org.worldvision.util.DateUtil;
 
 import com.google.appengine.api.datastore.Blob;

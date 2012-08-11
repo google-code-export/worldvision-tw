@@ -7,6 +7,10 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
+import org.worldvision.pojo.VoulenteerLogs;
+
 public class TemplateModel {
 
 	public List findLogs(Date start_date, Date end_date) {

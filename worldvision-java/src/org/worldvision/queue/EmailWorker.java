@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.worldvision.mail.MailTemplate;
 import org.worldvision.model.LetterModel;
-import org.worldvision.model.Letters;
-import org.worldvision.model.PMF;
-import org.worldvision.model.Templates;
+import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.PMF;
+import org.worldvision.pojo.Templates;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
