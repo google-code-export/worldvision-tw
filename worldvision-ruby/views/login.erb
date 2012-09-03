@@ -1,58 +1,84 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>World Vision</title>
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <style>
-        .header {
-            width: 130px;
-            float: left;
-        }
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; 
+      }
+      .container {
+        width: 300px;
+      }
+      h2 {
+        text-align: center;
+        font-size: 20px;
+        background-color: orange;
+        color: white;
+        -webkit-border-radius: 2px 2px 2px 2px;
+        -moz-border-radius: 2px 2px 2px 2px;
+        border-radius: 2px 2px 2px 2px;
+      }
 
-        .error {
-            color: red;
-        }
+      input {
+        width: 278px;
+      }
+
+      /* The white background content wrapper */
+      .container > .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; 
+        -webkit-border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+        border-radius: 10px 10px 10px 10px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+        -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+        box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      .login-form {
+        margin-left: 25px;
+      }
+
+      legend {
+        margin-right: -50px;
+        font-weight: bold;
+        color: #404040;
+      }
     </style>
-</head>
-<body style="font-family: sans-serif;">
-
-<div style="width: 190px; border: 1px solid lightgray; left: 40%; top: 150px; position: relative">
-    <form method=post action="/login">
-        <table border="0.5">
-            <tr>
-                <td colspan="2" style="color: white; background-color:orange">登入NEXT-志工翻譯系統</td>
-            </tr>
-            <tr>
-                <td>帳號</td>
-                <td><input name="email"/></td>
-            </tr>
-            <tr>
-                <td>密碼</td>
-                <td><input TYPE=PASSWORD name="password"/></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type=submit value=登入></td>
-            </tr>
-            <% if @fail %>
-                <tr>
-                    <td colspan="2">
-
-                        <div class="error">帳號或密碼錯誤</div>
-
-                    </td>
-                </tr>
-            <% elsif @not_allowed_login %>
-                <tr>
-                    <td colspan="2">
-
-                        <div class="error">無登入權限, 如有問題請email至srdvs@worldvision.org.tw</div>
-
-                    </td>
-                </tr>
-            <% end %>
-        </table>
-    </form>
-</dir>
-</table>
+  </head>
+  <body style="font-family: sans-serif;">
+    <div class="container">
+      <div class="content">
+      <div class="row">
+        <div class="login-form">
+          <h2>登入NEXT-志工翻譯系統</h2>
+          <form action="/login" method=post>
+            <fieldset>
+              <div class="clearfix">
+                <input type="text" placeholder="帳號(例：srdvs@worldvision.org.tw)">
+              </div>
+              <div class="clearfix">
+                <input type="password" placeholder="密碼(西元出生年月日，如19860803)">
+              </div>
+              <% if @fail %>
+              <div class="clearfix alert alert-error">帳號或密碼錯誤</div>
+              <% elsif @not_allowed_login %>
+              <div class="clearfix alert alert-error">無登入權限, 如有問題請email至srdvs@worldvision.org.tw</div>
+              <% end %>
+              <button class="btn primary" type="submit">登入</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /container -->
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
