@@ -1,8 +1,22 @@
-<div style="position: relative; left:700px">歡迎, <%= current_user.account %><a href="/logout">登出</a></div>
-<img style="position: relative; right: 10px; width:980px; height: 80px;" src='/b4.png' ismap="true" usemap="#mymap" border="0"/>
-<img style="width:990px; height: 200px" src="/b1.png" />
-<map name="mymap">
-    <area shape="rect" coords="0,0,100,50"
-          href="/volunteer" alt="Click here to the Home Page">
-</map>
-<br/><br/>
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <a href="#" class="brand">NEX-T</a>
+      <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+        歡迎, <a class="navbar-link" href="#"><%= current_user.account %></a><a href="/logout">登出</a>
+        </p>
+        <ul class="nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>
