@@ -26,7 +26,7 @@
       }
 
       input {
-        width: 278px;
+        width: 220px;
       }
 
       /* The white background content wrapper */
@@ -43,7 +43,15 @@
       }
 
       .login-form {
-        margin-left: 25px;
+        margin-left: 20px;
+      }
+
+      .form-horizontal .control-label {
+        width: 40px;
+      }
+
+      .form-horizontal .controls {
+        margin-left: 50px;
       }
 
       legend {
@@ -59,13 +67,25 @@
       <div class="row">
         <div class="login-form">
           <h2>登入NEXT-志工翻譯系統</h2>
-          <form action="/login" method=post>
+          <form action="/login" method=post class="form-horizontal">
             <fieldset>
-              <div class="clearfix">
-                <input type="text" placeholder="帳號(例：srdvs@worldvision.org.tw)">
+              <div class="control-group">
+                <label class="control-label" for="email">帳號</label>
+                <div class="controls">
+                  <input type="text" id="email" name="email">
+                </div>
+                <div class="controls">
+                  (如：srdvs@worldvision.org.tw)
+                </div>
               </div>
-              <div class="clearfix">
-                <input type="password" placeholder="密碼(西元出生年月日，如19860803)">
+              <div class="control-group">
+                <label class="control-label" for="password">密碼</label>
+                <div class="controls">
+                  <input type="password" id="password" name="password">
+                </div>
+                <div class="controls">
+                  (西元出生年月日，如：19860308)
+                </div>
               </div>
               <% if @fail %>
               <div class="clearfix alert alert-error">帳號或密碼錯誤</div>
