@@ -24,9 +24,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.worldvision.mail.MailTemplate;
 import org.worldvision.model.LetterModel;
+import org.worldvision.model.VoulenteerLogModel;
 import org.worldvision.pojo.Letters;
 import org.worldvision.pojo.PMF;
 import org.worldvision.pojo.Templates;
+import org.worldvision.pojo.VoulenteerLogs;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
@@ -36,13 +38,17 @@ import com.google.appengine.api.datastore.KeyFactory;
  * 
  */
 public class EmailWorker extends HttpServlet {
-	private static final Logger log = Logger.getLogger(EmailWorker.class.getName());
-	private LetterModel model = new LetterModel();
+	private static final Logger logger = Logger.getLogger(EmailWorker.class.getName());
+	private LetterModel letterModel = new LetterModel();
+	private VoulenteerLogModel logModel = new VoulenteerLogModel();
 	public static final String LETTER_VARIABLE = "@letter";
 	public static final String DOWNLOAD_URL = "@download_url";
 	public static final String UN_CLAIMED_LETTER_COUNT = "@number_of_unclaimed_letters";
 	public static final String AVAILABLE_ENG_LETTERS = "@available_eng_letters";
 	public static final String AVAILABLE_CHI_LETTERS = "@available_chi_letters";
+	public static final String VOLUNTEER_NAME = "@volunteer_name";
+	public static final String VOLUNTEER_EMAIL = "@volunteer_email";
+	public static final String RETURN_EXECUSE ="@return_execuse";
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
@@ -52,110 +58,89 @@ public class EmailWorker extends HttpServlet {
 		String email = req.getParameter("email");
 		String letterId = req.getParameter("id");
 		String mailId = req.getParameter("mailId");
+		String volunteerId = req.getParameter("volunteerId");
 		if (email != null && !"".equals(email))
-			sendEmail(email, letterId, mailId);
+			sendEmail(email, letterId, mailId, volunteerId);
 	}
 
-	private void sendEmail(String receipt, String letterId, String mailId) {
+	private void sendEmail(String receipt, String letterId, String mailId, String volunteerId) {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		
 		try {
-			//fetch attachment
-			
 			int mail_id = Integer.parseInt(mailId);
-			if (letterId!= null && !"".equals(letterId) && mail_id <=8){
-				letterId = letterId.replace("Letters(", "").replace(")", "");
-				Letters letter = model.getLetter(pm, letterId);
-				String file_name = letter.getUpload_file_name();
-				int index = file_name.lastIndexOf("\\");
-				if (index > 0)
-					file_name = file_name.substring(index+1, file_name.length());
+			if ( mail_id <=9){
+				Letters letter = null;
+				String file_name = "";
+				
+				if (letterId != null){
+					if (letterId.contains("Letters"))
+						letterId = letterId.replace("Letters(", "").replace(")", "");
+					letter = letterModel.getLetter(pm, letterId);
+					file_name = letter.getUpload_file_name();
+					if (file_name != null){
+						int index = file_name.lastIndexOf("\\");
+						if (index > 0)
+							file_name = file_name.substring(index+1, file_name.length());
+					}
+				}
+				
 				MimeMessage msg = createEmailMessage(receipt, session);
 				switch (mail_id){
 					case 1:
 						SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 						String dueDate = formatter.format(letter.getDue_date());
 						sendDueDateEmail(dueDate, msg, file_name);
+						Transport.send(msg);
 						break;
 					case 2:
 						sendThankYouEmail(msg, file_name);
+						Transport.send(msg);
 						break;
 					case 3:
 						String blob_key = letter.getReturn_file_url();
 						boolean re_upload = letter.isRe_upload();
 						sendEmailReturndEmail(msg, blob_key, file_name, re_upload);
+						Transport.send(msg);
 						break;
 					case 4:
 						this.sendDueReminderEmail(msg, file_name);
+						Transport.send(msg);
+						
+						String emp_email = letter.getEmployee_id();
+						msg = createEmailMessage(emp_email, session);
+						this.sendEmpDuedEmergentRemiderEmail(msg, letter, file_name);
+						Transport.send(msg);
 						break;
 					case 5:
 						this.sendEmpOldEmergentRemiderEmail(msg, letterId, file_name);
+						Transport.send(msg);
 						break;
 					case 6:
 						this.sendEmpCaimLetterNoticeEmail(msg, letterId, file_name);
+						Transport.send(msg);
 						break;
 					case 7:
-						Key key = KeyFactory.createKey("Templates", 242001);
-						PersistenceManager pm2 = PMF.get().getPersistenceManager();
-						Templates template = pm2.getObjectById(Templates.class, key);
-						msg.setSubject("test");
-						msg.setText("test");
+						int available_eng_letters = letterModel.findUnClaimedLetters("eng").size();
+						int available_chi_letters = letterModel.findUnClaimedLetters("chi").size();
+						this.sendNewLetterReminderEmail(msg, available_eng_letters, available_chi_letters);
+						Transport.send(msg);
 						break;
 					case 8:
-						this.sendEmpReturnedEmergentRemiderEmail(msg, letterId, file_name);
-						break;
-					case 9:
-						this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
-						break;
+						VoulenteerLogs log = logModel.findLogByVolunteerIdAndLetterId(volunteerId, letterId);
+						
+						if (log == null)
+							logger.info("[ERROR]can't find the log whose volunteerId is " + volunteerId + " and letterId is " + letterId);
+						else{
+							this.sendEmpReturnedEmergentRemiderEmail(msg, file_name, log);
+							Transport.send(msg);
+						}
+						break;					
 				}
-				System.out.println("ready to send");
-				Transport.send(msg);
-				System.out.println("send out email");
 				
-				//notify emp when email is due.
-				if (mail_id == 4){
-					String emp_email = letter.getEmployee_id();
-					msg = createEmailMessage(emp_email, session);
-					this.sendEmpDuedEmergentRemiderEmail(msg, letterId, file_name);
-				}
 			}
-			else if (mail_id == 7){
-				int available_eng_letters = model.findUnClaimedLetters("eng").size();
-				int available_chi_letters = model.findUnClaimedLetters("chi").size();
-				MimeMessage msg = new MimeMessage(session);
-				msg.setFrom(new InternetAddress("nextwvt@worldvision.org.tw",
-						"WorldVision Admin"));
-				msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
-						receipt, "robbiecheng"));
-				log.info("going to send new letter email to " + receipt);
-				this.sendNewLetterReminderEmail(msg, available_eng_letters, available_chi_letters);
-				Transport.send(msg);
-			}
-//			Blob file = letter.getUpload_file();
-//			String fileName = letter.getUpload_file_url();
-//			System.out.println("letter_id: "+letter.getId().toString());
-//			System.out.println("file_name: "+fileName);
-			// attache the file
-//			String htmlBody = "123";
-//			byte[] attachmentData = file.getBytes();
 
-//			Multipart mp = new MimeMultipart();
-//
-//			MimeBodyPart htmlPart = new MimeBodyPart();
-//			htmlPart.setContent(htmlBody, "text/html");
-//			mp.addBodyPart(htmlPart);
-			
-			//try xml instead
-//			File xml = new File("queue.xml");
-//			
-//			MimeBodyPart attachment = new MimeBodyPart();
-//			attachment.setFileName("queue.xml");
-//			attachment.setContent(xml, "text/xml");
-//			mp.addBodyPart(attachment);
-//
-//			msg.setContent(mp);
 		} catch (AddressException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
@@ -163,6 +148,7 @@ public class EmailWorker extends HttpServlet {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (Exception e){
+			logger.info(e.getMessage());
 			e.printStackTrace();
 		}
 		finally{
@@ -191,22 +177,31 @@ public class EmailWorker extends HttpServlet {
 		}
 	}
 	
-	private void sendEmpReturnedEmergentRemiderEmail(MimeMessage msg, String key, String file_name) {
-		String filePath = "http://www.worldvision-tw.appspot.com/serve?blob-key=" + key;
+	private void sendEmpReturnedEmergentRemiderEmail(MimeMessage msg, String fileName, VoulenteerLogs log) {
 		try {
+			String content = MailTemplate.EMP_EMERGENT_NOTICE_RETURNED_CONTENT;
+			content = content.replace(this.LETTER_VARIABLE, fileName);
+			content = content.replace(this.VOLUNTEER_EMAIL, log.getVoulenteer_id());
+			content = content.replace(this.VOLUNTEER_NAME, log.getVoulenteer_name());
+			content = content.replace(this.RETURN_EXECUSE, log.getExcuse());
+					
 			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_RETURNED_TOPIC, "big5");
-			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_RETURNED_CONTENT, file_name));
+			msg.setText(content);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private void sendEmpDuedEmergentRemiderEmail(MimeMessage msg, String fileId, String file_name) {
-		String filePath = "http://www.worldvision-tw.appspot.com/file_download?id=" + fileId;
+	private void sendEmpDuedEmergentRemiderEmail(MimeMessage msg, Letters letter, String file_name) {
 		try {
+			String content = MailTemplate.EMP_EMERGENT_NOTICE_DUED_CONTENT;
+			content = content.replace(this.LETTER_VARIABLE, file_name);
+			content = content.replace(this.VOLUNTEER_EMAIL, letter.getVoulenteer_account());
+			content = content.replace(this.VOLUNTEER_NAME, letter.getVoulenteer_name());
 			msg.setSubject(MailTemplate.EMP_EMERGENT_NOTICE_DUED_TOPIC, "big5");
-			msg.setText(replaceVariable(MailTemplate.EMP_EMERGENT_NOTICE_DUED_CONTENT, file_name));
+			
+			msg.setText(content);
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -248,7 +243,9 @@ public class EmailWorker extends HttpServlet {
 	private void sendNewLetterReminderEmail(MimeMessage msg, Integer available_eng_letters, Integer available_chi_letters)
 		throws MessagingException {
 		msg.setSubject(MailTemplate.NEW_LETTER_REMINDER_TOPIC, "big5");
-		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT.replace(AVAILABLE_CHI_LETTERS, available_chi_letters.toString()).replace(AVAILABLE_ENG_LETTERS, available_eng_letters.toString()));
+		msg.setText(MailTemplate.NEW_LETTER_REMINDER_CONTENT
+				.replace(AVAILABLE_CHI_LETTERS, available_chi_letters.toString())
+				.replace(AVAILABLE_ENG_LETTERS, available_eng_letters.toString()));
 	}
 	
 	private String replaceVariable(String string, String val){

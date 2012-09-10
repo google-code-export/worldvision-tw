@@ -7,9 +7,11 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import org.worldvision.pojo.Accounts;
 import org.worldvision.pojo.Letters;
 import org.worldvision.pojo.PMF;
 import org.worldvision.pojo.VoulenteerLogs;
+
 
 public class VoulenteerLogModel {
 
@@ -33,5 +35,24 @@ public class VoulenteerLogModel {
 		return result;
 
 	}
+	
+	public VoulenteerLogs findLogByVolunteerIdAndLetterId(String volunteerId, String letterId) {
+		PersistenceManager pm = PMF.get().getPersistenceManager();
+		List<VoulenteerLogs> result = new ArrayList();
+
+		// Query query = pm.newQuery("select * from " +
+		// VoulenteerLogs.class.getName());
+		//Query query = pm.newQuery(Accounts.class, "role == 'voulenteer'");
+		Query query = pm.newQuery(VoulenteerLogs.class, "voulenteer_id == '" + volunteerId + "' && letter_id == '" + letterId + "'");
+		result = (List) query.execute(volunteerId, letterId);
+
+		// pm.close();
+		if (result.size() > 0)
+			return result.get(0);
+		else
+			return null;
+
+	}
+	
 
 }

@@ -28,7 +28,18 @@ public class EmailQueuer extends HttpServlet {
 		String email = req.getParameter("email");
 		String id = req.getParameter("id");
 		String emailId = req.getParameter("mailId");
+		String execuse = req.getParameter("execuse");
+		String params = "email=" + email;
+		if (emailId != null)
+			params += "&mailId=" + emailId;
+		if (id != null)
+			params += "&id=" + id;
+		if (execuse != null)
+			params += "&execuse=" + execuse;
+		String volunteerId = req.getParameter("volunteerId");
+		if (volunteerId != null)
+			params += "&volunteerId=" + volunteerId;
 		if (email != null && !"".equals(email))
-			queue.add(TaskOptions.Builder.url("/_ah/queue/email-worker-queue?email="+ email + "&id=" + id + "&mailId=" + emailId ).method(Method.GET));
+			queue.add(TaskOptions.Builder.url("/_ah/queue/email-worker-queue?"+ params ).method(Method.GET));
 	}
 }
