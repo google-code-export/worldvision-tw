@@ -973,7 +973,7 @@ post '/return_letter' do
     letter.save
 
     log = VoulenteerLog.new
-    log.voulenteer_id = current_user[:voulenteer_id]
+    log.voulenteer_id = current_user[:account]
     log.voulenteer_name = current_user[:name]
     log.return_date = Date.today
     log.claim_date = claim_date
@@ -985,17 +985,17 @@ post '/return_letter' do
     log.save
 
     fetcher = URLFetchServiceFactory.getURLFetchService
-    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s)
+    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s + "&volunteerId=" + current_user[:voulenteer_id])
     fetcher.fetchAsync(url_for_emp)
   end
   redirect '/volunteer'
 end
 
 get '/migrate' do
-  letters = Letter.all
+  letters = Letter.all(:return_days => nil)
   letters.each do |letter|
-    if (letter.re_upload == nil)
-      letter.re_upload = false
+    if (letter.return_days == nil)
+      letter.return_days = 0
       letter.save
     end
   end
