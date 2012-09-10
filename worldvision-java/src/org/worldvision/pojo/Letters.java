@@ -78,7 +78,8 @@ public class Letters {
 	private boolean re_upload;
 	@Persistent
 	private String letter_source_type;
-	
+	@Persistent
+	private Integer return_days;
 
 	public boolean isRe_upload() {
 		return re_upload;
@@ -329,7 +330,14 @@ public class Letters {
 	public void setLetter_source_type(String letter_source_type) {
 		this.letter_source_type = letter_source_type;
 	}
-	
+
+	public Integer getReturn_days() {
+		return return_days;
+	}
+
+	public void setReturn_days(Integer return_days) {
+		this.return_days = return_days;
+	}
 	
 
 }
