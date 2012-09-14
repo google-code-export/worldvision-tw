@@ -1,4 +1,4 @@
-application: worldvision-tw-stag
-version: 1
+application: worldvision-tw
+version: 7
 runtime: jruby
 sessions_enabled: true
