@@ -6,7 +6,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
-            markSelected($('#tans_select'), type);
+            //markSelected($('#tans_select'), type);
 
             $('form').submit(function() {
                  show_loading_dialog();
@@ -42,12 +42,6 @@
             window.location.href = '/claim_letter?id=' + id + '&account_id=' + account_id;
         }
     </script>
-    <style type="text/css">
-      .navbar-inverse .navbar-inner {
-        background-color: #E96326;
-        background-image: -moz-linear-gradient(center top , #e96326, orange);
-      }
-    </style>
 </head>
 <body style="font-family: sans-serif;">
   <%= erb :vou_header %>
@@ -67,6 +61,16 @@
             <li>
               <a href="/volunteer/noun">各國翻譯常見名詞</a>
             </li>
+            <li class="nav-header">信件區</li>
+            <li>
+              <a href="/volunteer/template">緊急</a>
+            </li>
+            <li>
+              <a href="/volunteer/template">手寫</a>
+            </li>
+            <li>
+              <a href="/volunteer/template">打字稿</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -77,9 +81,6 @@
         <div class="row-fluid">
           <% if @template %>
             <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
-          <% end %>
-          <% if @account_trans_type && @account_trans_type == 'both' %>
-            <%= erb :_trans_type, {:layout=>false}, {:action => '/volunteer'} %>
           <% end %>
           <% if @letter_has_been_claimed %>
             <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
@@ -100,21 +101,34 @@
                 <li><a href="#tabs-3">打字稿</a></li>
               </ul>
               <div id="tabs-1">
-                <% @emergent_pages.each do |page| %>
-                  <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
-                <% end %>
+                <div class="pagination">
+                  <ul>
+                    <% @emergent_pages.each do |page| %>
+                      <li class="<%= page %>">
+                        <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
+                      </li>
+                    <% end %>
+                  </ul>
+                </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true} %>
               </div>
               <div id="tabs-2">
-                <% @hand_writing_pages.each do |page| %>
-                  <a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a>
-                <% end %>
+                <div class="pagination">
+                  <ul>
+                    <% @hand_writing_pages.each do |page| %>
+                      <li><a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a></li>
+                    <% end %>
+                  </ul>
+                </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
               <div id="tabs-3">
-                <% @typing_pages.each do |page| %>
-                  <a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a>
-                <% end %>
+                <div class="pagination">
+                  <ul>
+                    <% @typing_pages.each do |page| %>
+                      <li><a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a></li>
+                    <% end %>
+                  </ul>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
             </div>
@@ -125,15 +139,23 @@
                 <li><a href="#tabs-5">一般</a></li>
               </ul>
               <div id="tabs-4">
-                <% @emergent_pages.each do |page| %>
-                  <a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a>
-                <% end %>
+                <div class="pagination">
+                  <ul>
+                    <% @emergent_pages.each do |page| %>
+                      <li><a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a></li>
+                    <% end %>
+                  </ul>
+                </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
               <div id="tabs-5">
-                <% @pages.each do |page| %>
-                  <a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a>
-                <% end %>
+                <div class="pagination">
+                  <ul>
+                    <% @pages.each do |page| %>
+                      <li><a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a></li>
+                    <% end %>
+                  </ul>
+                </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
             </div>
         </div>
