@@ -38,7 +38,9 @@ public class NewLettersJobServlet extends HttpServlet {
 				log.info("going to send email to " + email);
 				System.out.println("going to send email to " + email);
 				String url = "http://www.worldvision-tw.appspot.com/queue_email?mailId=7&email=" + email + "&id=0";
-				MailSender.sendEmail(url);
+				if (email.equals("robbiecheng@gmail.com")){
+					MailSender.sendEmail(url);
+				}
 			}
 		}
 	}
