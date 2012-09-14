@@ -9,6 +9,10 @@ WEB-INF/classes/org/worldvision/model/Templates.class
 
 WEB-INF/classes/org/worldvision/util/URLUtil.class
 
+WEB-INF/app.yaml
+WEB-INF/web.xml
+WEB-INF/appengine-web.xml
+
 worldvision-ruby/WEB-INF/lib/appengine-rack.jar
 
 *.class
