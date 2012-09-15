@@ -61,10 +61,15 @@
             <li>
               <a href="/volunteer/noun">各國翻譯常見名詞</a>
             </li>
-            <li class="nav-header">信件區</li>
+            <% if @template %>
+            <li>
+              <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
+            </li>
+            <% end %>
+            <li class="nav-header">翻譯信件查詢</li>
             <% if  @trans_type == 'eng' %>
             <li>
-              <a href="#tabs-1">緊急</a>
+              <a href="#tabs-1" class="active">緊急</a>
             </li>
             <li>
               <a href="#tabs-2">手寫</a>
@@ -74,12 +79,16 @@
             </li>
             <% else %>
             <li>
-              <a href="#tabs-4">緊急</a>
+              <a href="#tabs-4" class="active">緊急</a>
             </li>
             <li>
               <a href="#tabs-5">一般</a>
             </li>
             <% end %>
+            <li class="divider"></li>
+            <li>
+              <a href="#recieved">已領取</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -88,21 +97,17 @@
           <img border="0" usemap="#mymap" ismap="true" src="/b4.png" style="position: relative; width:980px; height: 80px;">
         </div>
         <div class="row-fluid">
-          <% if @template %>
-            <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
-          <% end %>
           <% if @letter_has_been_claimed %>
             <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
           <% end %>
           <br/>
           <%= erb :loading_dialog %>
             <% if  @trans_type == 'eng' %>
-            <div id="tabs1" style="width: 960px">
               <div id="tabs-1">
                 <div class="pagination">
                   <ul>
                     <% @emergent_pages.each do |page| %>
-                      <li class="<%= page %>">
+                      <li class="<%= page == 1 ? 'active': '' %>">
                         <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
                       </li>
                     <% end %>
@@ -129,9 +134,7 @@
                   </ul>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
-            </div>
           <% else %>
-            <div id="tabs2" style="width: 960px">
               <div id="tabs-4">
                 <div class="pagination">
                   <ul>
@@ -151,15 +154,12 @@
                   </ul>
                 </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
-            </div>
-        </div>
-        <% end %>
-        <h3>已領取</h3>
-        <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url, :re_upload=>@re_upload} %>
-
-        <div style="position: absolute; bottom: 20px; right: 20px;">
-          <!-- <img src="/images/appengine.gif"></div> -->
-        </div>
+              </div>
+            <% end %>
+          <div id="recieved" hidden>
+            <h3>已領取</h3>
+            <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url, :re_upload=>@re_upload} %>
+          </div>
       </div>
     </div>
     <hr/>
@@ -167,5 +167,6 @@
       <p>© Company 2012</p>
     </footer>
   </div>
+  <script type="text/javascript" src="/wv.js"></script>
 </body>
 </html>
