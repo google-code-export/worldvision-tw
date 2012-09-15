@@ -62,15 +62,24 @@
               <a href="/volunteer/noun">各國翻譯常見名詞</a>
             </li>
             <li class="nav-header">信件區</li>
+            <% if  @trans_type == 'eng' %>
             <li>
-              <a href="/volunteer/template">緊急</a>
+              <a href="#tabs-1">緊急</a>
             </li>
             <li>
-              <a href="/volunteer/template">手寫</a>
+              <a href="#tabs-2">手寫</a>
             </li>
             <li>
-              <a href="/volunteer/template">打字稿</a>
+              <a href="#tabs-3">打字稿</a>
             </li>
+            <% else %>
+            <li>
+              <a href="#tabs-4">緊急</a>
+            </li>
+            <li>
+              <a href="#tabs-5">一般</a>
+            </li>
+            <% end %>
           </ul>
         </div>
       </div>
@@ -86,20 +95,9 @@
             <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
           <% end %>
           <br/>
-          <script>
-            $(function() {
-              $("#tabs1").tabs();
-              $("#tabs2").tabs();
-            });
-          </script>
           <%= erb :loading_dialog %>
-          <% if  @trans_type == 'eng' %>
+            <% if  @trans_type == 'eng' %>
             <div id="tabs1" style="width: 960px">
-              <ul>
-                <li><a href="#tabs-1">緊急</a></li>
-                <li><a href="#tabs-2">手寫稿</a></li>
-                <li><a href="#tabs-3">打字稿</a></li>
-              </ul>
               <div id="tabs-1">
                 <div class="pagination">
                   <ul>
@@ -112,7 +110,7 @@
                 </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true} %>
               </div>
-              <div id="tabs-2">
+              <div id="tabs-2" hidden>
                 <div class="pagination">
                   <ul>
                     <% @hand_writing_pages.each do |page| %>
@@ -122,7 +120,7 @@
                 </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
-              <div id="tabs-3">
+              <div id="tabs-3" hidden>
                 <div class="pagination">
                   <ul>
                     <% @typing_pages.each do |page| %>
@@ -134,10 +132,6 @@
             </div>
           <% else %>
             <div id="tabs2" style="width: 960px">
-              <ul>
-                <li><a href="#tabs-4">緊急</a></li>
-                <li><a href="#tabs-5">一般</a></li>
-              </ul>
               <div id="tabs-4">
                 <div class="pagination">
                   <ul>
@@ -148,7 +142,7 @@
                 </div>
                 <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false} %>
               </div>
-              <div id="tabs-5">
+              <div id="tabs-5" hidden>
                 <div class="pagination">
                   <ul>
                     <% @pages.each do |page| %>
