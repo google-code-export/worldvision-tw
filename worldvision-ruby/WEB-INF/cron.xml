@@ -16,7 +16,7 @@
   <cron>
     <url>/new_letters_job</url>
     <description>send new letters to available volunteers</description>
-    <schedule>every wednesday 08:30</schedule>
+    <schedule>every saturday 01:00</schedule>
     <timezone>Asia/Taipei</timezone>
   </cron>
   <cron>
