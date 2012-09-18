@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-bordered table-striped table-hover">
     <% if !is_chinese_email(trans_type) %>
         <col width=100>
         <col width=50>
@@ -60,12 +60,12 @@
             <td>
                 <form action="/claim_letter?id=<%= letter.id %>&account_id=<%= account_id %>" method="post">
                     <input style="display:none" name="id" value="<%= letter.id %>"></input>
-                    <input type="submit" value="領取確認" >
+                    <input type="submit" value="領取確認" class="btn btn-primary">
                 </form>
                 <% if !letter.claim_date.nil? %>
                     <form action="<%= url %>/?from=/volunteer&to=/return_file_upload?id=<%= letter.id %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="Send">
+                        <input type="submit" value="Send" class="btn btn-success">
                     </form>
                 <% end %>
             </td>

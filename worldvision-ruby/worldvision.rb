@@ -793,6 +793,12 @@ get '/volunteer' do
     end
   end
 
+  # counting
+  @recieved_count = @voulenteer_letters.length
+  @letters_count = @letters.length
+  @emergent_count = @emergent_letters.length
+  @hand_writing_count = @hand_writing_letters.length
+  @typing_count = @typing_letters.length
 
   # paging
   @pages = get_paginator(@letters)
