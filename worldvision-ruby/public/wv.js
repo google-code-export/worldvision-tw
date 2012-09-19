@@ -4,12 +4,14 @@ var WorldVision = {
   },
 
   bindEvents: function wv_bind() {
-    $('ul.nav.nav-list a').click(function() {
+    $('ul.nav.nav-list a').click(function(event) {
       var target = $(this).attr('href');
       $(this).parent().siblings().removeClass('active');
       $(this).parent().addClass('active');
       $(target).siblings().hide();
       $(target).show();
+
+      event.preventDefault();
     });
   },
 

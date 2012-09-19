@@ -1,25 +1,20 @@
 <div class="navbar navbar-inverse">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a data-target=".nav-collapse" data-toggle="collapse" class="btn btn-navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-      <a href="#" class="brand">NEX-T</a>
+      <a href="#" class="brand">NEX-T<span class="label label-warning">台灣世界展望會翻譯志工網站</span><span class="label label-important">新介面測試版! Ver1.0.1</span></a>
       <div class="nav-collapse collapse">
         <p class="navbar-text pull-right">
-        歡迎, <a class="navbar-link" href="#"><%= current_user.account %></a><a href="/logout">登出</a>
+        歡迎, <a class="navbar-link" href="#"><%= current_user.account %></a><a href="/logout" class="btn btn-info">登出</a>
         </p>
         <form action="/volunteer" method="GET">
           <ul class="nav">
           <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='chi' %>
-            <li>
+            <li class="<%= @trans_type == 'eng' ? '':'active' %>">
               <a href="/volunteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
             </li>
           <% end %>
           <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='eng' %>
-            <li>
+            <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
               <a href="/volunteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
             </li>
           <% end %>

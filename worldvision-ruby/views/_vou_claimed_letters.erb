@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-hover table-bordered table-striped">
     <% if !is_chinese_email(trans_type) %>
         <col width=90>
         <col width=90>
@@ -53,12 +53,12 @@
                 <% if letter.re_upload %>
                     <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/volunteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="上傳">
+                        <input type="submit" value="上傳" class="btn btn-success">
                     </form>
                 <% elsif letter.return_file_url == nil %>
                     <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/volunteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10">
-                        <input type="submit" value="上傳">
+                        <input type="submit" value="上傳" class="btn btn-success">
                     </form>
                     <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
                         退件原因:
@@ -67,7 +67,7 @@
                         <ul>
                             <li><input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
                             <li>
-                            <input type="submit" value="退件">
+                            <input type="submit" value="退件" class="btn btn-danger">
                             </li>
                         </ul>
                         </div>
@@ -76,7 +76,7 @@
                     已成功上傳
                     <form method="post" action="/re_upload">
                         <input name="id" style="display:none" value="<%= letter.id %>">
-                        <input type="submit" value="重新上傳">
+                        <input type="submit" value="重新上傳" class="btn btn-warning">
                     </form>
                 <% end %>
             </td>
