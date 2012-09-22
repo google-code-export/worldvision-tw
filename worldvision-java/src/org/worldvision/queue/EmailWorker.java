@@ -74,7 +74,7 @@ public class EmailWorker extends HttpServlet {
 				Letters letter = null;
 				String file_name = "";
 				
-				if (letterId != null){
+				if (letterId != null && !letterId.equals("0")){
 					if (letterId.contains("Letters"))
 						letterId = letterId.replace("Letters(", "").replace(")", "");
 					letter = letterModel.getLetter(pm, letterId);
