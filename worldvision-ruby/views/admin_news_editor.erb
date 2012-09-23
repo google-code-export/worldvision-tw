@@ -1,0 +1,21 @@
+<% if news %>
+<div id="editor_<%=news.id%>" style="display:none">
+  <form action="/update_news?id=<%=news.id %>" method="post">
+  標題 <input name="title" value="<%=news.title %>"/> <br>
+  內容 <textarea id="editor_text_<%=news.id%>" name="content" rows="2" cols="20" ><%=news.content%></textarea>
+  <br>
+  <input type="submit" value="更新"/>
+  <input onclick="$('#editor_<%=news.id%>').hide()" value="關閉" type="button"/>
+  </form>
+</div>
+<% else %>
+<div id="editor" style="display:none">
+  <form action="/create_news" method="post">
+  標題 <input name="title"/> <br>
+  內容 <textarea id="editor_text" name="content" rows="2" cols="20"></textarea>
+  <br>
+  <input type="submit" value="新增"/>
+  <input onclick="$('#editor').hide()" value="關閉" type="button"/>
+  </form>
+</div>
+<% end %>

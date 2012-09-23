@@ -1,0 +1,6 @@
+<% if @news %>
+  標題 : <br><span><%=@news.title %></span> <br>
+  內容 : <br><span><%=@news.content%></span>
+  <br><br>
+  <input onclick="window.close()" value="關閉" type="button"/>
+<% end %>
