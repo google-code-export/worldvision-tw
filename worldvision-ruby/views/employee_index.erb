@@ -43,7 +43,7 @@
         });
     </script>
 </head>
-<body style="font-family: sans-serif; width: 1150px" class="employee">
+<body>
 <%= erb :header_wide %>
   <div class="container-fluid">
     <div class="row-fluid">
@@ -51,9 +51,24 @@
         <div class="well sidebar-nav">
           <ul class="nav nav-list">
             <li>
-              <img src="/worldvision.png" />
+              <img src="/wvtlogobig.gif" />
             </li>
             <li class="divider"></li>
+            <li>
+              <a href="/employee">所有信件</a>
+            </li>
+            <li>
+              <a href="/employee?letter_status=unclaimed">未領取</a>
+            </li>
+            <li>
+              <a href="/employee?letter_status=claimed">已領取</a>
+            </li>
+            <li>
+              <a href="/employee?letter_status=emergent">緊急</a>
+            </li>
+            <li>
+              <a href="/employee?letter_status=returned">譯返</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -100,31 +115,14 @@
                 </script>
               </div>
             </div>
+          </div>
           <!-- end -->
           <!-- show letters -->
           <!-- total = <%= @letters.length %> rows -->
         </div>
         <div class="row-fluid">
-          <a href="/employee/country" >管理國家</a>
           <br/>
           <%= erb :_trans_type , {:layout=>false}, {:action => '/employee'} %>
-          <div >
-            <form action="/employee" method="GET">
-              <select id="letter_status" name="letter_status" onChange='form.submit()'>
-                <option>請選擇</option>
-                <option value="">所有信件</option>
-                <option value="unclaimed">未領取</option>
-                <option value="claimed">已領取</option>
-                <option value="emergent">緊急</option>
-                <option value="returned">已譯返</option>
-              </select>
-              <select id="type" name="type" style="display:none">
-                <option value="eng">英翻中</option>
-                <option value="chi">中翻英</option>
-              </select>
-            </form>
-          </div>
-
           <% if @trans_type == 'eng' %>
             <h3>待譯</h3>
             <div>

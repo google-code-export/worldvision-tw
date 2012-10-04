@@ -8,16 +8,15 @@
         </p>
         <form action="/volunteer" method="GET">
           <ul class="nav">
-          <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='chi' %>
             <li class="<%= @trans_type == 'eng' ? '':'active' %>">
               <a href="/volunteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
             </li>
-          <% end %>
-          <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='eng' %>
             <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
               <a href="/volunteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
             </li>
-          <% end %>
+            <li>
+              <a href="/employee/country" >管理國家</a>
+            </li>
           </ul>
         </form>
       </div><!--/.nav-collapse -->
