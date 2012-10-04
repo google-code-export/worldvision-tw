@@ -11,4 +11,179 @@
   <listener>
     <listener-class>com.google.appengine.jruby.LazyContextListener</listener-class>
   </listener>
+
+
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>NewLettersJobServlet</display-name>
+﻿  ﻿  <servlet-name>NewLettersJobServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.schedule.NewLettersJobServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>DueReminderJobServlet</display-name>
+﻿  ﻿  <servlet-name>DueReminderJobServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.schedule.DueReminderJobServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>Reset3DaysDueLetttersJobServlet</display-name>
+﻿  ﻿  <servlet-name>Reset3DaysDueLetttersJobServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.schedule.Reset3DaysDueLetttersJobServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>MarkOldLettersAsEmergentJobServlet</display-name>
+﻿  ﻿  <servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.schedule.MarkOldLettersAsEmergentJobServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>MarkDueLettersJobServlet</display-name>
+﻿  ﻿  <servlet-name>MarkDueLettersJobServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.schedule.MarkDueLettersJobServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>ExportCSVFile</display-name>
+﻿  ﻿  <servlet-name>ExportCSVFile</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.ExportCSVFile</servlet-class>
+  </servlet>
+
+
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>LetterServlet</display-name>
+﻿  ﻿  <servlet-name>LetterServlet</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.LetterServlet</servlet-class>
+  </servlet>
+  <servlet>
+﻿  ﻿  <description>
+﻿  ﻿  </description>
+﻿  ﻿  <display-name>FileUpload</display-name>
+﻿  ﻿  <servlet-name>FileUpload</servlet-name>
+﻿  ﻿  <servlet-class>org.worldvision.FileUpload</servlet-class>
+﻿  </servlet>
+﻿  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>FileDownload</display-name>
+﻿  ﻿  ﻿  <servlet-name>FileDownload</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.FileDownload</servlet-class>
+﻿  </servlet>
+﻿  <servlet>
+﻿  ﻿  ﻿  <display-name>BlobKeyProvider</display-name>
+﻿  ﻿  ﻿  <servlet-name>BlobKeyProvider</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.blobstore.BlobKeyProvider</servlet-class>
+﻿  </servlet>
+﻿  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>EmailQueuer</display-name>
+﻿  ﻿  ﻿  <servlet-name>EmailQueuer</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.queue.EmailQueuer</servlet-class>
+﻿  </servlet>
+﻿  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>EmailWorker</display-name>
+﻿  ﻿  ﻿  <servlet-name>EmailWorker</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.queue.EmailWorker</servlet-class>
+﻿  </servlet>
+﻿  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>BlobStoreFileUpload</display-name>
+﻿  ﻿  ﻿  <servlet-name>BlobStoreFileUpload</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.blobstore.BlobStoreFileUpload</servlet-class>
+            <load-on-startup>1</load-on-startup>
+﻿  ﻿  </servlet>
+
+﻿  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>BlobStoreFileDownload</display-name>
+﻿  ﻿  ﻿  <servlet-name>BlobStoreFileDownload</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.blobstore.BlobStoreFileDownload</servlet-class>
+﻿  ﻿  </servlet>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>DueReminderJobServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/due_reminder_job</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>Reset3DaysDueLetttersJobServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/reset_due_letters</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>MarkDueLettersJobServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/mark_due_letters</url-pattern>
+﻿  </servlet-mapping>
+
+
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>MarkOldLettersAsEmergentJobServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/mark_old_letters</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>NewLettersJobServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/new_letters_job</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileUpload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/file_upload</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileUpload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/country_upload</url-pattern>
+﻿  </servlet-mapping>
+    <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileUpload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/template_upload</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileUpload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/return_file_upload</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileDownload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/file_download</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>FileDownload</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/country_download</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>BlobKeyProvider</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/blobkey</url-pattern>
+﻿  </servlet-mapping>
+
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>EmailQueuer</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/queue_email</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>EmailWorker</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/_ah/queue/email-worker-queue</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  ﻿  <servlet-name>BlobStoreFileUpload</servlet-name>
+﻿  ﻿  ﻿  ﻿  <url-pattern>/upload</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  ﻿  <servlet-name>BlobStoreFileDownload</servlet-name>
+﻿  ﻿  ﻿  ﻿  <url-pattern>/serve</url-pattern>
+﻿  </servlet-mapping>
+﻿  <servlet-mapping>
+﻿  ﻿  ﻿  ﻿  <servlet-name>ExportCSVFile</servlet-name>
+﻿  ﻿  ﻿  ﻿  <url-pattern>/test_download</url-pattern>
+﻿  </servlet-mapping>
+    
+
 </web-app>
