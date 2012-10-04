@@ -9,10 +9,10 @@
         <form action="/volunteer" method="GET">
           <ul class="nav">
             <li class="<%= @trans_type == 'eng' ? '':'active' %>">
-              <a href="/volunteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
+              <a href="/employee?type=chi" class="letter_type_button" name="chi">中翻英</a>
             </li>
             <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
-              <a href="/volunteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
+              <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
             </li>
             <li>
               <a href="/employee/country" >管理國家</a>
