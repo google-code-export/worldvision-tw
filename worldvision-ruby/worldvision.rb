@@ -107,6 +107,15 @@ class Template
   property :tempate_url, String
 end
 
+class News
+  include DataMapper::Resource
+  property :id, Serial
+  property :created_date, Date
+  property :title, String
+  property :content, String
+  property :status, String
+end
+
 class Date
   def to_s
     strftime('%m/%d/%Y')
@@ -995,6 +1004,78 @@ post '/return_letter' do
     fetcher.fetchAsync(url_for_emp)
   end
   redirect '/volunteer'
+end
+
+post '/create_news' do
+  protected!
+  
+  news = News.new
+  news.title = params[:title]
+  news.content = params[:content]
+  news.status = "offline"
+  news.save
+  
+  redirect '/admin_news_index'
+end
+
+post '/update_news' do
+  protected!
+  
+  id = params[:id]
+  
+  if (id)
+    news = News.get(id)
+    if (params[:title])
+      news.title = params[:title]
+    end
+    if (params[:content])
+      news.content = params[:content]
+    end
+    if (params[:status])
+      if (news.created_date == nil)
+          news.created_date = Date.today
+      end
+      news.status = params[:status]
+    end
+    news.save
+  end
+  
+  redirect '/admin_news_index'
+end
+
+post '/delete_news' do
+  protected!
+  
+  id = params[:id]
+    
+  if (id)
+    news = News.get(id)
+    
+    news.destroy
+  end
+  
+  redirect '/admin_news_index'
+end
+
+get '/admin_news_index' do
+  protected!
+  
+  @news = News.all
+  
+  erb :admin_news_index
+end
+
+get '/preview_news' do
+  protected!
+    
+  id = params[:id]
+  @news = nil  
+  if (id)
+    news = News.get(id)
+    @news = news
+  end
+  
+  erb :admin_news_preview
 end
 
 get '/migrate' do

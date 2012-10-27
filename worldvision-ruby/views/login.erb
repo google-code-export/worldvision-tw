@@ -60,12 +60,32 @@
         font-weight: bold;
         color: #404040;
       }
+      
+      #browser-warning {
+        margin-left: 20px;
+        display: none;
+      }
     </style>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-34902118-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+       })();
+    </script>
   </head>
   <body style="font-family: sans-serif;">
     <div class="container">
       <div class="content">
       <div class="row">
+        <div id="browser-warning" class="alert alert-block hidden">
+          <h4>瀏覽網站最佳瀏覽器-建議使用Firefox、IE8以上版本</h4>
+          <a href="http://windows.microsoft.com/zh-TW/internet-explorer/downloads/ie-8">Mircosoft IE8+</a>, <a href="http://mozilla.com.tw/firefox/download/">Mozilla Firefox</a>, <a href="https://www.google.com/intl/zh-TW/chrome/browser/">Google Chrome</a>
+        </div>
         <div class="login-form">
           <h2>NEX-T 志工翻譯網頁</h2>
           <form action="/login" method=post class="form-horizontal">
@@ -100,6 +120,7 @@
       </div>
     </div>
   </div> <!-- /container -->
-  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
+  <script type="text/javascript" src="/wv.js"></script>
 </body>
 </html>
