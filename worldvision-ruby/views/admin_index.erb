@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>World Vision</title>
@@ -45,73 +46,74 @@
     </script>
   </head>
   <body>
-  <%= erb :header_wide %>
+  <%= erb :header_admin %>
 <!-- new account start -->
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li>
-	              <a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
-              </li>
-              <li>
-	              <a href="/admin/vou">志工翻譯封數統計</a>
-              </li>
-              <li>
-                <a href="/admin/vou_status">志工服務管理報表</a>
-              </li>
-              <li>
-                <a href="/admin/vou_status">志工服務管理報表</a>
-              </li>
-              <li>
-                <a href="/admin_news_index">公佈欄管理</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="span9">
           <div class="hero-unit">
-	          <h3>新建會員</h3>
-	          <div>
+            <h3>新建會員</h3>
+            <div>
               <% if @account_exists%>
                 <div class="alert">*此帳號已存在</div>
               <% end %>
-              <form method=post action="/create_account" onsubmit="return checkinputvalue()">
-                <div class="header">帳號</div> <input id="account" name="account" ></input>
-                <div class="header">密碼</div> <input id="password" name="password"></input>
-	              <div class="header">權限</div>
-	              <div>
-                  <select name="role">
-                    <option value="employee">員工</option>
-                    <option value="voulenteer" selected="selected">志工</option>
-                  </select>
+              <form class="form-horizontal" method=post action="/create_account" onsubmit="return checkinputvalue()">
+                <div class="control-group">
+                  <label class="control-label">帳號</label>
+                  <div class="controls">
+                    <input id="account" name="account" ></input>
+                  </div>
                 </div>
-                <div class="header">姓名</div> <input name="name"></input><br/>
-                <div class="header">志工編號</div> <input name="voulenteer_id"></input><br/>
-                <div class="header">志工類型</div>
-                <select name="voulenteer_type"><br/>
-                  <option value="chi">中翻英</option>
-                  <option value="eng" selected="selected">英翻中</option>
-                  <option value="both">皆可 </option>
-                </select><br/>
-                <div class="header">備註</div> <input id="note" name="note" ></input>
-                <input type=submit value="建立帳號" onclick=''>
+                <div class="control-group">
+                  <label class="control-label">密碼</label>
+                  <div class="controls">
+                    <input id="password" name="password"></input>
+                  </div>
+                </div>
+                <div class="control-group">  
+                  <label class="control-label">權限</label>
+                  <div class="controls">
+                    <select name="role">
+                      <option value="employee">員工</option>
+                      <option value="voulenteer" selected="selected">志工</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">  
+                  <label class="control-label">姓名</label>
+                  <div class="controls">
+                    <input name="name"></input>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">志工編號</label>
+                  <div class="controls">
+                    <input name="voulenteer_id"></input>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">志工類型</label>
+                  <div class="controls">
+                    <select name="voulenteer_type"><br/>
+                      <option value="chi">中翻英</option>
+                      <option value="eng" selected="selected">英翻中</option>
+                      <option value="both">皆可 </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">備註</label>
+                  <div class="controls">
+                    <input id="note" name="note" ></input>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <input type=submit value="建立帳號" onclick='' class="btn btn-primary">
+                  </div>
+                </div>
               </form>
             </div>
-            <div class="hero-unit">
-            <!-- new account end -->
-              <h3>搜尋姓名</h3>
-	            <form method=get action="/admin">
-	            <select name="search_role">
-	              <option >請選擇</option>
-                <option value="employee">員工</option>
-                <option value="voulenteer">志工</option>
-              </select>
-              <input name="search_name"></input>
-              <input type=submit value="搜尋">
-            </form>
-          </div>
+        </div>
             <input class="btn" type="button" value="顯示全部員工" onClick="javascript:location.href = '/admin?search_role=employee';" />
             <input class="btn" type="button" value="顯示全部志工" onClick="javascript:location.href = '/admin?search_role=voulenteer';" />
 <!-- existing account start -->
@@ -179,17 +181,17 @@
             <td><input name="note" value="<%= account.note%>"></input>  <br/>
               <td>
 
-                <input type=submit value="更新">
+                <input class="btn" type=submit value="更新">
               </form>
               <form method=post action='delete_account?id=<%= account.id %>'>
-                <input type=submit value="刪除">
+                <input class="btn btn-danger" type=submit value="刪除">
               </form>
             </td>
           </tr>
         <% end %>
       </table>
       <!-- existing accounts end -->
-    </div> 
+  </div>
   </div>
 </body>
 </html>

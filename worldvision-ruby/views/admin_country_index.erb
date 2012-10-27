@@ -2,30 +2,37 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>World Vision</title>
-<%= erb :js_css_header %>
-<script type="text/javascript">
-  function checkinputvalue(){
-	var country_name = document.getElementById('country_name');
-	if (country_name.value == ''){
-		alert("請輸入國家");
-		return false;
-	}
-    var continent_name = document.getElementById('countinent_name');
-    if (continent_name == ''){
-        alert('請選擇洲區');
-        return false;
-    }
-}
-</script>
-</head>
-<body>
-<!-- countries start	 -->
-<%= erb :header_wide %>
-<!-- new account start -->
-<div class="hero-unit">
-	<h4>所有國家</h4>
-    <div>
-    <div style="float: left">
+    <%= erb :js_css_header %>
+    <style type="text/css">
+      table.table {
+        display: block;
+      }
+    </style>
+    <script type="text/javascript">
+      function checkinputvalue(){
+  	    var country_name = document.getElementById('country_name');
+	      if (country_name.value == ''){
+		      alert("請輸入國家");
+		      return false;
+  	    }
+        var continent_name = document.getElementById('countinent_name');
+        if (continent_name == ''){
+          alert('請選擇洲區');
+          return false;
+          }
+        }
+      </script>
+    </head>
+  <body>
+  <!-- countries start	 -->
+  <%= erb :header_wide %>
+  <!-- new account start -->
+  <div class="container-fluid">
+    <div class="row-fluid">
+  <div class="hero-unit">
+  <h3>所有國家</h3>
+      <div>
+      <div style="float: left">
         <form method=post action='create_country' onsubmit="return checkinputvalue()">
             <select id="continent_name" name="continent">
                 <option >洲區</option>
@@ -35,17 +42,17 @@
                 <option value="拉丁美洲">拉丁美洲</option>
             </select>
             <input id="country_name" name="name"></input>
-            <input type=submit value="新增國家">
+            <input class="btn btn-primary" type=submit value="新增國家">
         </form>
         <form method="post" action="search_country">
             <input name="country"/>
-            <input type="submit" value="搜尋國家">
+            <input class="btn btn-info" type="submit" value="搜尋國家">
         </form>
     </div>
     <div>
       <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
       <input type="file" name="myFile" size="10">
-      <input type="submit" value="上傳翻譯底稿">
+      <input class="btn" type="submit" value="上傳翻譯底稿">
       </form>
     </div>
     </div>
@@ -58,7 +65,7 @@
 		<th style="width: 100px">翻譯範本</th>
 		<th style="width: 100px">常見名詞</th>
         <!--<th style="width: 100px">翻譯背景</th>-->
-		<th style="width: 200px">操作</th>
+		<th style="width: auto;">操作</th>
 	</tr>
 	<% @countries.each do |country| %>	
 	<tr>
@@ -73,22 +80,22 @@
 	<td>
 	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
-          <input type="submit" value="上傳注意事項">
+          <input class="btn" type="submit" value="上傳注意事項">
     </form>
 	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
-          <input type="submit" value="上傳翻譯範本">
+          <input class="btn" type="submit" value="上傳翻譯範本">
     </form>
 	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
-          <input type="submit" value="上傳常見名詞">
+          <input class="btn" type="submit" value="上傳常見名詞">
     </form>
 	<!--<form onsubmit="post_parameters(this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'background'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳翻譯背景">
     </form>-->
     <form method=post action='delete_country?id=<%=country.id%>'>
-		<input type=submit value="刪除國家">
+		<input class="btn btn-danger" type=submit value="刪除國家">
     </form>
 
 	</td>
@@ -96,5 +103,7 @@
     <% end %>
 	</table>
 <!-- countries end -->
+</div>
+</div>
   </body>
 </html>

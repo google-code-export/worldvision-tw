@@ -1,23 +1,23 @@
+<!DOCTYPE html>
 <html>
-  <head>
-  
+  <head>  
     <title>World Vision</title>
+    <%= erb :js_css_header %>
     <script type="text/javascript" src="/js/ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="/js/ckeditor/config.js"></script>
-<link rel="stylesheet" type="text/css" href="/js/ckeditor/skins/kama/editor.css">
-<script type="text/javascript" src="/js/ckeditor/lang/en.js"></script>
-<script type="text/javascript" src="/js/ckeditor/plugins/styles/styles/default.js"></script>
-    <%= erb :js_css_header %>
-</head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <body style="font-family: sans-serif;">
-<script language="javascript" type="text/javascript">
-<!--
-function popitup(url) {
-  newwindow=window.open(url,'name','height=500,width=500');
-  if (window.focus) {newwindow.focus()}
-  return false;
-}
+    <link rel="stylesheet" type="text/css" href="/js/ckeditor/skins/kama/editor.css">
+    <script type="text/javascript" src="/js/ckeditor/lang/en.js"></script>
+    <script type="text/javascript" src="/js/ckeditor/plugins/styles/styles/default.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <script language="javascript" type="text/javascript">
+      <!--
+      function popitup(url) {
+        newwindow=window.open(url,'name','height=500,width=500');
+        if (window.focus) {newwindow.focus()}
+        return false;
+      }
 
 function bind_ckeditor(id){
   var name = 'content'; 
@@ -29,8 +29,8 @@ function bind_ckeditor(id){
 }
 
 $(document).ready(function(){
-  CKEDITOR.config.toolbar =
-  [
+    CKEDITOR.config.toolbar =
+    [
       [ 'Preview', 'Source', '-', 'Bold', 'Italic', 'Styles','Format','Font','FontSize', 'TextColor','BGColor'  ]
   ];
   bind_ckeditor('editor_text');
@@ -39,19 +39,16 @@ $(document).ready(function(){
 
 // -->
 </script>
-  <%= erb :header %>
-<a href="/admin">管理會員</a>
-<a href="/admin/vou">志工翻譯封數統計</a>
-<a href="/admin/vou_status">志工服務管理報表</a>
-<br>
-<input type="button" value="新增News" onclick="$('#editor').show()" />
-
+  <%= erb :header_admin %>
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <input class="btn" type="button" value="新增News" onclick="$('#editor').show()" />
 <%= erb :admin_news_editor, {:layout=>false},{:news => nil} %>
 
 <% @news.each do |news| %>
   <%= erb :admin_news_editor, {:layout=>false},{:news => news} %>
 <% end %>
-<table border="1" style="width: 800px">
+<table class="table">
   <tr>
     <th style="width: 100px">上架時間</th>
     <th style="width: 100px">標題</th>
@@ -66,21 +63,24 @@ $(document).ready(function(){
       <td>
         <% if (news.status == 'offline') %>
             <form method=post action='update_news?id=<%= news.id %>&status=online'>
-              <input type="submit" value="上架"/>
+              <input class="btn" type="submit" value="上架"/>
             </form>
         <% else %>
             <form method=post action='update_news?id=<%= news.id %>&status=offline'>
-              <input type="submit" value="下架"/>
+              <input class="btn" type="submit" value="下架"/>
             </form>
         <% end %>
-        <input type="submit" value="修改" onclick="bind_ckeditor('editor_text_<%=news.id%>');$('#editor_<%=news.id%>').show()"/>
-        <input type="submit" value="預覽" onclick="popitup('/preview_news?id=<%=news.id%>')"/>
+        <input class="btn" type="submit" value="修改" onclick="bind_ckeditor('editor_text_<%=news.id%>');$('#editor_<%=news.id%>').show()"/>
+        <input class="btn" type="submit" value="預覽" onclick="popitup('/preview_news?id=<%=news.id%>')"/>
         
         <form method=post action='delete_news?id=<%= news.id %>'>
-          <input type="submit" value="刪除"/>
+          <input class="btn btn-danger" type="submit" value="刪除"/>
         </form>
       </td>
     </tr>
   <% end %>
+</table>
+</div>
+</div>
   </body>
 </html>

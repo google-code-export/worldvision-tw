@@ -16,7 +16,7 @@ var WorldVision = {
   },
 
   view: function wv_view() {
-    if (this.URL.params.em_start) {
+    if (this.URL.params && this.URL.params.em_start) {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul:nth-child('+this.URL.params.em_start+')').addClass('active');
     }

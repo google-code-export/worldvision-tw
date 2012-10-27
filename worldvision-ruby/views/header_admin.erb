@@ -1,0 +1,44 @@
+<div class="navbar navbar-inverse">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a href="#" class="brand">NEX-T</a>
+      <div class="nav-collapse collapse">
+        <p class="navbar-text pull-right">
+          <a href="/logout" class="btn btn-info">登出</a>
+        </p>
+        <form method=get action="/admin">
+        <ul class="nav">
+          <li>
+            <a href="/admin">會員管理</a>
+          </li>
+          <li>
+            <a href="/admin/log">志工退件 / 逾期 / 未譯返紀錄</a>
+          </li>
+          <li>
+            <a href="/admin/vou">志工翻譯封數統計</a>
+          </li>
+          <li>
+            <a href="/admin/vou_status">志工服務管理報表</a>
+          </li>
+          <li>
+            <a href="/admin_news_index">公佈欄管理</a>
+          </li>
+          <li>
+            <select name="search_role">
+              <option >請選擇</option>
+              <option value="employee">員工</option>
+              <option value="voulenteer">志工</option>
+            </select>
+          </li>
+          <li>
+            <input name="search_name"></input>
+          </li>
+          <li>
+            <input type=submit value="搜尋" class="btn btn-primary">
+          </li>
+        </ul>
+        </form>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+</div>

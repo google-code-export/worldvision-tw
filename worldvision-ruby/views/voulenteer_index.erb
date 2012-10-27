@@ -1,9 +1,15 @@
+<!DOCTYPE html>
 <html>
 <head>
     <title>World Vision</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <%= erb :js_css_header %>
     <script type="text/javascript">
+      function popitup(url) {
+        newwindow=window.open(url,'name','height=500,width=500');
+        if (window.focus) {newwindow.focus()}
+        return false;
+      }
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             //markSelected($('#tans_select'), type);
@@ -92,9 +98,15 @@
             <li>
             <a href="#recieved">已領取<span class="badge badge-info pull-right"><%= @recieved_count %></span></a>
             </li>
-            <li class="nav-header">公布欄</li>
-            <li class="disabled">
-            開發中
+            <li class="nav-header">最新消息</li>
+            <li>
+              <a onclick="popitup('/preview_news?id=780001')" href="#">10/23 中翻英信件告急</a>
+            </li>
+            <li>
+              <a onclick="popitup('/preview_news?id=732001')" href="#">公佈欄開張~</a>
+            </li>
+            <li>
+              <a href="/show_all_news">&gt;&gt;其他最新消息</a>
             </li>
             <li class="nav-header">投票區</li>
             <li class="disabled">

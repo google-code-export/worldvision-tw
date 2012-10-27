@@ -1,0 +1,23 @@
+<div class="well sidebar-nav">
+  <ul class="nav nav-list">
+    <li>
+    <img src="/wvtlogobig.gif" />
+    </li>
+    <li class="divider"></li>
+    <li class="nav-header">幫助</li>
+    <li>
+    <a href="/volunteer/template">各國信件翻譯範本</a>
+    </li>
+    <li>
+    <a href="/volunteer/note">各國翻譯注意事項</a>
+    </li>
+    <li>
+    <a href="/volunteer/noun">各國翻譯常見名詞</a>
+    </li>
+    <% if @template %>
+      <li>
+      <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
+      </li>
+    <% end %>
+  </ul>
+</div>

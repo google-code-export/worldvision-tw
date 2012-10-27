@@ -1,0 +1,14 @@
+/* Because the selects are too many in tables. Override bootstrap */
+.navbar select, table select {
+  width: auto;
+}
+.navbar .nav > li > input {
+  margin: 10px 2px;
+}
+.navbar .nav > li > select {
+  margin: 5px 2px;
+}
+
+table.table form {
+  display: inline;
+}
