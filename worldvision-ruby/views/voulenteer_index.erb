@@ -44,7 +44,7 @@
     </script>
 </head>
 <body style="font-family: sans-serif;">
-<div style="">
+<div style="width:800px">
     <br>
     <%= erb :vou_header %>
     <a href="/volunteer/template">各國信件翻譯範本</a>
@@ -53,12 +53,25 @@
     <% if @template %>
       <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
     <% end %>
+    
+    <div style="float: right">
+          <span style="color: red">&gt;&gt;最新消息</span>
+          <br>
+          <% @latest5news.each do |news| %>
+              <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
+              <br>
+          <% end %>
+          <br>
+          <span style="color: blue"><a href="/show_all_news">&gt;&gt;其他最新消息</a></span>
+     </div>
+    
     <% if @account_trans_type && @account_trans_type == 'both' %>
         <%= erb :_trans_type, {:layout=>false}, {:action => '/volunteer'} %>
     <% end %>
     <% if @letter_has_been_claimed %>
         <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
     <% end %>
+     
     <br/>
     <script>
         $(function() {

@@ -13,11 +13,6 @@
   <body style="font-family: sans-serif;">
 <script language="javascript" type="text/javascript">
 <!--
-function popitup(url) {
-  newwindow=window.open(url,'name','height=500,width=500');
-  if (window.focus) {newwindow.focus()}
-  return false;
-}
 
 function bind_ckeditor(id){
   var name = 'content'; 
@@ -31,7 +26,7 @@ function bind_ckeditor(id){
 $(document).ready(function(){
   CKEDITOR.config.toolbar =
   [
-      [ 'Preview', 'Source', '-', 'Bold', 'Italic', 'Styles','Format','Font','FontSize', 'TextColor','BGColor'  ]
+      [ 'Preview', 'Source', '-', 'JustifyLeft','JustifyCenter','JustifyRight', 'Bold', 'Italic','Format','Font','FontSize', 'TextColor','BGColor' ]
   ];
   bind_ckeditor('editor_text');
 });
@@ -54,14 +49,14 @@ $(document).ready(function(){
 <table border="1" style="width: 800px">
   <tr>
     <th style="width: 100px">上架時間</th>
-    <th style="width: 100px">標題</th>
-    <th style="width: 100px">狀態</th>
+    <th style="width: 500px">標題</th>
+    <th style="width: 50px">狀態</th>
     <th style="width: 100px">操作</th>
   </tr>
   <% @news.each do |news| %>
     <tr>
       <td><%= news.created_date %></td>
-      <td><%= news.title %></td>
+      <td style="word-wrap: break-word"><%= news.title %></td>
       <td><%= news.status %></td>
       <td>
         <% if (news.status == 'offline') %>

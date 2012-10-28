@@ -101,7 +101,10 @@
             <property name="trans_type" direction="asc"/>
             <property name="create_date" direction="asc"/>
         </datastore-index>
-    
+     <datastore-index kind="News" ancestor="false" source="manual">
+        <property name="status" direction="asc"/>
+        <property name="created_date" direction="desc"/>
+    </datastore-index>
     
 
 </datastore-indexes>
