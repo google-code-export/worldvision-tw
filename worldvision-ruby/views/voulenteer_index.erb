@@ -18,6 +18,9 @@
         $('#modal-news').modal();
         return false;
       }
+function closeDialog () {
+  $('#modal-news').modal('hide'); 
+};
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             //markSelected($('#tans_select'), type);
@@ -207,14 +210,13 @@
     </div>
     <hr/>
   </div>
-  <div class="modal hide" id="modal-news" hidden>
+  <div class="modal hide fade" id="modal-news" hidden>
     <div class="modal-header">
-      <a class="close" data-dismiss="modal">×</a>
       <h3 id="modal-news-title">NEWS</h3>
     </div>
     <iframe class="modal-body" id="modal-news-iframe"></iframe>
     <div class="modal-footer">
-      <a href="#" class="btn" data-dismiss="modal">關閉</a>
+      <a href="#" class="btn" onclick="closeDialog();">關閉</a>
     </div>
   </div>
   <script type="text/javascript" src="/wv.js"></script>
