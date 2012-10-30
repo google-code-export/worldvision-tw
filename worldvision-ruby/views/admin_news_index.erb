@@ -29,9 +29,9 @@ function bind_ckeditor(id){
 }
 
 $(document).ready(function(){
-    CKEDITOR.config.toolbar =
-    [
-      [ 'Preview', 'Source', '-', 'Bold', 'Italic', 'Styles','Format','Font','FontSize', 'TextColor','BGColor'  ]
+  CKEDITOR.config.toolbar =
+  [
+      [ 'Preview', 'Source', '-', 'JustifyLeft','JustifyCenter','JustifyRight', 'Bold', 'Italic','Format','Font','FontSize', 'TextColor','BGColor' ]
   ];
   bind_ckeditor('editor_text');
 });
@@ -51,14 +51,14 @@ $(document).ready(function(){
 <table class="table">
   <tr>
     <th style="width: 100px">上架時間</th>
-    <th style="width: 100px">標題</th>
-    <th style="width: 100px">狀態</th>
+    <th style="width: 500px">標題</th>
+    <th style="width: 50px">狀態</th>
     <th style="width: 100px">操作</th>
   </tr>
   <% @news.each do |news| %>
     <tr>
       <td><%= news.created_date %></td>
-      <td><%= news.title %></td>
+      <td style="word-wrap: break-word"><%= news.title %></td>
       <td><%= news.status %></td>
       <td>
         <% if (news.status == 'offline') %>

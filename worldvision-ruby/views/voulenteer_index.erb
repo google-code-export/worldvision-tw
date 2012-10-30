@@ -49,6 +49,7 @@
         }
     </script>
 </head>
+<<<<<<< HEAD
 <body>
   <%= erb :vou_header %>
   <div class="container-fluid">
@@ -99,12 +100,11 @@
             <a href="#recieved">已領取<span class="badge badge-info pull-right"><%= @recieved_count %></span></a>
             </li>
             <li class="nav-header">最新消息</li>
-            <li>
-              <a onclick="popitup('/preview_news?id=780001')" href="#">10/23 中翻英信件告急</a>
-            </li>
-            <li>
-              <a onclick="popitup('/preview_news?id=732001')" href="#">公佈欄開張~</a>
-            </li>
+            <% @latest5news.each do |news| %>
+              <li>
+                <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
+              </li>
+            <% end %>
             <li>
               <a href="/show_all_news">&gt;&gt;其他最新消息</a>
             </li>

@@ -39,7 +39,7 @@ public class NewLettersJobServlet extends HttpServlet {
 //				if (email.equals("robbiecheng@gmail.com")){
 					log.info("going to send email to " + email);
 					System.out.println("going to send email to " + email);
-					MailSender.sendEmail(url);
+//					MailSender.sendEmail(url);
 //				}
 			}
 		}

@@ -846,6 +846,11 @@ get '/volunteer' do
   @account_id = current_user[:id]
   logger.info("account_id:" + @account_id.to_s)
   get_template
+  
+  @latest5news = News.all(:status => 'online', :order => [:created_date.desc], :limit => 5)
+  if (@latest5news.length > 5)
+    @latest5news = @latest5news[0, 4]
+  end   
 
   erb :voulenteer_index
 end
@@ -893,6 +898,13 @@ get '/volunteer/noun' do
   erb :vou_noun
 end
 
+get '/show_all_news' do
+  get_template
+  @news = News.all(:status => 'online', :order => [:created_date.desc])
+    
+  erb :vou_all_news
+end
+
 post '/claim_letter' do
   voulenteer!
   id = params[:id]
@@ -902,6 +914,10 @@ post '/claim_letter' do
       letter.voulenteer_id = current_user[:voulenteer_id]
       letter.voulenteer_account = current_user[:account]
       letter.voulenteer_name = current_user[:name]
+#      time = Time.new 
+#      time.localtime("+08:00") 
+#       
+#      now = DateTime.parse(time.to_s)
       letter.claim_date = Date.today
       
       # eng2chi letters
@@ -1066,7 +1082,6 @@ get '/admin_news_index' do
 end
 
 get '/preview_news' do
-  protected!
     
   id = params[:id]
   @news = nil  
@@ -1089,7 +1104,9 @@ get '/migrate' do
   redirect '/admin'
 end
 
-get '/test2' do
+get '/is_weekly_email' do
+  @account = Account.first(:account => params[:email])
+  
   erb :test
 end
 
