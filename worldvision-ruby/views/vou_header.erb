@@ -4,7 +4,8 @@
       <a href="/volunteer" class="brand">NEX-T 志工翻譯網頁</a>
       <div class="nav-collapse collapse">
         <p class="navbar-text pull-right">
-        <span>歡迎, <%= current_user.account %></span><a href="/logout" class="btn btn-info">登出</a>
+          <span>歡迎, <%= current_user.account %></span>
+          <a id="logout" href="/logout" class="btn">登出</a>
         </p>
         <form action="/volunteer" method="GET">
           <ul class="nav">
