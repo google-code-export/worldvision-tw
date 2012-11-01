@@ -13,34 +13,15 @@ table.table form {
   display: inline;
 }
 
-.navbar {
-  color: #fff;
+.navbar .brand {
+  color: orange;
 }
 
-.navbar .brand {
-  color: black;
+.navbar div.pull-right {
+  margin-top: 6px;
 }
 
 .navbar a.btn#logout {
-  margin-top: -2px;
+  margin-top: -3px;
   margin-left: 3px;
-}
-
-/* Orange conquers. */
-.navbar-inner {
-  background-color: orange;
-  background-image: -moz-linear-gradient(top, orange, #ff7f00);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(orange), to(#ff7f00));
-  background-image: -webkit-linear-gradient(top, orange, #ff7f00);
-  background-image: -o-linear-gradient(top, orange, #ff7f00);
-  background-image: linear-gradient(to bottom, orange, #ff7f00);
-  background-repeat: repeat-x;
-  border: 1px solid #d4d4d4;
-  -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='orange', endColorstr='#ffff7f00', GradientType=0);
-  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-     -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
 }

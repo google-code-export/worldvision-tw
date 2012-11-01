@@ -2,24 +2,21 @@
   <div class="navbar-inner">
     <div class="container-fluid">
       <a href="#" class="brand">NEX-T 志工翻譯網頁</a>
-      <div class="nav-collapse collapse">
-        <p class="navbar-text pull-right">
-          <span>歡迎, <%= current_user.account %></span>
-          <a href="/logout" class="btn btn-info" id="logout">登出</a>
-        </p>
-        <form action="/volunteer" method="GET">
-          <ul class="nav">
-            <li class="<%= @trans_type == 'eng' ? '':'active' %>">
-              <a href="/employee?type=chi" class="letter_type_button" name="chi">中翻英</a>
-            </li>
-            <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
-              <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
-            </li>
-            <li>
-              <a href="/employee/country" >管理國家</a>
-            </li>
-          </ul>
-        </form>
+      <div class="nav-collapse">
+        <div class="nav pull-right">
+          <span>歡迎, <%= current_user.account %></span><a id="logout" href="/logout" class="btn">登出</a>
+        </div>
+        <ul class="nav">
+          <li class="<%= @trans_type == 'eng' ? '':'active' %>">
+          <a href="/employee?type=chi" class="letter_type_button" name="chi">中翻英</a>
+          </li>
+          <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
+          <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
+          </li>
+          <li>
+          <a href="/employee/country" >管理國家</a>
+          </li>
+        </ul>
       </div><!--/.nav-collapse -->
     </div>
   </div>

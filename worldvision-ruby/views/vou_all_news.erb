@@ -1,20 +1,29 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
     <title>World Vision</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link type="text/css" href="/app.css" rel="stylesheet" />
 <%= erb :js_css_header %> 
   </head>
-  <body style="font-family: sans-serif;">
+  <body>
   <%= erb :vou_header %>
-    <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
-<h3>全部最新消息</h3>
-<span style="color: red">&gt;&gt;最新消息</span>
-      <br>
-      <% @news.each do |news| %>
-                    <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
-                    <br>
-      <% end %>
-      <br>
-</body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+        </div>
+        <div class="span9">
+          <a href="/serve?blob-key=<%= @template.tempate_url %>">英翻中翻譯底稿下載</a>
+          <h3>全部最新消息</h3>
+          <span style="color: red">&gt;&gt;最新消息</span>
+          <br>
+          <% @news.each do |news| %>
+            <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
+            <br>
+          <% end %>
+          <br>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>

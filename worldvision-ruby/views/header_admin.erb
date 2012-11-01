@@ -2,11 +2,10 @@
   <div class="navbar-inner">
     <div class="container-fluid">
       <a href="#" class="brand">NEX-T</a>
-      <div class="nav-collapse collapse">
-        <p class="navbar-text pull-right">
-          <a href="/logout" class="btn btn-info" id="logout">登出</a>
-        </p>
-        <form method=get action="/admin">
+      <div class="nav-collapse">
+        <div class="nav pull-right">
+            <a href="/logout" class="btn" id="logout">登出</a>
+        </div>
         <ul class="nav">
           <li>
             <a href="/admin">會員管理</a>
@@ -23,20 +22,14 @@
           <li>
             <a href="/admin_news_index">公佈欄管理</a>
           </li>
-          <li>
-            <select name="search_role">
-              <option >請選擇</option>
-              <option value="employee">員工</option>
-              <option value="voulenteer">志工</option>
-            </select>
-          </li>
-          <li>
-            <input name="search_name"></input>
-          </li>
-          <li>
-            <input type=submit value="搜尋" class="btn btn-primary">
-          </li>
         </ul>
+        <form method="get" class="navbar-search pull-left" action="/admin">
+          <select name="search_role">
+            <option >請選擇</option>
+            <option value="employee">員工</option>
+            <option value="voulenteer">志工</option>
+          </select>
+          <input type="text" class="search-query span2" placeholder="搜尋">
         </form>
       </div><!--/.nav-collapse -->
     </div>

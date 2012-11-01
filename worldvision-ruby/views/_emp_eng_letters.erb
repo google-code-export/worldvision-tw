@@ -39,14 +39,21 @@
         <th><input type="checkbox" id="selectallclaimed"></th>
        <% end %>
     </tr>
-
-    <% pages.each do |page| %>
+    <div class="pagination">
+      <ul>
+        <% pages.each do |page| %>
         <% if query_string %>
-            <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>&nbsp;
+          <li>
+            <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>
+          </li>
         <% else %>
-            <a href="/employee?start=<%= page %>"><%= page %></a>&nbsp;
+          <li>
+            <a href="/employee?start=<%= page %>"><%= page %></a>
+          </li>
         <% end %>
-    <% end %>
+      </ul>
+    </div>
+
     <% letters.each do |letter| %>
         <tr>
             <% if query_string2 %>

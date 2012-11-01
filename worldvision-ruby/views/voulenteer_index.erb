@@ -116,11 +116,7 @@ function closeDialog () {
               </li>
             <% end %>
             <li>
-              <a href="/show_all_news">&gt;&gt;其他最新消息</a>
-            </li>
-            <li class="nav-header">投票區</li>
-            <li class="disabled">
-            開發中
+              <a href="#show-all-news">其他最新消息</a>
             </li>
           </ul>
         </div>
@@ -205,6 +201,13 @@ function closeDialog () {
               <h1>已領取</h1>
             </div>
             <%= erb :_vou_claimed_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @voulenteer_letters, :url=>@url, :re_upload=>@re_upload, :caption=>'已領取'} %>
+          </div>
+          <div id="show-all-news" hidden>
+            <h1>全部最新消息</h1>
+          <% @news.each do |news| %>
+            <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
+            <br>
+          <% end %>
           </div>
       </div>
     </div>

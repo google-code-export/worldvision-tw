@@ -4,8 +4,8 @@
   標題 <input name="title" value="<%=news.title %>"/> <br>
   內容 <textarea id="editor_text_<%=news.id%>" name="content" rows="2" cols="20" ><%=news.content%></textarea>
   <br>
-  <input type="submit" value="更新"/>
-  <input onclick="$('#editor_<%=news.id%>').hide()" value="關閉" type="button"/>
+  <input class="btn btn-info" type="submit" value="更新"/>
+  <input class="btn" onclick="$('#editor_<%=news.id%>').hide()" value="關閉" type="button"/>
   </form>
 </div>
 <% else %>

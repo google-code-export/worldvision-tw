@@ -2,25 +2,22 @@
   <div class="navbar-inner">
     <div class="container-fluid">
       <a href="/volunteer" class="brand">NEX-T 志工翻譯網頁</a>
-      <div class="nav-collapse collapse">
-        <p class="navbar-text pull-right">
-          <span>歡迎, <%= current_user.account %></span>
-          <a id="logout" href="/logout" class="btn">登出</a>
-        </p>
-        <form action="/volunteer" method="GET">
-          <ul class="nav">
+      <div class="nav-collapse">
+        <div class="nav pull-right">
+          <span>歡迎, <%= current_user.account %></span><a id="logout" href="/logout" class="btn">登出</a>
+        </div>
+        <ul class="nav">
           <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='chi' %>
             <li class="<%= @trans_type == 'eng' ? '':'active' %>">
-              <a href="/volunteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
+            <a href="/volunteer?type=chi" class="letter_type_button" name="chi">中翻英</a>
             </li>
           <% end %>
           <% if @account_trans_type && @account_trans_type == 'both' || @account_trans_type =='eng' %>
             <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
-              <a href="/volunteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
+            <a href="/volunteer?type=eng" class="letter_type_button" name="eng">英翻中</a>
             </li>
           <% end %>
-          </ul>
-        </form>
+        </ul>
       </div><!--/.nav-collapse -->
     </div>
   </div>
