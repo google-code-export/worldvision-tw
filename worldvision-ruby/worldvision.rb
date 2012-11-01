@@ -851,6 +851,8 @@ get '/volunteer' do
   if (@latest5news.length > 5)
     @latest5news = @latest5news[0, 4]
   end   
+  
+  @news = News.all(:status => 'online', :order => [:created_date.desc])
 
   erb :voulenteer_index
 end

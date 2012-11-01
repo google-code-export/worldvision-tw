@@ -18,18 +18,11 @@
         $('#modal-news').modal();
         return false;
       }
-function closeDialog () {
-  $('#modal-news').modal('hide'); 
-};
         $(document).ready(function() {
             var type = getUrlVars()["type"] == null ? "chi" : getUrlVars()["type"];
             //markSelected($('#tans_select'), type);
 
-            $('form').submit(function() {
-                 show_loading_dialog();
-            });
-
-            var hash_key = getUrlVars()["hash_key"]
+            var hash_key = getUrlVars()["hash_key"];
             if (hash_key){
                download_file(hash_key); 
             }
@@ -205,7 +198,7 @@ function closeDialog () {
           <div id="show-all-news" hidden>
             <h1>全部最新消息</h1>
           <% @news.each do |news| %>
-            <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>')"><%= news.title %></a>
+            <a href="#" onclick="popitup('/preview_news?id=<%=news.id%>', '<%= news.title %>')"><%= news.title %></a>
             <br>
           <% end %>
           </div>
