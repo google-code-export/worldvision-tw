@@ -13,7 +13,7 @@
           <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
           <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
           </li>
-          <li>
+          <li class="<%= @trans_type == 'country' ? '': 'active' %>">
           <a href="/employee/country" >管理國家</a>
           </li>
         </ul>

@@ -60,13 +60,19 @@
               <a href="/employee?type=<%= @trans_type %>">所有信件<span class="badge pull-right"><%= @count %></span></a>
             </li>
             <li>
-              <a href="/employee?letter_status=unclaimed&type=<%= @trans_type %>">未領取<span class="badge pull-right"><%= @unclaimed_count %></span></a>
+              <a href="/employee?letter_status=unclaimed&type=<%= @trans_type %>">
+                <i class="icon-envelope"></i>
+                未領取<span class="badge pull-right"><%= @unclaimed_letters_count %></span></a>
             </li>
             <li>
-              <a href="/employee?letter_status=claimed&type=<%= @trans_type %>">已領取<span class="badge pull-right"><%= @claimed_count %></span></a>
+              <a href="/employee?letter_status=claimed&type=<%= @trans_type %>">
+                <i class="icon-envelope"></i>
+              已領取<span class="badge pull-right"><%= @claimed_letters_count %></span></a>
             </li>
             <li>
-              <a href="/employee?letter_status=emergent&type=<%= @trans_type %>">緊急<span class="badge pull-right badge-important"><%= @emergent_count %></span></a>
+            <a href="/employee?letter_status=emergent&type=<%= @trans_type %>">
+                <i class="icon-envelope"></i>
+              緊急<span class="badge pull-right badge-important"><%= @emergent_letters_count %></span></a>
             </li>
             <li>
               <a href="/employee?letter_status=returned&type=<%= @trans_type %>">譯返<span class="badge pull-right badge-information"><%= @return_letters_count %></span></a>

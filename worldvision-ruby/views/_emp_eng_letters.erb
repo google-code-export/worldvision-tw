@@ -1,18 +1,18 @@
-        <div class="pagination">
-          <ul>
-        <% pages.each do |page| %>
-            <% if query_string %>
-              <li>
-                <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>&nbsp;
-              </li>
-            <% else %>
-              <li>
-                <a href="/employee?start=<%= page %>"><%= page %></a>&nbsp;
-              </li>
-            <% end %>
-        <% end %>
-        </ul>
-      </div>
+<div class="pagination">
+  <ul>
+    <% pages.each do |page| %>
+      <% if query_string %>
+        <li>
+        <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>
+        </li>
+      <% else %>
+        <li>
+        <a href="/employee?start=<%= page %>"><%= page %></a>
+        </li>
+      <% end %>
+    <% end %>
+  </ul>
+</div>
 <table class="table table-bordered table-striped table-hover">
     <col width=80>
     <col width=70>
