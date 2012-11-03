@@ -793,14 +793,14 @@ get '/volunteer' do
     end
   end
 
-  @claim_letters = Letter.all(:due_date.not => nil, :order => [ :due_date.desc ])
-  @voulenteer_letters = Array.new
-  voulenteer_id = current_user[:voulenteer_id]
-  @claim_letters.each do |letter|
-    if (letter.voulenteer_id == voulenteer_id)
-      @voulenteer_letters.push(letter)
-    end
-  end
+  @voulenteer_letters = Letter.all(:due_date.not => nil, :order => [ :due_date.desc ], :voulenteer_account => current_user[:account])
+#  @voulenteer_letters = Array.new
+#  voulenteer_id = current_user[:voulenteer_id]
+#  @claim_letters.each do |letter|
+#    if (letter.voulenteer_id == voulenteer_id)
+#      @voulenteer_letters.push(letter)
+#    end
+#  end
 
 
   # paging
@@ -908,21 +908,24 @@ post '/claim_letter' do
       letter.voulenteer_id = current_user[:voulenteer_id]
       letter.voulenteer_account = current_user[:account]
       letter.voulenteer_name = current_user[:name]
-#      time = Time.new 
-#      time.localtime("+08:00") 
+      now = Time.now   
+      localtime = now + 28000 
+      logger.info(localtime)
+      today = Date.parse(localtime.strftime('%Y/%m/%d'))
+      
 #       
 #      now = DateTime.parse(time.to_s)
-      letter.claim_date = Date.today
+      letter.claim_date = today
       
       # eng2chi letters
       if (letter.return_days.nil?)
-        letter.due_date = Date.today + 7
-        letter.due_date_3 = Date.today + 10
+        letter.due_date = today + 7
+        letter.due_date_3 = today + 10
       #if return days, chi2eng letters 
       else
         return_days = (letter.return_days - 1)
-        letter.due_date = Date.today + return_days
-        letter.due_date_3 = Date.today + return_days + 3
+        letter.due_date = today + return_days
+        letter.due_date_3 = today + return_days + 3
       end
       letter.status="claimed"
       letter.save
