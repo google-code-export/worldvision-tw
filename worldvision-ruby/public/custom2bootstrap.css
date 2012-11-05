@@ -25,3 +25,7 @@ table.table form {
   margin-top: -3px;
   margin-left: 3px;
 }
+
+table.table tbody tr td.continent {
+  background-color: silver;
+}

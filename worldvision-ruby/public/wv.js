@@ -20,6 +20,10 @@ var WorldVision = {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul:nth-child('+this.URL.params.em_start+')').addClass('active');
     }
+
+    if (this.URL.params && this.URL.params.type) {
+    
+    }
   },
 
   init: function wv_init() {

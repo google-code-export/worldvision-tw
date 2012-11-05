@@ -1,7 +1,11 @@
 <div class="navbar">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a href="/volunteer" class="brand">NEX-T 志工翻譯網頁</a>
+      <% if @asia_countries && @asis_countries.length %>
+        <a href="/volunteer" class="brand"><u><i class="icon-signin"></i>NEX-T 志工翻譯網頁</u></a>
+      <% else %>
+      <a href="/volunteer" class="brand"><u>NEX-T 志工翻譯網頁</u></a>
+      <% end %>
       <div class="nav-collapse">
         <div class="nav pull-right">
           <span>歡迎, <%= current_user.account %></span><a id="logout" href="/logout" class="btn">登出</a>
