@@ -47,6 +47,10 @@ public class VoulenteerLogs {
 	private Date claim_date;
 	@Persistent
 	private String letter_id;
+	@Persistent
+	private String employee_id;
+	@Persistent
+	private String upload_file_name;
 	
 	public Key getId() {
 		return id;
@@ -89,6 +93,18 @@ public class VoulenteerLogs {
 	}
 	public void setLetter_id(String letter_id) {
 		this.letter_id = letter_id;
+	}
+	public String getEmployee_id() {
+		return employee_id;
+	}
+	public void setEmployee_id(String employee_id) {
+		this.employee_id = employee_id;
+	}
+	public String getUpload_file_name() {
+		return upload_file_name;
+	}
+	public void setUpload_file_name(String upload_file_name) {
+		this.upload_file_name = upload_file_name;
 	}
 	
 	

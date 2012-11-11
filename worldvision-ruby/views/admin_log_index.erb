@@ -47,14 +47,18 @@ function setDate(param, id){
 				<th>志工姓名</th>
 				<th>志工編號</th>
 				<th>下載檔案日期</th>
+				<th>翻譯信件</th>
+				<th>上傳同工</th>
 				<th>退件日期</th>
 				<th>退件原因</th>
 			</tr>
 			<% @logs.each do |log|%>
 			<tr>
 				<td><%= log.voulenteer_name%></td>
-				<td><%= log.voulenteer_id%></td>
+				<td class="wrap"><%= log.voulenteer_id%></td>
 				<td><%= log.claim_date%></td>
+        <td class="wrap"><%= log.upload_file_name%></td>
+        <td class="wrap"><%= log.employee_id%></td>
 				<td><%= log.return_date%></td>
 				<td><%= log.excuse%></td>
 			</tr>
