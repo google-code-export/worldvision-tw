@@ -57,6 +57,8 @@ class VoulenteerLog
   property :return_date, Date
   property :excuse, String
   property :claim_date, Date
+  property :upload_file_name, String
+  property :employee_id, String
   property :letter_id, String
 end
 
@@ -112,7 +114,7 @@ class News
   property :id, Serial
   property :created_date, Date
   property :title, String
-  property :content, String
+  property :content, Text
   property :status, String
 end
 
@@ -401,7 +403,7 @@ get '/admin/log' do
     e_date = Date.strptime(end_date2, DATE_FORMAT)
     @letters = Array.new
     letters = Letter.all(:due_date_3.not => nil)
-    letters = letters.all(:return_date => nil, :due_date_3.lt => Date.today)
+    letters = letters.all(:return_date => nil, :due_date_3.lt => get_today())
     # letters = letters.all(:return_file_url => nil, :status => '已領取')
     logger.info("due emeail::1 " + letters.size.to_s)
     letters.each do |letter|
@@ -415,7 +417,7 @@ get '/admin/log' do
     end
   else
     #@letters = Letter.all(:due_date.not => nil)
-    #@letters = @letters.all(:due_date.lt => Date.today)
+    #@letters = @letters.all(:due_date.lt => get_today())
     #@letters = @letters.all(:return_file_url => nil, :status => '已領取')
     @letters = Array.new
   end
@@ -584,6 +586,16 @@ post '/update_account' do
     if params[:note]
       account.note = params[:note]
     end
+    if (params[:account])
+      #update all of claimed letters, and logs
+      all_claimed_letters = Letter.all(:due_date.not =>nil, :voulenteer_account => account.account)
+      all_claimed_letters.each do |letter|
+        letter.voulenteer_account = params[:account]
+        letter.save 
+      end
+      account.account = params[:account]
+      account.save
+    end  
     account.save
   end
   redirect '/admin'
@@ -910,7 +922,6 @@ post '/claim_letter' do
       letter.voulenteer_name = current_user[:name]
       now = Time.now   
       localtime = now + 28000 
-      logger.info(localtime)
       today = Date.parse(localtime.strftime('%Y/%m/%d'))
       
 #       
@@ -1003,9 +1014,11 @@ post '/return_letter' do
     log = VoulenteerLog.new
     log.voulenteer_id = current_user[:account]
     log.voulenteer_name = current_user[:name]
-    log.return_date = Date.today
+    log.return_date = get_today()
     log.claim_date = claim_date
     log.letter_id = id
+    log.employee_id = letter.employee_id
+    log.upload_file_name = letter.upload_file_name
     if (!params[:excuse].nil?)
       log.excuse =params[:excuse]
       puts params[:excuse]
@@ -1046,7 +1059,7 @@ post '/update_news' do
     end
     if (params[:status])
       if (news.created_date == nil)
-          news.created_date = Date.today
+          news.created_date = get_today()
       end
       news.status = params[:status]
     end
@@ -1219,6 +1232,13 @@ def get_offset(bookmark)
   # end
 
   offset
+end
+
+def get_today()
+   now = Time.now   
+   localtime = now + 28000 
+   today = Date.parse(localtime.strftime('%Y/%m/%d'))
+   today
 end
 
 # end
