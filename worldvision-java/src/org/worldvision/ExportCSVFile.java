@@ -140,11 +140,13 @@ public class ExportCSVFile extends HttpServlet {
 
 		System.out.println("found " + size + " logs");
 		StringBuffer content = new StringBuffer(
-				"志工姓名, 志工編號, 下載檔案日期, 退件日期, 退件原因\n");
+				"志工姓名, 志工編號, 下載檔案日期, 翻譯信件, 上傳同工, 退件日期, 退件原因\n");
 		for (int i = 0; i < size; i++) {
 			VoulenteerLogs log = (VoulenteerLogs) logs.get(i);
 			content.append(log.getVoulenteer_name() + ","
 					+ log.getVoulenteer_id() + ","
+					+ log.getUpload_file_name() + ","
+					+ log.getEmployee_id() + ","
 					+ df.format(log.getClaim_date()) + ","
 					+ df.format(log.getReturn_date()) + "," + log.getExcuse()
 					+ "\n");
