@@ -244,7 +244,7 @@ helpers do
 
   def authenticate_account(username, password, type)
 
-    if (username == 'admin' && password == 'admin')
+    if (username == 'admin' && password == 'wdrgyji')
       session[:user] = 'admin'
       return 'admin'
     end
@@ -1026,7 +1026,7 @@ post '/return_letter' do
     log.save
 
     fetcher = URLFetchServiceFactory.getURLFetchService
-    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s + "&volunteerId=" + current_user[:voulenteer_id])
+    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s + "&volunteerId=" + current_user[:account])
     fetcher.fetchAsync(url_for_emp)
   end
   redirect '/volunteer'
