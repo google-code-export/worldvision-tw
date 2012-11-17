@@ -64,10 +64,18 @@
           <br>
           <span style="color: blue"><a href="/show_all_news">&gt;&gt;其他最新消息</a></span>
      </div>
+    <br><br>
     
     <% if @account_trans_type && @account_trans_type == 'both' %>
         <%= erb :_trans_type, {:layout=>false}, {:action => '/volunteer'} %>
     <% end %>
+    
+    <% if (@trans_type == 'chi') %>
+         <span>目前待譯信件中翻英共有 <%= @count_of_unclaimd_letters %> 筆   ★ 請優先領取緊急信件，謝謝。</span>
+    <% elsif (@trans_type == 'eng') %>
+         <span>目前待譯信件中翻英共有 <%= @count_of_unclaimd_letters %> 筆   ★ 請優先領取緊急信件，謝謝。</span>
+    <% end %> 
+    
     <% if @letter_has_been_claimed %>
         <span style="color: red">抱歉, 該信件已被領取, 請領取其他信件 :)</span>
     <% end %>
