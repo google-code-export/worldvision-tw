@@ -307,7 +307,8 @@ end
 post '/login' do
   email = params[:email]
   password = params[:password]
-
+  
+  session[:user] = nil
   @type = authenticate_account(email, password, 'admin')
   if (@type)
     if (@type == -1)
@@ -820,6 +821,12 @@ get '/volunteer' do
   @emergent_pages = get_paginator(@emergent_letters)
   @hand_writing_pages = get_paginator(@hand_writing_letters)
   @typing_pages = get_paginator(@typing_letters)
+  
+  # count un-claimed letters
+  @count_of_unclaimd_letters = 0
+  if (@letters && @emergent_letters)
+    @count_of_unclaimd_letters = @letters.size + @emergent_letters.size 
+  end
 
   bookmark = params[:start]
   offset = params[:start].nil? ? 0 : get_offset(params[:start])
@@ -856,8 +863,8 @@ get '/volunteer' do
   @latest5news = News.all(:status => 'online', :order => [:created_date.desc], :limit => 5)
   if (@latest5news.length > 5)
     @latest5news = @latest5news[0, 4]
-  end   
-
+  end
+   
   erb :voulenteer_index
 end
 
@@ -997,11 +1004,11 @@ post '/return_letter' do
   if (!id.nil?)
     letter = Letter.get(id)
     claim_date = letter.claim_date
-    letter.voulenteer_id = nil
-    letter.voulenteer_name = nil
-    letter.voulenteer_account = nil
+#    letter.voulenteer_id = nil
+#    letter.voulenteer_name = nil
+#    letter.voulenteer_account = nil
     letter.claim_date = nil
-    letter.due_date = nil
+#    letter.due_date = nil
     letter.due_date_3 = nil
     voulenteer = Account.get(current_user[:id])
     jobs = voulenteer.jobs

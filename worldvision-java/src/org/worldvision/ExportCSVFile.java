@@ -83,12 +83,13 @@ public class ExportCSVFile extends HttpServlet {
 		int size = letters.size();
 		System.out.println("found " + size + " letters");
 		StringBuffer content = new StringBuffer(
-				"志工姓名, 志工編號, 下載檔案日期\n");
+				"志工姓名, 志工編號, 下載檔案日期, 檔案應返日期(+3)\n");
 		for (int i = 0; i < size; i++) {
 			Letters letter = (Letters) letters.get(i);
 			content.append(letter.getVoulenteer_name() + ","
 					+ letter.getVoulenteer_id() + ","
-					+ (letter.getClaim_date() == null ? "" : df.format(letter.getClaim_date())) 
+					+ (letter.getClaim_date() == null ? "" : df.format(letter.getClaim_date())) + ","
+					+ (letter.getDue_date_3() == null ? "" : df.format(letter.getDue_date_3()))
 					+ "\n");
 		}
 		return content;
