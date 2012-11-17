@@ -26,6 +26,7 @@
     </script>
   </head>
   <body style="font-family: sans-serif;">
+<<<<<<< HEAD
   <!-- log start -->
   <%= erb :header_admin %>
   <!-- new account start -->
@@ -45,14 +46,18 @@
 				  <th>志工姓名</th>
 				  <th>志工編號</th>
 				  <th>下載檔案日期</th>
+				  <th>翻譯信件</th>
+				  <th>上傳同工</th>
 				  <th>退件日期</th>
 				  <th>退件原因</th>
 			  </tr>
 			  <% @logs.each do |log|%>
 			  <tr>
 				  <td><%= log.voulenteer_name%></td>
-				  <td><%= log.voulenteer_id%></td>
+				  <td class="wrap"><%= log.voulenteer_id%></td>
 				  <td><%= log.claim_date%></td>
+          <td class="wrap"><%= log.upload_file_name%></td>
+          <td class="wrap"><%= log.employee_id%></td>
 				  <td><%= log.return_date%></td>
 				  <td><%= log.excuse%></td>
 			  </tr>
@@ -68,6 +73,55 @@
 		    </form>
       </div>
 			<table class="table">
+=======
+
+<!-- log start -->
+<%= erb :header %>
+<!-- new account start -->
+<a href="/admin">管理會員</a>
+<a href="/admin/vou">志工翻譯封數統計</a>
+<a href="/admin/vou_status">志工服務管理報表</a>
+<a href="/admin_news_index">公佈欄管理</a>
+
+	<h4>退件</h4>
+	<form url="/admin/log">
+	退件日期&nbsp;&nbsp;<input type="text" id="start_date" name="start_date" style="width: 100px;">
+	<input type="text" id="end_date" name="end_date" style="width: 100px;">
+	<input type="submit" value="查詢">
+	<a href="/test_download?type=1&<%=@query_string%>">下載CSV檔</a>
+	</form>
+		<table>
+			<tr>
+				<th>志工姓名</th>
+				<th>志工編號</th>
+				<th>下載檔案日期</th>
+				<th>翻譯信件</th>
+				<th>上傳同工</th>
+				<th>退件日期</th>
+				<th>退件原因</th>
+			</tr>
+			<% @logs.each do |log|%>
+			<tr>
+				<td><%= log.voulenteer_name%></td>
+				<td class="wrap"><%= log.voulenteer_id%></td>
+				<td><%= log.claim_date%></td>
+        <td class="wrap"><%= log.upload_file_name%></td>
+        <td class="wrap"><%= log.employee_id%></td>
+				<td><%= log.return_date%></td>
+				<td><%= log.excuse%></td>
+			</tr>
+			<% end %>
+		</table>
+		<h4>逾期/未譯返</h4>
+		<form url="/admin/log">
+		逾期日期&nbsp;&nbsp;<input type="text" id="start_date2" name="start_date2" style="width: 100px;">
+		<input type="text" id="end_date2" name="end_date2" style="width: 100px;">
+		<input type="submit" value="查詢"/>
+		<a href="/test_download?type=2&<%=@query_string2%>">下載CSV檔</a>
+		</form>
+		
+			<table>
+>>>>>>> 1fcf73ec0e9a6eac2f6f86a12e0a45b0ac51053c
 				<tr>
 					<th>志工姓名</th>
 					<th>志工帳號</th>

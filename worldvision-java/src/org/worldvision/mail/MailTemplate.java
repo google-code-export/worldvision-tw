@@ -128,7 +128,7 @@ public class MailTemplate {
 		"\n在此通知您所上傳的信件 @letter 因為志工退件而變成緊急狀態囉" +
 		"\n志工姓名: @volunteer_name" +
 		"\n志工E-mail帳號: @volunteer_email" +
-		"\n退件原因: " +
+		"\n退件原因: @return_execuse" +
 		"\n請您登入http://next.worldvision.org.tw以安排信件的後續處理" +
 		"\n"+
 		"\n";

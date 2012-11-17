@@ -105,6 +105,14 @@
         <property name="status" direction="asc"/>
         <property name="created_date" direction="desc"/>
     </datastore-index>
+    <datastore-index kind="Letters" ancestor="false" source="manual">
+        <property name="due_date" direction="desc"/>
+        <property name="voulenteer_account" direction="desc"/>
+    </datastore-index>
+    <datastore-index kind="Letters" ancestor="false" source="manual">
+        <property name="voulenteer_account" direction="asc"/>
+        <property name="due_date" direction="desc"/>
+    </datastore-index>
     
 
 </datastore-indexes>

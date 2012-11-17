@@ -145,7 +145,7 @@
                 <tr>
                   <form method=post action='update_account'>
                     <td style="display:none"><input name="id" value="<%= account.id %>"></input></td>
-                    <td><%=h account.account%></td>
+                    <td><input name="account" style="width:200px" value="<%= account.account%>"></input></td>
                     <td><%=h account.password%></td>
                     <td>
                       <select name="role" select="<%=h account.role%>">

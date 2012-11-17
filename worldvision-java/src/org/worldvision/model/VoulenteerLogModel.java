@@ -38,20 +38,21 @@ public class VoulenteerLogModel {
 	
 	public VoulenteerLogs findLogByVolunteerIdAndLetterId(String volunteerId, String letterId) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-		List<VoulenteerLogs> result = new ArrayList();
-
 		// Query query = pm.newQuery("select * from " +
 		// VoulenteerLogs.class.getName());
 		//Query query = pm.newQuery(Accounts.class, "role == 'voulenteer'");
-		Query query = pm.newQuery(VoulenteerLogs.class, "voulenteer_id == '" + volunteerId + "' && letter_id == '" + letterId + "'");
-		result = (List) query.execute(volunteerId, letterId);
-
-		// pm.close();
-		if (result.size() > 0)
-			return result.get(0);
-		else
-			return null;
-
+		Query query = pm.newQuery(VoulenteerLogs.class);
+		List<VoulenteerLogs> result = new ArrayList();
+		try {
+			query.setFilter("voulenteer_id == '" + volunteerId + "' && letter_id == '" + letterId + "'");
+			result = (List<VoulenteerLogs>) query.execute();
+			if (result != null && result.size() >0)
+				return result.get(0);
+			else 
+				return null;
+		} finally {
+			query.closeAll();
+		}
 	}
 	
 
