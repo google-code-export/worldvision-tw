@@ -1008,7 +1008,7 @@ post '/return_letter' do
 #    letter.voulenteer_name = nil
 #    letter.voulenteer_account = nil
     letter.claim_date = nil
-#    letter.due_date = nil
+    letter.due_date = nil
     letter.due_date_3 = nil
     voulenteer = Account.get(current_user[:id])
     jobs = voulenteer.jobs
