@@ -28,12 +28,12 @@ public class MarkDueLettersJobServlet extends HttpServlet {
 		System.out.println("found due letter: " + size);
 		for (int i = 0; i < size; i++){
 			Letters letter = result.get(i);
-//			letter.setClaim_date(null);
-//			letter.setVoulenteer_id(null);
-//			letter.setVoulenteer_name(null);
-//			letter.setVoulenteer_account(null);
-//			letter.setClaim_date(null);
-//			letter.setDue_date(null);
+			letter.setClaim_date(null);
+			letter.setVoulenteer_id(null);
+			letter.setVoulenteer_name(null);
+			letter.setVoulenteer_account(null);
+			letter.setClaim_date(null);
+			letter.setDue_date(null);
 			letter.setDue_date_3(null);
 			letter.setStatus("emergent");
 			letter.setShow("true");

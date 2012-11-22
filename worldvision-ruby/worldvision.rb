@@ -1004,9 +1004,9 @@ post '/return_letter' do
   if (!id.nil?)
     letter = Letter.get(id)
     claim_date = letter.claim_date
-#    letter.voulenteer_id = nil
-#    letter.voulenteer_name = nil
-#    letter.voulenteer_account = nil
+    letter.voulenteer_id = nil
+    letter.voulenteer_name = nil
+    letter.voulenteer_account = nil
     letter.claim_date = nil
     letter.due_date = nil
     letter.due_date_3 = nil
