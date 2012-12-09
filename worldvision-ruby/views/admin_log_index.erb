@@ -77,14 +77,14 @@ function setDate(param, id){
 					<th>志工姓名</th>
 					<th>志工帳號</th>
 					<th>下載檔案日期</th>
-          <th>檔案應返日期(+3)</th>
+          <th>檔案應返日期</th>
 				</tr>
-				<% @letters.each do |letter|%>
+				<% @due_logs.each do |log|%>
 				<tr>
-					<td><%= letter.voulenteer_name%></td>
-					<td><%= letter.voulenteer_account%></td>
-					<td><%= letter.claim_date%></td>
-          <td><%= letter.due_date_3%></td>
+					<td><%= log.voulenteer_name%></td>
+					<td><%= log.voulenteer_account%></td>
+					<td><%= log.claim_date%></td>
+          <td><%= log.due_date%></td>
 				</tr>
 				<% end %>
 			</table>

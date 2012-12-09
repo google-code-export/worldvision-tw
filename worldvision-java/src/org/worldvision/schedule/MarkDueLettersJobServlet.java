@@ -15,6 +15,7 @@ import org.worldvision.model.LetterModel;
 import org.worldvision.pojo.Accounts;
 import org.worldvision.pojo.Letters;
 import org.worldvision.pojo.PMF;
+import org.worldvision.pojo.VoulenteerDueLogs;
 
 public class MarkDueLettersJobServlet extends HttpServlet {
 	private LetterModel letter_model = new LetterModel();
@@ -28,6 +29,18 @@ public class MarkDueLettersJobServlet extends HttpServlet {
 		System.out.println("found due letter: " + size);
 		for (int i = 0; i < size; i++){
 			Letters letter = result.get(i);
+			
+			VoulenteerDueLogs log = new VoulenteerDueLogs();
+			log.setClaim_date(letter.getClaim_date());
+			log.setEmployee_account(letter.getEmployee_id());
+			log.setLetter_id(letter.getId().toString());
+			log.setVoulenteer_account(letter.getVoulenteer_account());
+			log.setVoulenteer_name(letter.getVoulenteer_name());
+			log.setClaim_date(letter.getClaim_date());
+			log.setDue_date(letter.getDue_date());
+			
+			pm.makePersistent(log);
+			
 			letter.setClaim_date(null);
 			letter.setVoulenteer_id(null);
 			letter.setVoulenteer_name(null);
@@ -37,6 +50,7 @@ public class MarkDueLettersJobServlet extends HttpServlet {
 			letter.setDue_date_3(null);
 			letter.setStatus("emergent");
 			letter.setShow("true");
+			
 			pm.makePersistent(letter);
 		}
 	}
