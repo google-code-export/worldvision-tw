@@ -393,7 +393,7 @@ get '/admin/log' do
     e_date = Date.strptime(end_date, DATE_FORMAT)
     # Zoo.all(:opened_on => (s..e))  
     # @logs = VoulenteerLog.all(:return_date => (s_date..e_date))
-    logs = VoulenteerLog.all(:due_date.gte => s_date, :due_date.lte => e_date, :order => [ :return_date.desc ])
+    logs = VoulenteerLog.all(:return_date.gte => s_date, :return_date.lte => e_date, :order => [ :return_date.desc ])
     logs.each do |log|
       if (log.return_date >= s_date && log.return_date <= e_date)
         @logs.push(log)
