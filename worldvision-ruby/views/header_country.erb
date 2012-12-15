@@ -6,17 +6,6 @@
         <div class="nav pull-right">
           <span>歡迎, <%= current_user.account %></span><a id="logout" href="/logout" class="btn">登出</a>
         </div>
-        <ul class="nav">
-          <li class="<%= @trans_type == 'eng' ? '':'active' %>">
-          <a href="/employee?type=chi" class="letter_type_button" name="chi">中翻英</a>
-          </li>
-          <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
-          <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
-          </li>
-          <li>
-          <a href="/employee/country"><i class="icon icon-signout"></i>管理國家</a>
-          </li>
-        </ul>
       </div><!--/.nav-collapse -->
     </div>
   </div>
