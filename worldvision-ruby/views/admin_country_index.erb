@@ -31,9 +31,10 @@
     <div class="row-fluid">
   <div class="hero-unit">
   <h3>所有國家</h3>
+    <div>
       <div>
-      <div style="float: left">
-        <form method=post action='create_country' onsubmit="return checkinputvalue()">
+        <div>
+          <form method=post action='create_country' onsubmit="return checkinputvalue()">
             <select id="continent_name" name="continent">
                 <option >洲區</option>
                 <option value="亞洲">亞洲</option>
@@ -43,18 +44,21 @@
             </select>
             <input id="country_name" name="name"></input>
             <input class="btn btn-primary" type=submit value="新增國家">
-        </form>
-        <form method="post" action="search_country">
+          </form>
+        </div>
+        <!--div>
+          <form method="post" action="search_country">
             <input name="country"/>
             <input class="btn btn-info" type="submit" value="搜尋國家">
+          </form>
+        </div-->
+      </div>
+      <div>
+        <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+        <input type="file" name="myFile" size="10">
+        <input class="btn" type="submit" value="上傳翻譯底稿">
         </form>
-    </div>
-    <div>
-      <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-      <input type="file" name="myFile" size="10">
-      <input class="btn" type="submit" value="上傳翻譯底稿">
-      </form>
-    </div>
+      </div>
     </div>
   </div>
   <table class="table table-bordered table-striped table-hover">
