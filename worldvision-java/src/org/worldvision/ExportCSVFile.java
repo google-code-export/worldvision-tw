@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.worldvision.model.LetterModel;
+import org.worldvision.model.VoulenteerDueLogModel;
 import org.worldvision.model.VoulenteerLogModel;
 import org.worldvision.pojo.Letters;
+import org.worldvision.pojo.VoulenteerDueLogs;
 import org.worldvision.pojo.VoulenteerLogs;
 
 public class ExportCSVFile extends HttpServlet {
@@ -25,6 +27,7 @@ public class ExportCSVFile extends HttpServlet {
 			.getName());
 	private final VoulenteerLogModel logModel = new VoulenteerLogModel();
 	private final LetterModel letterModel = new LetterModel();
+	private final VoulenteerDueLogModel duelogModeul = new VoulenteerDueLogModel();
 	private final SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -79,16 +82,17 @@ public class ExportCSVFile extends HttpServlet {
 	}
 
 	private StringBuffer generateDueReport(Date start_date, Date end_date) {
-		List letters = letterModel.findDueLetters(0, true);
-		int size = letters.size();
+		List logs = duelogModeul.findDueLogs(start_date, end_date);
+		int size = logs.size();
 		System.out.println("found " + size + " letters");
 		StringBuffer content = new StringBuffer(
-				"志工姓名, 志工編號, 下載檔案日期\n");
+				"志工姓名, 志工編號, 下載檔案日期, 檔案應返日期\n");
 		for (int i = 0; i < size; i++) {
-			Letters letter = (Letters) letters.get(i);
-			content.append(letter.getVoulenteer_name() + ","
-					+ letter.getVoulenteer_id() + ","
-					+ (letter.getClaim_date() == null ? "" : df.format(letter.getClaim_date())) 
+			VoulenteerDueLogs log = (VoulenteerDueLogs) logs.get(i);
+			content.append(log.getVoulenteer_name() + ","
+					+ log.getVoulenteer_account() + ","
+					+ (log.getClaim_date() == null ? "" : df.format(log.getClaim_date())) + ","
+					+ (log.getDue_date() == null ? "" : df.format(log.getDue_date()))
 					+ "\n");
 		}
 		return content;

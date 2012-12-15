@@ -62,6 +62,18 @@ class VoulenteerLog
   property :letter_id, String
 end
 
+class VoulenteerDueLog
+  include DataMapper::Resource
+
+  property :id, Serial
+  property :voulenteer_account, String
+  property :voulenteer_name, String
+  property :due_date, Date
+  property :claim_date, Date
+  property :employee_account, String
+  property :letter_id, String
+end
+
 class Letter
   include DataMapper::Resource
   property :id, Serial
@@ -307,7 +319,8 @@ end
 post '/login' do
   email = params[:email]
   password = params[:password]
-
+  
+  session[:user] = nil
   @type = authenticate_account(email, password, 'admin')
   if (@type)
     if (@type == -1)
@@ -381,7 +394,7 @@ get '/admin/log' do
     e_date = Date.strptime(end_date, DATE_FORMAT)
     # Zoo.all(:opened_on => (s..e))  
     # @logs = VoulenteerLog.all(:return_date => (s_date..e_date))
-    logs = VoulenteerLog.all
+    logs = VoulenteerLog.all(:return_date.gte => s_date, :return_date.lte => e_date, :order => [ :return_date.desc ])
     logs.each do |log|
       if (log.return_date >= s_date && log.return_date <= e_date)
         @logs.push(log)
@@ -398,30 +411,16 @@ get '/admin/log' do
   @query_string2 = ''
   start_date2 = params[:start_date2]
   end_date2 = params[:end_date2]
-  logger.info("due emeail::0 ")
+  @due_logs = Array.new
   if (start_date2 && end_date2)
     s_date = Date.strptime(start_date2, DATE_FORMAT)
     e_date = Date.strptime(end_date2, DATE_FORMAT)
-    @letters = Array.new
-    letters = Letter.all(:due_date_3.not => nil)
-    letters = letters.all(:return_date => nil, :due_date_3.lt => get_today())
-    # letters = letters.all(:return_file_url => nil, :status => '已領取')
-    logger.info("due emeail::1 " + letters.size.to_s)
-    letters.each do |letter|
-      if (letter.claim_date && letter.claim_date >= s_date && letter.claim_date <= e_date)
-        @letters.push(letter)
-      end
-    end
-    logger.info("due emeail::2 " + letters.size.to_s)
+    @due_logs = VoulenteerDueLog.all(:due_date.gte => start_date2, :due_date.lte => end_date2)
     params.each do |key, value|
       @query_string2 += ("#{key}\=#{value}\&")
     end
-  else
-    #@letters = Letter.all(:due_date.not => nil)
-    #@letters = @letters.all(:due_date.lt => get_today())
-    #@letters = @letters.all(:return_file_url => nil, :status => '已領取')
-    @letters = Array.new
   end
+  logger.info("due emeail:: " + @due_logs.size.to_s)
 
   erb :admin_log_index
 end
@@ -839,6 +838,12 @@ get '/volunteer' do
   @emergent_pages = get_paginator(@emergent_letters)
   @hand_writing_pages = get_paginator(@hand_writing_letters)
   @typing_pages = get_paginator(@typing_letters)
+  
+  # count un-claimed letters
+  @count_of_unclaimd_letters = 0
+  if (@letters && @emergent_letters)
+    @count_of_unclaimd_letters = @letters.size + @emergent_letters.size 
+  end
 
   bookmark = params[:start]
   offset = params[:start].nil? ? 0 : get_offset(params[:start])
