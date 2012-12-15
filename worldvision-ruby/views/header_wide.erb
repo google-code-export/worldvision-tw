@@ -1,7 +1,7 @@
 <div class="navbar">
   <div class="navbar-inner">
     <div class="container-fluid">
-      <a href="#" class="brand">NEX-T 志工翻譯網頁</a>
+      <a href="/employee" class="brand">NEX-T 志工翻譯網頁</a>
       <div class="nav-collapse">
         <div class="nav pull-right">
           <span>歡迎, <%= current_user.account %></span><a id="logout" href="/logout" class="btn">登出</a>
@@ -13,8 +13,8 @@
           <li class="<%= @trans_type == 'chi' ? '': 'active' %>">
           <a href="/employee?type=eng" class="letter_type_button" name="eng">英翻中</a>
           </li>
-          <li class="<%= @trans_type == 'country' ? '': 'active' %>">
-          <a href="/employee/country" >管理國家</a>
+          <li>
+          <a href="/employee/country"><i class="icon icon-signout"></i>管理國家</a>
           </li>
         </ul>
       </div><!--/.nav-collapse -->
