@@ -82,25 +82,33 @@
 	<td><a href="/serve?blob-key=<%=country.noun_url%>"><%=truncate(country.noun_file_name)%></a></td>
     <!--<td><a href="/serve?blob-key=<%#=country.background_url%>"><#%=country.background_file_name%></a></td>-->
 	<td>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+    <div>
+	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input class="btn" type="submit" value="上傳注意事項">
-    </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+      </form>
+    </div>
+    </div>
+	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input class="btn" type="submit" value="上傳翻譯範本">
-    </form>
-	<form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
+      </form>
+    </div>
+    <div>
+	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input class="btn" type="submit" value="上傳常見名詞">
-    </form>
+      </form>
+    </div>
 	<!--<form onsubmit="post_parameters(this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'background'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
           <input type="file" name="myFile" size="10">
           <input type="submit" value="上傳翻譯背景">
     </form>-->
-    <form method=post action='delete_country?id=<%=country.id%>'>
-		<input class="btn btn-danger" type=submit value="刪除國家">
-    </form>
+    <div>
+      <form method=post action='delete_country?id=<%=country.id%>'>
+		    <input class="btn btn-danger" type=submit value="刪除國家">
+      </form>
+    </div>
 
 	</td>
 	</tr>
