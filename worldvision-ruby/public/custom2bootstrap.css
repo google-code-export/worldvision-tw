@@ -29,3 +29,8 @@ table.table form {
 table.table tbody tr td.continent {
   background-color: silver;
 }
+
+/* Because the jquery ui css is removed, create some rules for the element still using it */
+.ui-widget {
+  background: white;
+}
