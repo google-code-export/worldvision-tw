@@ -16,18 +16,28 @@ var WorldVision = {
   },
 
   view: function wv_view() {
+    // Emergency
     if (this.URL.params && this.URL.params.em_start) {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul li:nth-child('+this.URL.params.em_start+')').addClass('active');
+      $('ul.nav.nav-list li.active').removeClass('active');
+      $('ul.nav.nav-list a[href="#tabs-1"]').parent().addClass('active');
+      $('ul.nav.nav-list a[href="#tabs-4"]').parent().addClass('active');
     } else if (this.URL.params && this.URL.params.hw_start) {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul li:nth-child('+this.URL.params.hw_start+')').addClass('active');
+      $('ul.nav.nav-list li.active').removeClass('active');
+      $('ul.nav.nav-list a[href="#tabs-2"]').parent().addClass('active');
     } else if (this.URL.params && this.URL.params.ty_start) {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul li:nth-child('+this.URL.params.ty_start+')').addClass('active');
+      $('ul.nav.nav-list li.active').removeClass('active');
+      $('ul.nav.nav-list a[href="#tabs-3"]').parent().addClass('active');
     } else if (this.URL.params && this.URL.params.start) {
       $('.pagination:visible li.active').removeClass('active');
       $('.pagination:visible ul li:nth-child('+this.URL.params.start+')').addClass('active');
+      $('ul.nav.nav-list li.active').removeClass('active');
+      $('ul.nav.nav-list a[href="#tabs-5"]').parent().addClass('active');
     }
 
     if (this.URL.params && this.URL.params.type && this.URL.anchor) {
