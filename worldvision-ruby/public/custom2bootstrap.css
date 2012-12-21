@@ -29,3 +29,8 @@ table.table form {
 table.table tbody tr td.continent {
   background-color: silver;
 }
+
+/* IE hack */
+*[hidden] {
+  display: none;
+}
