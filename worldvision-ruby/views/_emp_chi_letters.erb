@@ -94,14 +94,11 @@
                 <td>
                     <% if letter.show == "false"%>
                         <input id="<%=letter.id%>_save_button" type="button" class="btn btn-info" value="儲存" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
-                        </form>
                         <img id="<%=letter.id%>_img" src="/warn.png" alt="">
                     <% elsif (letter.claim_date == nil) %>
                         <input type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
-                        </form>
                     <% elsif (letter.status == "returned") %>
                         <input type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
-                        </form>
                     <% end %>
 					<div class="ajax_msg" id="<%= letter.id %>_msg"></div>
                     </td>
@@ -112,6 +109,7 @@
                             <input class="claimedcase" type="checkbox" name="ids[]" style="color:white" value="<%= letter.id %>"/>
                         <% end %>
                     </td>
+                        </form>
                     </tr>
         <% end %>
     </table>
