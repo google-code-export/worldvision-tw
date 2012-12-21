@@ -96,9 +96,9 @@
                         <input id="<%=letter.id%>_save_button" type="button" class="btn btn-info" value="儲存" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                         <img id="<%=letter.id%>_img" src="/warn.png" alt="">
                     <% elsif (letter.claim_date == nil) %>
-                        <input type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input class="btn" type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                     <% elsif (letter.status == "returned") %>
-                        <input type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
+                        <input class="btn" type="button" value="更新" class="btn" onclick="check_updating_letters(<%=letter.id %>, 'chi')">
                     <% end %>
 					<div class="ajax_msg" id="<%= letter.id %>_msg"></div>
                     </td>
