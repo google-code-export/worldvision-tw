@@ -34,3 +34,7 @@ table.table tbody tr td.continent {
 *[hidden] {
   display: none;
 }
+
+input.search-query {
+  margin-bottom: 8px;
+}
