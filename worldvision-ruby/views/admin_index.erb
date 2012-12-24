@@ -116,6 +116,14 @@
         </div>
             <input class="btn" type="button" value="顯示全部員工" onClick="javascript:location.href = '/admin?search_role=employee';" />
             <input class="btn" type="button" value="顯示全部志工" onClick="javascript:location.href = '/admin?search_role=voulenteer';" />
+        <form method="get" class="navbar-search pull-left" action="/admin">
+          <select name="search_role">
+            <option >請選擇</option>
+            <option value="employee">員工</option>
+            <option value="voulenteer">志工</option>
+          </select>
+          <input name="search_name" type="text" class="search-query span2" placeholder="搜尋">
+        </form>
 <!-- existing account start -->
             <h3>所有帳號</h3>
             <table class="table">
