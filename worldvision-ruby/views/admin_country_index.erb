@@ -55,7 +55,7 @@
       </div>
       <div>
         <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/template_upload', id:'<%=@template.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-        <input type="file" name="myFile" size="10">
+        <input type="file" name="myFile" size="10" title="選擇翻譯底稿">
         <input class="btn" type="submit" value="上傳翻譯底稿">
         </form>
       </div>
@@ -84,19 +84,19 @@
 	<td>
     <div>
 	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'note'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-          <input type="file" name="myFile" size="10">
+          <input type="file" name="myFile" size="10" title="選擇注意事項">
           <input class="btn" type="submit" value="上傳注意事項">
       </form>
     </div>
     </div>
 	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'template'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-          <input type="file" name="myFile" size="10">
+          <input type="file" name="myFile" size="10" title="選擇翻譯範本">
           <input class="btn" type="submit" value="上傳翻譯範本">
       </form>
     </div>
     <div>
 	    <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/employee/country', to:'/country_upload', id:'<%= country.id %>', type:'noun'})" action="<%=@url%>" enctype="multipart/form-data" method="post">
-          <input type="file" name="myFile" size="10">
+          <input type="file" name="myFile" size="10" title="選擇常見名詞">
           <input class="btn" type="submit" value="上傳常見名詞">
       </form>
     </div>
@@ -117,5 +117,6 @@
 <!-- countries end -->
 </div>
 </div>
+  <%= erb :js_css_footer %>
   </body>
 </html>
