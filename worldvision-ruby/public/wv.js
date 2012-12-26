@@ -55,9 +55,11 @@ var WorldVision = {
       $('ul.nav.nav-list a[href="#tabs-5"]').parent().addClass('active');
     }
 
-    if (this.URL.params && this.URL.params.type && this.URL.anchor) {
+    if (this.URL.anchor) {
       $('ul.nav.nav-list li.active').removeClass('active');
       $('ul.nav.nav-list a[href="#'+this.URL.anchor+'"]').parent().addClass('active');
+      $('#'+this.URL.anchor).siblings().hide();
+      $('#'+this.URL.anchor).show();
     }
   },
 
