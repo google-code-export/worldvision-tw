@@ -900,7 +900,7 @@ post '/re_upload' do
     letter.save
   end
 
-  redirect '/volunteer'
+  redirect '/volunteer#recieved'
 end
 
 get '/volunteer/template' do
