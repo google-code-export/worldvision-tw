@@ -56,22 +56,22 @@
                         <input type="submit" value="上傳" class="btn btn-success">
                     </form>
                 <% elsif letter.return_file_url == nil %>
+                    <div>
                     <form onsubmit="return check_file_name_and_post_parameters(event,this, {from:'/volunteer', to: '/return_file_upload', id:'<%= letter.id %>'})" action="<%= url %>" enctype="multipart/form-data" method="post">
                         譯返上傳:<input type="file" name="myFile" size="10" title="選擇譯返檔">
                         <input type="submit" value="上傳" class="btn btn-success">
                     </form>
+                    </div>
+                    <div>
                     <form action="/return_letter" method="post" onsubmit='return check("execuse_<%= letter.id %>")'>
                         退件原因:
                         <input name="id" style="display:none" value="<%= letter.id %>">
-                        <div id="navcontainer">
-                        <ul>
-                            <li><input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
-                            <li>
+                        <div id="navcontainer" class="input-append">
+                            <input name="excuse" size="25" id="execuse_<%= letter.id %>"></li>
                             <input type="submit" value="退件" class="btn btn-danger">
-                            </li>
-                        </ul>
                         </div>
                     </form>
+                  </div>
                 <% else %>
                     已成功上傳
                     <form method="post" action="/re_upload">
