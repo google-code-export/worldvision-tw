@@ -62,8 +62,10 @@ var WorldVision = {
   },
 
   fetchCookie: function wv_fetchCookie() {
-    if (location.hash !== '' && $.cookie('hash'))
+    if (location.hash !== '' && $.cookie('hash')) {
       location.hash = $.cookie('hash');
+    } else {
+      $.cookie('hash', location.hash);
     }
   },
 
