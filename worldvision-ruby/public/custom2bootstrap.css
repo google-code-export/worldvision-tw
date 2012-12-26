@@ -35,6 +35,6 @@ table.table tbody tr td.continent {
   display: none;
 }
 
-a.btn, input.search-query, input[type="submit"] {
+input.btn[type="button"], a.btn, input.search-query, input[type="submit"] {
   margin-bottom: 10px;
 }
