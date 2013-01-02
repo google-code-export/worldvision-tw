@@ -6,7 +6,7 @@
     URL = $.url.parse();
 
     // No letter status specified, save the count of letters in cookie
-    if (! 'letter_status' in URL.params) {
+    if (! URL.params || ! 'letter_status' in URL.params) {
       $.cookie('all', $('#all-count').text());
       $.cookie('uncliamed', $('#unclaimed-count').text());
       $.cookie('claimed', $('#claimed-count').text());
