@@ -39,4 +39,6 @@
       $('.pagination:visible ul li:nth-child('+URL.params.start+')').addClass('active');
     }
   };
+
+  init();
 })();
