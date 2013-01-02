@@ -4,45 +4,6 @@
     <title>World Vision</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <%= erb :js_css_header %>
-    <script type="text/javascript">
-        var trans_type = "英翻中";
-        $(document).ready(function() {
-            var params = getUrlVars();
-            var type = params["type"] == null ? "eng" : params["type"];
-            var letter_status = params["letter_status"];
-
-            if (letter_status)
-                setSelected('#letter_status', letter_status);
-            if (type)
-                setSelected('#type', type);
-            $('select[select]').each(function() {
-                setSelected('#' + $(this).attr("id"), $(this).attr("select"));
-            });
-            markSelected('#tans_select', type);
-
-            $("#selectallavailable").click(function () {
-                $('.availablecase').attr('checked', this.checked);
-            });
-
-            $("#selectallclaimed").click(function () {
-                $('.claimedcase').attr('checked', this.checked);
-            });
-
-            $('form').submit(function() {
-                 show_loading_dialog();
-            });
-        });
-
-        $(function() {
-
-            $("#date_select").datepicker();
-            var date = getUrlVars()["date"]
-            if (date) {
-                date = $.url.decode(date)
-                $("#date_select").datepicker("setDate", date);
-            }
-        });
-    </script>
 </head>
 <body>
 <%= erb :header_wide %>
@@ -130,12 +91,12 @@
           <% if @trans_type == 'eng' %>
             <h3>待譯</h3>
             <div>
-              <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => false, :pages => @pages, :query_string => @query_string,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+              <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => false, :pages => @pages, :status => @status,:letters => @letters,:query_string2 =>@query_string2,:countries =>@countries} %>
               <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
             </div>
           <% else %>
             <h3>待譯</h3>
-            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => false, :pages => @pages, :query_string => @query_string, :letters => @letters, :query_string2 =>@query_string2, :countries =>@countries} %>
+            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => false, :pages => @pages, :status => @status, :letters => @letters, :query_string2 =>@query_string2, :countries =>@countries} %>
             <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_available_letter_form', 'availablecase')">刪除</button>
           <% end %>
         </div>
@@ -144,11 +105,11 @@
     <div class="row-fluid">
       <% if @trans_type == 'eng' %>
             <h3>譯返</h3>
-            <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries, :letter_status=>@letter_status} %>
+            <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :status => @status,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
             <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
           <% else %>
             <h3>譯返</h3>
-            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries, :letter_status=>@letter_status} %>
+            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :status => @status, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries} %>
             <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
           <% end %>
     </div>
