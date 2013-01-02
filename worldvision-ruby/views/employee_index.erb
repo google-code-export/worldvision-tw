@@ -56,26 +56,26 @@
               <img src="/wvtlogobig.gif" />
             </li>
             <li class="divider"></li>
-            <li>
-              <a href="/employee?type=<%= @trans_type %>">所有信件<span class="badge pull-right"><%= @count %></span></a>
+            <li class="active">
+              <a href="/employee?type=<%= @trans_type %>">所有信件<span id="all-count" class="badge pull-right"><%= @count %></span></a>
             </li>
             <li>
               <a href="/employee?letter_status=unclaimed&type=<%= @trans_type %>">
                 <i class="icon-envelope"></i>
-                未領取<span class="badge pull-right"><%= @unclaimed_letters_count %></span></a>
+                未領取<span class="badge pull-right" id="uncliamed-count"><%= @unclaimed_letters_count %></span></a>
             </li>
             <li>
               <a href="/employee?letter_status=claimed&type=<%= @trans_type %>">
                 <i class="icon-envelope"></i>
-              已領取<span class="badge pull-right"><%= @claimed_letters_count %></span></a>
+              已領取<span class="badge pull-right" id="claimed-count"><%= @claimed_letters_count %></span></a>
             </li>
             <li>
             <a href="/employee?letter_status=emergent&type=<%= @trans_type %>">
                 <i class="icon-envelope"></i>
-              緊急<span class="badge pull-right badge-important"><%= @emergent_letters_count %></span></a>
+              緊急<span class="badge pull-right badge-important" id="emergent-count"><%= @emergent_letters_count %></span></a>
             </li>
             <li>
-              <a href="/employee?letter_status=returned&type=<%= @trans_type %>">譯返<span class="badge pull-right badge-information"><%= @return_letters_count %></span></a>
+              <a href="/employee?letter_status=returned&type=<%= @trans_type %>">譯返<span id="returned-count" class="badge pull-right badge-information"><%= @return_letters_count %></span></a>
             </li>
             <li class="divider"></li>
           </ul>
@@ -153,6 +153,7 @@
           <% end %>
     </div>
   </div>
+  <script type="text/javascript" src="/wv2.js"></script>
   <%= erb :js_css_footer %>
 </body>
 </html>
