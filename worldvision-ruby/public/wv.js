@@ -64,7 +64,8 @@ var WorldVision = {
   },
 
   fetchCookie: function wv_fetchCookie() {
-    if (location.hash !== '' && $.cookie('hash')) {
+    // Set the hash if we has the cookie
+    if (location.hash === '' && $.cookie('hash')) {
       location.hash = $.cookie('hash');
     } else {
       $.cookie('hash', location.hash);
