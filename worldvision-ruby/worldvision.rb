@@ -617,6 +617,7 @@ get '/employee' do
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : get_offset(bookmark)
   @account = current_user
+  @letter_status = params[:letter_status] ? params[:letter_status]: nil
   letters = get_letters
   @letters = Array.new
   @return_letters = Array.new

@@ -144,11 +144,11 @@
     <div class="row-fluid">
       <% if @trans_type == 'eng' %>
             <h3>譯返</h3>
-            <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries} %>
+            <%= erb :_emp_eng_letters, {:layout=>false},{:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string,:letters => @return_letters,:query_string2 =>@query_string2,:countries =>@countries, :letter_status=>@letter_status} %>
             <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
           <% else %>
             <h3>譯返</h3>
-            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries} %>
+            <%= erb :_emp_chi_letters, {:layout=>false}, {:is_return_letters => true, :pages => @return_letters_pages, :query_string => @query_string, :letters => @return_letters, :query_string2 =>@query_string2, :countries =>@countries, :letter_status=>@letter_status} %>
             <button class="pull-right btn btn-danger" onClick="return delete_letters_submit('delete_claimed_letter_form', 'claimedcase')">刪除</button>
           <% end %>
     </div>

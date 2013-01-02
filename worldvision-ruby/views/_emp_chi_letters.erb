@@ -1,9 +1,9 @@
 <div class="pagination">
   <ul>
     <% pages.each do |page| %>
-      <% if query_string %>
+      <% if letter_status %>
         <li>
-        <a href="/employee?start=<%= page %>&<%= query_string %>"><%= page %></a>
+        <a href="/employee?start=<%= page %>&letter_status=<%= letter_status %>"><%= page %></a>
         </li>
       <% else %>
         <li>
