@@ -15,6 +15,10 @@ var WorldVision = {
       location.hash = target;
       $.cookie('hash', target);
     });
+
+    $('table form').submit(function onSubmit(){
+      $('#modal-processing').modal();
+    })
   },
 
   view: function wv_view() {
