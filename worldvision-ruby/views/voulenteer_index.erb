@@ -122,72 +122,102 @@
           <% end %>
             <% if  @trans_type == 'eng' %>
               <div id="tabs-1">
-                <div class="pagination">
-                  <ul>
-                    <% @emergent_pages.each do |page| %>
-                      <li class="<%= page == 1 ? 'active': '' %>">
-                        <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
-                      </li>
-                    <% end %>
-                  </ul>
-                </div>
+                <% if @emergent_pages.count > 1 %>
+                  <div class="pagination">
+                    <ul>
+                      <% @emergent_pages.each do |page| %>
+                        <li class="<%= page == 1 ? 'active': '' %>">
+                          <a href="/volunteer?type=eng&em_start=<%= page %>#tabs-1"><%= page %></a>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
                 <div class="page-header">
                   <h1>緊急<small>英翻中</small></h1>
                 </div>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true, :caption=>'緊急'} %>
+                <% if  @emergent_count == 0 %>
+                  <p>此分類目前沒有信件。</p>
+                <% else %>
+                  <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => true, :caption=>'緊急'} %>
+                <% end %>
               </div>
               <div id="tabs-2" hidden>
-                <div class="pagination">
-                  <ul>
-                    <% @hand_writing_pages.each do |page| %>
-                      <li><a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a></li>
-                    <% end %>
-                  </ul>
-                </div>
+                <% if @hand_writing_pages.count > 1 %>
+                  <div class="pagination">
+                    <ul>
+                      <% @hand_writing_pages.each do |page| %>
+                        <li><a href="/volunteer?type=eng&hw_start=<%= page %>#tabs-2"><%= page %></a></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
                 <div class="page-header">
                   <h1>手寫<small>英翻中</small></h1>
                 </div>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'手寫'} %>
+                <% if @hand_writing_count == 0 %>
+                  <p>此分類目前沒有信件</p>
+                <% else %>
+                  <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @hand_writing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'手寫'} %>
+                <% end %>
               </div>
               <div id="tabs-3" hidden>
-                <div class="pagination">
-                  <ul>
-                    <% @typing_pages.each do |page| %>
-                      <li><a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a></li>
-                    <% end %>
-                  </ul>
-                </div>
+                <% if @typing_pages.count > 1 %>
+                  <div class="pagination">
+                    <ul>
+                      <% @typing_pages.each do |page| %>
+                        <li><a href="/volunteer?type=eng&ty_start=<%= page %>#tabs-3"><%= page %></a></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
                 <div class="page-header">
                   <h1>打字稿<small>英翻中</small></h1>
                 </div>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'打字稿'} %>
+                <% if @typing_count == 0 %>
+                  <p>此分類目前沒有信件</p>
+                <% else %>
+                  <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @typing_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'打字稿'} %>
+                <% end %>
               </div>
           <% else %>
               <div id="tabs-4">
-                <div class="pagination">
-                  <ul>
-                    <% @emergent_pages.each do |page| %>
-                      <li><a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a></li>
-                    <% end %>
-                  </ul>
-                </div>
+                <% if @emergent_pages.count > 1 %>
+                  <div class="pagination">
+                    <ul>
+                      <% @emergent_pages.each do |page| %>
+                        <li><a href="/volunteer?type=chi&em_start=<%= page %>#tabs-4"><%= page %></a></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
                 <div class="page-header">
                   <h1>緊急<small>中翻英</small></h1>
                 </div>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'緊急'} %>
+                <% if @emergent_count == 0 %>
+                  <p>此分類目前沒有信件</p>
+                <% else %>
+                  <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @emergent_letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'緊急'} %>
+                <% end %>
               </div>
               <div id="tabs-5" hidden>
-                <div class="pagination">
-                  <ul>
-                    <% @pages.each do |page| %>
-                      <li><a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a></li>
-                    <% end %>
-                  </ul>
-                </div>
+                <% if @pages.count > 1 %>
+                  <div class="pagination">
+                    <ul>
+                      <% @pages.each do |page| %>
+                        <li><a href="/volunteer?type=chi&start=<%= page %>#tabs-5"><%= page %></a></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
                 <div class="page-header">
                   <h1>一般<small>中翻英</small></h1>
                 </div>
-                <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'一般'} %>
+                <% if @letters_count == 0 %>
+                  <p>此分類目前沒有信件</p>
+                <% else %>
+                  <%= erb :_vou_letters, {:layout => false}, {:trans_type => @trans_type, :letters => @letters, :account_id => @account_id, :url=>@url, :is_emergent => false, :caption=>'一般'} %>
+                <% end %>
               </div>
             <% end %>
           <div id="recieved" hidden>
