@@ -38,3 +38,9 @@ table.table tbody tr td.continent {
 input.btn[type="button"], a.btn, input.search-query, input[type="submit"] {
   margin-bottom: 10px;
 }
+
+.sub-brand {
+  position: absolute;
+  top: 40px;
+  right: 1em;
+}
