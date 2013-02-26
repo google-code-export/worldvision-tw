@@ -65,5 +65,22 @@
     }
   };
 
+  $('#selectallclaimed').change(function() {
+    if ($(this).attr('checked')) {
+      $('.claimedcase').attr('checked', true);
+    } else {
+      $('.claimedcase').attr('checked', false);
+    }
+  });
+
+  $('#selectallavailable').change(function() {
+    if ($(this).attr('checked')) {
+      $('.availablecase').attr('checked', true);
+    } else {
+      $('.availablecase').attr('checked', false);
+    }
+  });
+
+
   init();
 })();
