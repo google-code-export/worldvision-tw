@@ -3,11 +3,11 @@
     <% pages.each do |page| %>
       <% if status %>
         <li>
-        <a href="/employee?start=<%= page %>&letter_status=<%= status %>"><%= page %></a>
+        <a href="/employee?type=chi&start=<%= page %>&letter_status=<%= status %>"><%= page %></a>
         </li>
       <% else %>
         <li>
-        <a href="/employee?start=<%= page %>"><%= page %></a>
+        <a href="/employee?type=chi&start=<%= page %>"><%= page %></a>
         </li>
       <% end %>
     <% end %>
