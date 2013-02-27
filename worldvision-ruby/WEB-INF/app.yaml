@@ -1,4 +1,4 @@
 application: worldvision-tw
-version: 9
+version: 12
 runtime: jruby
 sessions_enabled: true
