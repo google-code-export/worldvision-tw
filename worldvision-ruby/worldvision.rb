@@ -1179,41 +1179,42 @@ def get_letters()
 
 
   @criteria = ''
-  @letters = Letter.all(:deleted => 0)
+  @letters = Array.new
+  if (date)
+      d = Date.strptime(date, DATE_FORMAT)
+      letters = Array.new()
+      index = 0
+      puts ("date: " + date)
+      puts ("d: " + d.to_s)
+      puts "size" + @letters.size.to_s
+      @letters = @letters.all(:create_date=>d, :deleted => 0)
+      # @letters.each do |letter|
+      #                 if (letter.create_date.to_s != d)
+      #                   letters.push(letter)
+      #                   puts "date: " + letter.create_date.to_s
+      #                   puts "index" + index.to_s
+      #                 end
+      #                 index += 1
+      #               end
+      #               @letters.delete(letters)
+      @criteria += ('date='+date.to_s)
+  end
+  if (employee_id)
+      @letters = @letters.all(:employee_id=>employee_id)
+      @criteria+=('employee_id'+employee_id.to_s)
+  end
+  if (country_id)
+      @letters = @letters.all(:country_id=>country_id)
+      @criteria+=('country_id='+country_id.to_s)
+    end
   if (trans_type)
     @letters = @letters.all(:trans_type => trans_type)
     @criteria+=('type=' + trans_type)
   end
-  if (country_id)
-    @letters = @letters.all(:country_id=>country_id)
-    @criteria+=('country_id='+country_id.to_s)
-  end
-  if (employee_id)
-    @letters = @letters.all(:employee_id=>employee_id)
-    @criteria+=('employee_id'+employee_id.to_s)
-  end
-  if (date)
-    d = Date.strptime(date, DATE_FORMAT)
-    letters = Array.new()
-    index = 0
-    puts ("date: " + date)
-    puts ("d: " + d.to_s)
-    puts "size" + @letters.size.to_s
-    @letters = @letters.all(:create_date=>d)
-    # @letters.each do |letter|
-    #                 if (letter.create_date.to_s != d)
-    #                   letters.push(letter)
-    #                   puts "date: " + letter.create_date.to_s
-    #                   puts "index" + index.to_s
-    #                 end
-    #                 index += 1
-    #               end
-    #               @letters.delete(letters)
-    @criteria += ('date='+date.to_s)
-  end
   if (status)
     @letters = @letters.all(:status => status)
   end
+
   if (sort)
     if (field)
       if (sort == 'asc')
