@@ -27,25 +27,27 @@ public class BlobStoreFileDownload extends HttpServlet {
 		BlobInfoFactory blobinfoFactory = new BlobInfoFactory();
 		BlobInfo info = blobinfoFactory.loadBlobInfo(blobKey);
 		
-		res.setContentType(info.getContentType());
-		res.setHeader("Content-Transfer-Encoding", "binary");
-		res.setHeader("charset", "utf-8");
-		res.setCharacterEncoding("utf-8");
-		String filename = info.getFilename();
-		if (filename.indexOf("\\") > 0)
-			filename = filename.substring(filename.lastIndexOf("\\") + 1);
-		
-		String user_agent = req.getHeader("user-agent");	
-		boolean isInternetExplorer = (user_agent.indexOf("MSIE") > -1);
-		if (isInternetExplorer) {
-			filename = URLEncoder.encode(filename, "utf-8");
-		} else {
-		    filename = MimeUtility.encodeText(filename);
+		if (info != null){
+			res.setContentType(info.getContentType());
+			res.setHeader("Content-Transfer-Encoding", "binary");
+			res.setHeader("charset", "utf-8");
+			res.setCharacterEncoding("utf-8");
+			String filename = info.getFilename();
+			if (filename.indexOf("\\") > 0)
+				filename = filename.substring(filename.lastIndexOf("\\") + 1);
+			
+			String user_agent = req.getHeader("user-agent");	
+			boolean isInternetExplorer = (user_agent.indexOf("MSIE") > -1);
+			if (isInternetExplorer) {
+				filename = URLEncoder.encode(filename, "utf-8");
+			} else {
+			    filename = MimeUtility.encodeText(filename);
+			}
+			System.out.println("filename: " + filename);
+			filename = URLUtil.espaceSpace(filename);
+			res.setHeader("Content-Disposition", "attachment; filename=" + filename);
+			blobstoreService.serve(blobKey, res);
 		}
-		System.out.println("filename: " + filename);
-		filename = URLUtil.espaceSpace(filename);
-		res.setHeader("Content-Disposition", "attachment; filename=" + filename);
-		blobstoreService.serve(blobKey, res);
 	}
 
 }

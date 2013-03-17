@@ -106,6 +106,20 @@
             <load-on-startup>1</load-on-startup>
 ﻿  ﻿  </servlet>
 
+  <servlet>
+﻿  ﻿  ﻿  <description>
+﻿  ﻿  ﻿  </description>
+﻿  ﻿  ﻿  <display-name>MigrationServlet</display-name>
+﻿  ﻿  ﻿  <servlet-name>MigrationServlet</servlet-name>
+﻿  ﻿  ﻿  <servlet-class>org.worldvision.migration.MigrationServlet</servlet-class>
+            <load-on-startup>1</load-on-startup>
+﻿  ﻿  </servlet>
+
+	<servlet-mapping>
+﻿  ﻿  ﻿  <servlet-name>MigrationServlet</servlet-name>
+﻿  ﻿  ﻿  <url-pattern>/migrate_java</url-pattern>
+﻿  </servlet-mapping>
+
 ﻿  <servlet>
 ﻿  ﻿  ﻿  <description>
 ﻿  ﻿  ﻿  </description>

@@ -41,6 +41,22 @@ public class LetterModel {
 		}
 
     }
+    
+    public List findByCreatedDate(PersistenceManager pm, Date begin){
+    	List<Letters> result = new ArrayList();
+		
+		Query query = pm.newQuery(Letters.class);
+		try {
+			query.setFilter("create_date >= begin");
+			query.declareImports("import java.util.Date");
+			query.declareParameters("Date begin");
+			result = (List<Letters>) query.execute(begin);
+			return result;
+		} finally {
+			query.closeAll();
+		}
+
+    }
 	
 	public List findDueLetters(int days, boolean send) {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -168,6 +184,8 @@ public class LetterModel {
 		}
 
 	}
+	
+	
 
 	public Letters getLetter(PersistenceManager pm, String letterId) {
 		if (letterId != null) {
