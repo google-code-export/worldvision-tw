@@ -130,6 +130,13 @@ class News
   property :status, String
 end
 
+class BlobMigration
+  include DataMapper::Resource
+  storage_names[:default] = "__BlobMigration__"
+  property :new_blob_key, String
+  property :old_blob_key, String
+end
+
 class Date
   def to_s
     strftime('%m/%d/%Y')
@@ -626,14 +633,14 @@ get '/employee' do
   @unclaimed_letters = Array.new
   
   if (current_user[:account] == 'srdvs@worldvision.org.tw')
-    @letters = Letter.all(:deleted => 0, :trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed'], :order => [ :create_date.desc ])
+    @letters = Letter.all(:deleted => 0, :trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed', 'returned'], :order => [ :create_date.desc ])
     
     @return_letters = @letters.all(:trans_type=> @trans_type, :status => 'returned', :order => [ :return_date.desc ])
     @emergent_letters = @letters.all(:trans_type=> @trans_type, :status => 'emergent', :order => [ :create_date.desc ])
     @claimed_letters = @letters.all(:trans_type=> @trans_type, :status => 'claimed', :order => [ :create_date.desc ])
     @unclaimed_letters = @letters.all(:trans_type=> @trans_type, :status => 'unclaimed', :order => [ :create_date.desc ])
   else
-    @letters = Letter.all(:deleted => 0, :employee_id=> current_user[:account].to_s, :status.in => ['unclaimed', 'emergent', 'claimed'], :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @letters = Letter.all(:deleted => 0, :employee_id=> current_user[:account].to_s, :status.in => ['unclaimed', 'emergent', 'claimed', 'returned'], :trans_type=> @trans_type, :order => [ :create_date.desc ])
     @return_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'returned', :trans_type=> @trans_type, :order => [ :return_date.desc ])
     @emergent_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'emergent', :trans_type=> @trans_type, :order => [ :create_date.desc ])
     @unclaimed_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'unclaimed', :trans_type=> @trans_type, :order => [ :create_date.desc ])
@@ -969,18 +976,18 @@ post '/claim_letter' do
       letter.status="claimed"
       letter.save
       if (current_user[:email] != nil)
-        # uri = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        # uri = URI.parse("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
         # http = Net::HTTP.new(uri.host, uri.port)
         #       http.read_timeout = 30
         #       request = Net::HTTP::Get.new(uri.request_uri)
         #
         # http.request(request)
         fetcher = URLFetchServiceFactory.getURLFetchService
-        url_for_vou = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
-        url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=6&email=" + letter.employee_id + "&id=" + id.to_s)
+        url_for_vou = URL.new("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        url_for_emp = URL.new("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=6&email=" + letter.employee_id + "&id=" + id.to_s)
         fetcher.fetchAsync(url_for_vou)
         fetcher.fetchAsync(url_for_emp)
-        # url = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
+        # url = URI.parse("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=1&email=" + current_user[:email] + "&id=" + id.to_s)
         # AppEngine::URLFetch.fetchAsync(url)
       end
 
@@ -1007,13 +1014,13 @@ get '/send_thank_you_email' do
     puts "vou_id " + letter.voulenteer_id
     vou = Account.first(:voulenteer_id => letter.voulenteer_id)
     puts "vou_email " + vou.email
-    uri = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=2&email=" + vou.email + "&id=" + id.to_s)
+    uri = URI.parse("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=2&email=" + vou.email + "&id=" + id.to_s)
     Net::HTTP.get_response(uri)
 
     puts "emp_id" + letter.employee_id
     emp = Account.first(:account => letter.employee_id)
     puts "emp_email " + emp.email
-    uri2 = URI.parse("http://www.worldvision-tw.appspot.com/queue_email?mailId=3&email=" + emp.email + "&id=" + id.to_s)
+    uri2 = URI.parse("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=3&email=" + emp.email + "&id=" + id.to_s)
     Net::HTTP.get_response(uri2)
   end
   erb :nothing
@@ -1054,7 +1061,7 @@ post '/return_letter' do
     log.save
 
     fetcher = URLFetchServiceFactory.getURLFetchService
-    url_for_emp = URL.new("http://www.worldvision-tw.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s + "&volunteerId=" + current_user[:account])
+    url_for_emp = URL.new("http://www.worldvision-tw-hrd.appspot.com/queue_email?mailId=8&email=" + letter.employee_id + "&id=" + id.to_s + "&volunteerId=" + current_user[:account])
     fetcher.fetchAsync(url_for_emp)
   end
   redirect '/volunteer'
@@ -1132,12 +1139,33 @@ get '/preview_news' do
 end
 
 get '/migrate' do
-  letters = Letter.all(:return_days => nil)
+  begin_date = get_today() - 5
+  letters = Letter.all(:deleted => 0, :employee_id => 'amanda_pan@worldvision.org.tw',
+    :status => "claimed", :create_date.gte => begin_date)
+    
+  logger.info("found " + letters.size.to_s + " letters to be migrated")
   letters.each do |letter|
-    if (letter.return_days == nil)
-      letter.return_days = 0
-      letter.save
+#    migrate upload letters
+    upload_key = letter.upload_file_url
+    if (upload_key)
+      logger.info('upload_key' + upload_key)
+      new_blob = BlobMigration.get(upload_key)
+      if(new_blob)
+        logger.info('upload_key:found')
+        letter.upload_file_url = new_blob.new_blob_key
+      end
     end
+#    migrate returnd letters
+    return_key = letter.return_file_url
+    if (return_key)
+      logger.info('return_key' + return_key)
+      new_blob = BlobMigration.get(return_key)
+      if (new_blob)
+        logger.info('return_blob:found')
+        letter.return_file_url = new_blob.new_blob_key
+      end
+    end    
+    letter.save
   end
   redirect '/admin'
 end
