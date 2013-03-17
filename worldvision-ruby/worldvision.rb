@@ -310,7 +310,7 @@ end
 
 
 get '/' do
-  redirect '/volunteer'
+  redirect '/login'
 end
 
 get '/logout' do
