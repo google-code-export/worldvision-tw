@@ -617,7 +617,7 @@ get '/employee' do
   bookmark = params[:start]
   offset = bookmark.nil? ? 0 : get_offset(bookmark)
   @account = current_user
-  letters = get_letters
+  get_letters
   @status = params[:letter_status].nil? ? nil : params[:letter_status] == '' ? nil : params[:letter_status]
   @letters = Array.new
   @return_letters = Array.new
@@ -626,17 +626,18 @@ get '/employee' do
   @unclaimed_letters = Array.new
   
   if (current_user[:account] == 'srdvs@worldvision.org.tw')
-    @letters = letters.all(:trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed'], :order => [ :create_date.desc ])
-    @return_letters = letters.all(:trans_type=> @trans_type, :status => 'returned', :order => [ :return_date.desc ])
-    @emergent_letters = letters.all(:trans_type=> @trans_type, :status => 'emergent', :order => [ :create_date.desc ])
-    @claimed_letters = letters.all(:trans_type=> @trans_type, :status => 'claimed', :order => [ :create_date.desc ])
-    @unclaimed_letters = letters.all(:trans_type=> @trans_type, :status => 'unclaimed', :order => [ :create_date.desc ])
+    @letters = Letter.all(:deleted => 0, :trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed'], :order => [ :create_date.desc ])
+    
+    @return_letters = @letters.all(:trans_type=> @trans_type, :status => 'returned', :order => [ :return_date.desc ])
+    @emergent_letters = @letters.all(:trans_type=> @trans_type, :status => 'emergent', :order => [ :create_date.desc ])
+    @claimed_letters = @letters.all(:trans_type=> @trans_type, :status => 'claimed', :order => [ :create_date.desc ])
+    @unclaimed_letters = @letters.all(:trans_type=> @trans_type, :status => 'unclaimed', :order => [ :create_date.desc ])
   else
-    @letters = letters.all(:employee_id=> current_user[:account].to_s, :status.in => ['unclaimed', 'emergent', 'claimed'], :trans_type=> @trans_type, :order => [ :create_date.desc ])
-    @return_letters = letters.all(:employee_id=> current_user[:account].to_s, :status => 'returned', :trans_type=> @trans_type, :order => [ :return_date.desc ])
-    @emergent_letters = letters.all(:employee_id=> current_user[:account].to_s, :status => 'emergent', :trans_type=> @trans_type, :order => [ :create_date.desc ])
-    @unclaimed_letters = letters.all(:employee_id=> current_user[:account].to_s, :status => 'unclaimed', :trans_type=> @trans_type, :order => [ :create_date.desc ])
-    @claimed_letters = letters.all(:employee_id=> current_user[:account].to_s, :status => 'claimed', :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @letters = Letter.all(:deleted => 0, :employee_id=> current_user[:account].to_s, :status.in => ['unclaimed', 'emergent', 'claimed'], :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @return_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'returned', :trans_type=> @trans_type, :order => [ :return_date.desc ])
+    @emergent_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'emergent', :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @unclaimed_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'unclaimed', :trans_type=> @trans_type, :order => [ :create_date.desc ])
+    @claimed_letters = @letters.all(:employee_id=> current_user[:account].to_s, :status => 'claimed', :trans_type=> @trans_type, :order => [ :create_date.desc ])
   end
 
 # @todo investigate why count does not work
@@ -670,7 +671,7 @@ get '/employee' do
   end
   @query_string = ''
   # puts "query_string: " + @query_string
-  puts "criteria: " + @criteria
+  logger.info("criteria: " + @criteria)
 
   params.each do |key, value|
     if ((key != 'sort' && key != 'start') && value != '請選擇')
@@ -1179,17 +1180,17 @@ def get_letters()
 
 
   @criteria = ''
-  @letters = Letter.all(:deleted => 0)
+#  @letters = Letter.all(:deleted => 0)
   if (trans_type)
-    @letters = @letters.all(:trans_type => trans_type)
+#    @letters = @letters.all(:trans_type => trans_type)
     @criteria+=('type=' + trans_type)
   end
   if (country_id)
-    @letters = @letters.all(:country_id=>country_id)
+#    @letters = @letters.all(:country_id=>country_id)
     @criteria+=('country_id='+country_id.to_s)
   end
   if (employee_id)
-    @letters = @letters.all(:employee_id=>employee_id)
+#    @letters = @letters.all(:employee_id=>employee_id)
     @criteria+=('employee_id'+employee_id.to_s)
   end
   if (date)
@@ -1199,7 +1200,7 @@ def get_letters()
     puts ("date: " + date)
     puts ("d: " + d.to_s)
     puts "size" + @letters.size.to_s
-    @letters = @letters.all(:create_date=>d)
+#    @letters = @letters.all(:create_date=>d)
     # @letters.each do |letter|
     #                 if (letter.create_date.to_s != d)
     #                   letters.push(letter)
@@ -1212,28 +1213,28 @@ def get_letters()
     @criteria += ('date='+date.to_s)
   end
   if (status)
-    @letters = @letters.all(:status => status)
+#    @letters = @letters.all(:status => status)
   end
   if (sort)
     if (field)
       if (sort == 'asc')
-        @letters = @letters.all(:order=>[:employee_id.asc])
+#        @letters = @letters.all(:order=>[:employee_id.asc])
       elsif (sort == 'desc')
-        @letters = @letters.all(:order=>[:employee_id.desc])
+#        @letters = @letters.all(:order=>[:employee_id.desc])
       end
       @criteria += ('sort='+sort+'&filed='+field)
     else
       if (sort == 'asc')
-        @letters = @letters.all(:order=>[:create_date.asc])
+#        @letters = @letters.all(:order=>[:create_date.asc])
       elsif (sort == 'desc')
-        @letters = @letters.all(:order=>[:create_date.desc])
+#        @letters = @letters.all(:order=>[:create_date.desc])
       end
       @criteria += ('sort='+sort)
     end
   else
-    @letters = @letters.all(:order=>[:create_date.desc])
+#    @letters = @letters.all(:order=>[:create_date.desc])
   end
-  @letters
+#  @letters
 end
 
 def get_paginator(letters)
