@@ -634,7 +634,6 @@ get '/employee' do
   
   if (current_user[:account] == 'srdvs@worldvision.org.tw')
     @letters = Letter.all(:deleted => 0, :trans_type=> @trans_type, :status.in => ['unclaimed', 'emergent', 'claimed', 'returned'], :order => [ :create_date.desc ])
-    
     @return_letters = @letters.all(:trans_type=> @trans_type, :status => 'returned', :order => [ :return_date.desc ])
     @emergent_letters = @letters.all(:trans_type=> @trans_type, :status => 'emergent', :order => [ :create_date.desc ])
     @claimed_letters = @letters.all(:trans_type=> @trans_type, :status => 'claimed', :order => [ :create_date.desc ])
@@ -648,13 +647,24 @@ get '/employee' do
   end
 
 # @todo investigate why count does not work
-  @count = @letters.size
   @return_letters_count = @return_letters.size
   @emergent_letters_count = @emergent_letters.size
   @claimed_letters_count = @claimed_letters.size
   @unclaimed_letters_count = @unclaimed_letters.size
+  
+  if (@status == 'unclaimed')
+    @letters = @unclaimed_letters
+  elsif (@status == 'claimed')
+    @letters = @claimed_letters
+  elsif (@status == 'emergent')
+    @letters = @emergent_letters
+  else
+    @letters = @unclaimed_letters  
+  end
+  
+  @count = @emergent_letters_count + @claimed_letters_count + @unclaimed_letters_count
   logger.info("count:" + @count.to_s)
-  logger.info("r_count:" + @return_letters_count.to_s)
+  logger.info("r_count:" + @return_letters_count.to_s)  
 
   if (@letters.size > PAGESIZE)
     @letters = @letters[offset, PAGESIZE]

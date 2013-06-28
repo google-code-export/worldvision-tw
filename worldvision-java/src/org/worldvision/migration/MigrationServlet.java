@@ -34,7 +34,7 @@ public class MigrationServlet extends HttpServlet{
 		
 		Calendar cal = DateUtil.getCurrentCalendarOfTPE();
 		// if (days > 0)
-		cal.add(Calendar.DATE, -30);
+		cal.add(Calendar.DATE, -90);
 		cal.set(Calendar.HOUR_OF_DAY, 0); 
 		cal.set(Calendar.MINUTE, 0); 
 		cal.set(Calendar.SECOND, 0);

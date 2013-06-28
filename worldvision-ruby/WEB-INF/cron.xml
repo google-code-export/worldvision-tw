@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
+  <!-- <cron>
     <url>/due_reminder_job</url>
     <description>Mail out a due email reminder</description>
     <schedule>every day 08:00</schedule>
     <timezone>Asia/Taipei</timezone>
-  </cron>
+  </cron> -->
 <!--
   <cron>
     <url>/reset_due_letters</url>

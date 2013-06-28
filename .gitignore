@@ -1,16 +1,4 @@
-
-WEB-INF/classes/org/worldvision/TestServlet.class
-
-WEB-INF/classes/org/worldvision/Worldvision_javaServlet.class
-
-WEB-INF/classes/org/worldvision/model/TemplateModel.class
-
-WEB-INF/classes/org/worldvision/model/Templates.class
-
-WEB-INF/classes/org/worldvision/util/URLUtil.class
-
 worldvision-ruby/WEB-INF/lib/appengine-rack.jar
 
-*.class
-
-*.class
+*.gem
+/worldvision-ruby/.gems/*
