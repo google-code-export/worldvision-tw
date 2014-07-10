@@ -36,6 +36,13 @@
 		    </form>
         <table class="table">
           <tr>
+            <th>信件類別</th>
+            <th>信件種類</th>
+            <th>國家</th>
+            <th>上傳同工</th>
+            <th>上傳日期</th>
+            <th>上傳檔案名</th>
+            <th>領取日期</th>
             <th>志工姓名</th>
             <th>志工編號</th>
             <th>譯返上傳日期</th>
@@ -43,6 +50,13 @@
           </tr>
           <% @letters.each do |letter|%>
             <tr>
+            <td><%= letter.trans_type%></td>
+            <td><%= letter.letter_source_type%></td>
+            <td><%= letter.country_name%></td>
+            <td><%= letter.employee_id%></td>
+            <td><%= letter.create_date%></td>
+            <td><%= letter.upload_file_name%></td>
+            <td><%= letter.claim_date%></td>
               <td><%= letter.voulenteer_name%></td>
               <td><%= letter.voulenteer_id%></td>
               <td><%= letter.return_date%></td>

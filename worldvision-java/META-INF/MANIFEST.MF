@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: worldvision-java
+Bundle-SymbolicName: worldvision-java
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: worldvision-java.jar,
+ robbiecheng/workspace/worldvision-tw/worldvision-ruby/WEB-INF/lib/commons-fileupload-1.2.2.jar,
+ robbiecheng/workspace/worldvision-tw/worldvision-ruby/WEB-INF/lib/commons-io-1.4.jar
+Export-Package: org.worldvision,
+ org.worldvision.blobstore,
+ org.worldvision.mail,
+ org.worldvision.migration,
+ org.worldvision.model,
+ org.worldvision.pojo,
+ org.worldvision.queue,
+ org.worldvision.schedule,
+ org.worldvision.util
